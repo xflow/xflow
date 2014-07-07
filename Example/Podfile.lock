@@ -1,0 +1,24 @@
+PODS:
+  - FBSnapshotTestCase (1.1)
+  - Kiwi/ARC (2.2.4)
+  - Kiwi/NonARC (2.2.4)
+  - Kiwi/XCTest (2.2.4):
+    - Kiwi/ARC
+    - Kiwi/NonARC
+  - xflowapp (0.1.0)
+
+DEPENDENCIES:
+  - FBSnapshotTestCase
+  - Kiwi/XCTest
+  - xflowapp (from `../`)
+
+EXTERNAL SOURCES:
+  xflowapp:
+    :path: ../
+
+SPEC CHECKSUMS:
+  FBSnapshotTestCase: 9053afee1d66b4c7c313fcb0ae582a5e47bea9d0
+  Kiwi: c73667f2b84cbf36f1a3830267c5a4ae8dcbd8ba
+  xflowapp: 3433fca57f6f7a9dd301dc9d94c454d6cb2658db
+
+COCOAPODS: 0.33.1
