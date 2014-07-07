@@ -1,0 +1,10 @@
+target 'xflowapp', :exclusive => true do
+  pod "xflowapp", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "xflowapp", :path => "../"
+
+  pod 'Kiwi/XCTest'
+  pod 'FBSnapshotTestCase'
+end
