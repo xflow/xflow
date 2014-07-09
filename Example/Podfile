@@ -4,7 +4,7 @@ end
 
 target 'Tests', :exclusive => true do
   pod "xflowapp", :path => "../"
-
+  pod 'OCMock', '~> 2.2.4'
   pod 'Kiwi/XCTest'
   pod 'FBSnapshotTestCase'
 end

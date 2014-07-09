@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTViewController : UIViewController
+@interface XFAViewController : UIViewController
 
 @end

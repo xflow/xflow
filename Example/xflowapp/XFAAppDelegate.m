@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTAppDelegate.h"
+#import "XFAAppDelegate.h"
 
-@implementation MTAppDelegate
+@implementation XFAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTViewController.h"
+#import "XFAViewController.h"
 
-@interface MTViewController ()
+@interface XFAViewController ()
 
 @end
 
-@implementation MTViewController
+@implementation XFAViewController
 
 - (void)viewDidLoad
 {

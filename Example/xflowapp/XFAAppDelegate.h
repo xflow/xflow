@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTAppDelegate : UIResponder <UIApplicationDelegate>
+@interface XFAAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
