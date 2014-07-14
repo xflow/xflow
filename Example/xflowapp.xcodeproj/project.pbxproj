@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		10157F7D197378340010B954 /* XFADummy1VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F6E197378340010B954 /* XFADummy1VC.m */; };
+		10157F7E197378340010B954 /* XFADummy2VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F70197378340010B954 /* XFADummy2VC.m */; };
+		10157F7F197378340010B954 /* XFANavigationC.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F72197378340010B954 /* XFANavigationC.m */; };
+		10157F80197378340010B954 /* XFATabBarC.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F74197378340010B954 /* XFATabBarC.m */; };
+		10157F81197378340010B954 /* XFATableTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F76197378340010B954 /* XFATableTVC.m */; };
+		10157F82197378340010B954 /* XFATableVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F78197378340010B954 /* XFATableVC.m */; };
+		10157F83197378340010B954 /* XFAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F7A197378340010B954 /* XFAViewController.m */; };
+		10157F84197378340010B954 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10157F7C197378340010B954 /* Main.storyboard */; };
 		1058ECE0196CE33000C6ACD0 /* TXSwizzleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDA196CE33000C6ACD0 /* TXSwizzleTest.m */; };
 		1058ECE1196CE33000C6ACD0 /* TXTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDC196CE33000C6ACD0 /* TXTestObject.m */; };
 		1058ECE2196CE33000C6ACD0 /* TXTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */; };
@@ -17,9 +25,6 @@
 		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
 		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
 		6003F59E195388D20070C39A /* XFAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* XFAAppDelegate.m */; };
-		6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F59F195388D20070C39A /* Main_iPhone.storyboard */; };
-		6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A2195388D20070C39A /* Main_iPad.storyboard */; };
-		6003F5A7195388D20070C39A /* XFAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* XFAViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -41,6 +46,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10157F6D197378340010B954 /* XFADummy1VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFADummy1VC.h; sourceTree = "<group>"; };
+		10157F6E197378340010B954 /* XFADummy1VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFADummy1VC.m; sourceTree = "<group>"; };
+		10157F6F197378340010B954 /* XFADummy2VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFADummy2VC.h; sourceTree = "<group>"; };
+		10157F70197378340010B954 /* XFADummy2VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFADummy2VC.m; sourceTree = "<group>"; };
+		10157F71197378340010B954 /* XFANavigationC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFANavigationC.h; sourceTree = "<group>"; };
+		10157F72197378340010B954 /* XFANavigationC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFANavigationC.m; sourceTree = "<group>"; };
+		10157F73197378340010B954 /* XFATabBarC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFATabBarC.h; sourceTree = "<group>"; };
+		10157F74197378340010B954 /* XFATabBarC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFATabBarC.m; sourceTree = "<group>"; };
+		10157F75197378340010B954 /* XFATableTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFATableTVC.h; sourceTree = "<group>"; };
+		10157F76197378340010B954 /* XFATableTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFATableTVC.m; sourceTree = "<group>"; };
+		10157F77197378340010B954 /* XFATableVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFATableVC.h; sourceTree = "<group>"; };
+		10157F78197378340010B954 /* XFATableVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFATableVC.m; sourceTree = "<group>"; };
+		10157F79197378340010B954 /* XFAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFAViewController.h; sourceTree = "<group>"; };
+		10157F7A197378340010B954 /* XFAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFAViewController.m; sourceTree = "<group>"; };
+		10157F7C197378340010B954 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		1058ECDA196CE33000C6ACD0 /* TXSwizzleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSwizzleTest.m; sourceTree = "<group>"; };
 		1058ECDB196CE33000C6ACD0 /* TXTestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXTestObject.h; sourceTree = "<group>"; };
 		1058ECDC196CE33000C6ACD0 /* TXTestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXTestObject.m; sourceTree = "<group>"; };
@@ -57,10 +77,6 @@
 		6003F59B195388D20070C39A /* xflowapp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "xflowapp-Prefix.pch"; sourceTree = "<group>"; };
 		6003F59C195388D20070C39A /* XFAAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XFAAppDelegate.h; sourceTree = "<group>"; };
 		6003F59D195388D20070C39A /* XFAAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XFAAppDelegate.m; sourceTree = "<group>"; };
-		6003F5A0195388D20070C39A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		6003F5A3195388D20070C39A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		6003F5A5195388D20070C39A /* XFAViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XFAViewController.h; sourceTree = "<group>"; };
-		6003F5A6195388D20070C39A /* XFAViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XFAViewController.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -103,6 +119,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10157F6B197378340010B954 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				10157F6C197378340010B954 /* controllers */,
+				10157F7B197378340010B954 /* storyboards */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		10157F6C197378340010B954 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				10157F6D197378340010B954 /* XFADummy1VC.h */,
+				10157F6E197378340010B954 /* XFADummy1VC.m */,
+				10157F6F197378340010B954 /* XFADummy2VC.h */,
+				10157F70197378340010B954 /* XFADummy2VC.m */,
+				10157F71197378340010B954 /* XFANavigationC.h */,
+				10157F72197378340010B954 /* XFANavigationC.m */,
+				10157F73197378340010B954 /* XFATabBarC.h */,
+				10157F74197378340010B954 /* XFATabBarC.m */,
+				10157F75197378340010B954 /* XFATableTVC.h */,
+				10157F76197378340010B954 /* XFATableTVC.m */,
+				10157F77197378340010B954 /* XFATableVC.h */,
+				10157F78197378340010B954 /* XFATableVC.m */,
+				10157F79197378340010B954 /* XFAViewController.h */,
+				10157F7A197378340010B954 /* XFAViewController.m */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		10157F7B197378340010B954 /* storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				10157F7C197378340010B954 /* Main.storyboard */,
+			);
+			path = storyboards;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -141,12 +195,9 @@
 		6003F593195388D20070C39A /* xflowapp */ = {
 			isa = PBXGroup;
 			children = (
+				10157F6B197378340010B954 /* app */,
 				6003F59C195388D20070C39A /* XFAAppDelegate.h */,
 				6003F59D195388D20070C39A /* XFAAppDelegate.m */,
-				6003F59F195388D20070C39A /* Main_iPhone.storyboard */,
-				6003F5A2195388D20070C39A /* Main_iPad.storyboard */,
-				6003F5A5195388D20070C39A /* XFAViewController.h */,
-				6003F5A6195388D20070C39A /* XFAViewController.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -280,9 +331,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */,
+				10157F84197378340010B954 /* Main.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
-				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,8 +416,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F59E195388D20070C39A /* XFAAppDelegate.m in Sources */,
-				6003F5A7195388D20070C39A /* XFAViewController.m in Sources */,
+				10157F80197378340010B954 /* XFATabBarC.m in Sources */,
+				10157F7D197378340010B954 /* XFADummy1VC.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				10157F83197378340010B954 /* XFAViewController.m in Sources */,
+				10157F81197378340010B954 /* XFATableTVC.m in Sources */,
+				10157F7F197378340010B954 /* XFANavigationC.m in Sources */,
+				10157F7E197378340010B954 /* XFADummy2VC.m in Sources */,
+				10157F82197378340010B954 /* XFATableVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,22 +456,6 @@
 				6003F597195388D20070C39A /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		6003F59F195388D20070C39A /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6003F5A0195388D20070C39A /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		6003F5A2195388D20070C39A /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6003F5A3195388D20070C39A /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
