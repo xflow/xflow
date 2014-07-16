@@ -91,28 +91,6 @@
     [observerMock verify];
 }
 
-/*
-- (void)testPartialMock
-{
-    
-    XFAStudioAgent * studioAgent = XFAStudioAgent.new;
-    
-    [studioAgent on];
-    
-    id studioAgentMocked = [OCMockObject partialMockForObject:studioAgent];
-    
-    MTMethod * method = MTMethod.new;
-
-    [[[studioAgentMocked expect] andForwardToRealObject]enqueByNotif:[OCMArg any]];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD
-                                                        object:method
-                                                      userInfo:nil];
-    
-    [studioAgentMocked verify];
-
-}*/
-
 
 
 - (void)testTXTestViewControllerBasicFunctionality{
@@ -128,29 +106,6 @@
     
 }
 
-
-- (void)testTXTestViewControllerBasicFunc{
-    TXTestViewController * vc = TXTestViewController.new;
-    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    vc.string1 = @"TEXT2";
-    
-    MTMethod * method = MTMethod.new;
-    method.methodName = @"actionButton1:";
-    method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v12@0:4@8";
-    MTMethodArgument *arg = [MTMethodArgument argumentForType:@"@"];
-    UIButton * btn = vc.button1;
-    XCTAssert(btn, @"no button");
-    NSValue * val = [NSValue valueWithNonretainedObject:btn];
-    XCTAssert(val, @"no value");
-    arg.argumentValue = val;
-    [method.methodArguments addObject:arg];
-    NSLog(@"%@",val.nonretainedObjectValue);
-    XCTAssert(val.nonretainedObjectValue, @"no value");
-    [method applyTo:vc];
-    
-    XCTAssertEqual(vc.string2, @"TEXT2", @"should be TEXT2");
-}
 
 - (void)testTXTestViewControllerBasicFunc3{
     TXTestViewController * vc = TXTestViewController.new;
@@ -180,53 +135,9 @@
 }
 
 
--(MTMethod*)methodButton1{
-    MTMethod * method = MTMethod.new;
-    method.methodName = @"actionButton1:";
-    method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v12@0:4@8";
-    MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
-    [method.methodArguments addObject:arg1];
-    return method;
-}
 
 
-- (void)testTXTestViewControllerBasicMonitor{
-    
-    TXTestViewController * vc = TXTestViewController.new;
-    
-    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
- 
-    MTMethod * method = [self methodButton1];
-    
-    [method monitorForObject:vc];
-    
-    id observerMock = [OCMockObject observerMock];
-    
-    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
-                                                     name:NOTIF_METHOD_INVOCATION
-                                                   object:nil];
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        XCTAssertNotNil(obj, @"no notification");
-        XCTAssert([obj isMemberOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
-        MTMethodInvocation * methodInvoc = obj;
-        XCTAssertNotNil(methodInvoc.method, @"no notification");
-        XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"args soule be 1");
-    }] userInfo:[OCMArg any]];
 
-    vc.string1 = @"ACTION_BUTTON_1";
-//    [vc.button1 sendActionsForControlEvents:UIControlEventTouchUpInside];
-
-    [vc actionButton1:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
-    
-
-    [observerMock verify];
-
-//    XCTAssertEqualObjects(vc.label.text, @"ACTION_BUTTON_1", @"should be PRESSED");
-    
-}
 
 
 

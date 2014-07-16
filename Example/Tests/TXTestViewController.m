@@ -58,7 +58,7 @@
 -(IBAction)actionButton1:(id)sender
 {
     NSAssert(sender, @"no sender");
-    NSAssert([sender isEqual:self.button1], @"expected  button1 not %@",sender);
+    NSAssert([sender isEqual:self.button1], @"expected  button1 %@ not %@",self.button1, sender);
     _string2 = self.string1;
 }
 
