@@ -1,5 +1,6 @@
 target 'xflowapp', :exclusive => true do
   pod "xflowapp", :path => "../"
+  pod 'CocoaLumberjack', '~> 1.9.1'
 end
 
 target 'Tests', :exclusive => true do
@@ -8,3 +9,5 @@ target 'Tests', :exclusive => true do
   pod 'Kiwi/XCTest'
   pod 'FBSnapshotTestCase'
 end
+
+pod 'Aspects', '~> 1.4.1'

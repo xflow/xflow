@@ -7,12 +7,13 @@
 //
 
 #import "XFAAppDelegate.h"
-
+#import <TXEngine.h>
 @implementation XFAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [Txe on];
     return YES;
 }
 							

@@ -13,12 +13,14 @@
 
 @property (nonatomic, strong) UIButton * button1;
 @property (nonatomic, strong) UIButton * button2;
+@property (nonatomic, strong) UIButton * button3;
 
-@property (nonatomic, strong) UILabel * label;
-@property (nonatomic, strong) NSString * string;
-
+@property (nonatomic, strong) NSString * string1;
+@property (nonatomic, readonly) NSString * string2;
+@property (nonatomic, readonly) NSInteger lastTag;
 
 -(IBAction)actionButton1:(id)sender;
 -(IBAction)actionButton2:(id)sender event:(UIEvent*)event;
+-(IBAction)actionButton3:(id)sender event:(UIEvent*)event;
 
 @end

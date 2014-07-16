@@ -117,38 +117,39 @@
 
 - (void)testTXTestViewControllerBasicFunctionality{
     TXTestViewController * vc = TXTestViewController.new;
-    vc.string = @"TEXT1";
+    vc.string1 = @"TEXT1";
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    XCTAssertNotNil(vc.label, @"");
     XCTAssertNotNil(vc.button1, @"");
-    XCTAssertEqual(vc.label.text, @"TEXT1", @"should be TEXT1");
+
     
-    vc.string = @"TEXT2";
+    vc.string1 = @"TEXT2";
     [vc.button1 sendActionsForControlEvents:UIControlEventTouchUpInside];
-    XCTAssertEqual(vc.label.text, @"TEXT2", @"should be TEXT2");
+    XCTAssertEqual(vc.string2, @"TEXT2", @"should be TEXT2");
     
 }
 
 
 - (void)testTXTestViewControllerBasicFunc{
     TXTestViewController * vc = TXTestViewController.new;
-    vc.string = @"TEXT1";
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    vc.string = @"TEXT2";
+    vc.string1 = @"TEXT2";
     
     MTMethod * method = MTMethod.new;
     method.methodName = @"actionButton1:";
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v12@0:4@8";
     MTMethodArgument *arg = [MTMethodArgument argumentForType:@"@"];
-    arg.argumentValue = vc.button2;
-    
+    UIButton * btn = vc.button1;
+    XCTAssert(btn, @"no button");
+    NSValue * val = [NSValue valueWithNonretainedObject:btn];
+    XCTAssert(val, @"no value");
+    arg.argumentValue = val;
     [method.methodArguments addObject:arg];
-    
+    NSLog(@"%@",val.nonretainedObjectValue);
+    XCTAssert(val.nonretainedObjectValue, @"no value");
     [method applyTo:vc];
     
-    XCTAssertEqual(vc.label.text, @"TEXT2", @"should be TEXT2");
-
+    XCTAssertEqual(vc.string2, @"TEXT2", @"should be TEXT2");
 }
 
 - (void)testTXTestViewControllerBasicFunc3{
@@ -156,10 +157,9 @@
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
 
     MTMethod * method = [self methodButton2];
-    vc.string = @"PRESSED";
+    vc.string1 = @"PRESSED";
     [method applyTo:vc];
     
-    XCTAssertEqual(vc.label.text, @"PRESSED", @"should be PRESSED");
     
 }
 
@@ -215,7 +215,7 @@
         XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"args soule be 1");
     }] userInfo:[OCMArg any]];
 
-    vc.string = @"ACTION_BUTTON_1";
+    vc.string1 = @"ACTION_BUTTON_1";
 //    [vc.button1 sendActionsForControlEvents:UIControlEventTouchUpInside];
 
     [vc actionButton1:nil];
@@ -224,7 +224,7 @@
 
     [observerMock verify];
 
-    XCTAssertEqualObjects(vc.label.text, @"ACTION_BUTTON_1", @"should be PRESSED");
+//    XCTAssertEqualObjects(vc.label.text, @"ACTION_BUTTON_1", @"should be PRESSED");
     
 }
 
@@ -250,7 +250,7 @@
         XCTAssert([obj isMemberOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
     }] userInfo:[OCMArg any] ];
 
-    vc.string = @"TEXT2";
+    vc.string1 = @"TEXT2";
     
     [vc.button2 sendActionsForControlEvents:UIControlEventTouchUpInside];
 
@@ -258,7 +258,7 @@
     
     [observerMock verify];
     
-    XCTAssertEqualObjects(vc.label.text, @"TEXT2", @"should be TEXT2");
+//    XCTAssertEqualObjects(vc.label.text, @"TEXT2", @"should be TEXT2");
     
 }
 

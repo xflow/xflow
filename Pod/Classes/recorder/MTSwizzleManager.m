@@ -185,10 +185,10 @@ id voidMethodWithInvoker(id objId, SEL _cmd, ...)
     
     [myInvocation invoke];
     
-    //    if (method.isScalarWithScalars) {
-    //        void* result = malloc(returnLength);
-    //        [myInvocation getReturnValue:result];
-    //    }
+//    if (method.isScalarWithScalars) {
+//        void* result = malloc(returnLength);
+//        [myInvocation getReturnValue:result];
+//    }
     
     Swizzle(obj.class, _cmd, NSSelectorFromString( r ) );
     

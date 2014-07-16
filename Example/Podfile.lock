@@ -20,6 +20,12 @@ PODS:
   - AFNetworking/UIKit (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - Aspects (1.4.1)
+  - CocoaLumberjack (1.9.1):
+    - CocoaLumberjack/Extensions
+  - CocoaLumberjack/Core (1.9.1)
+  - CocoaLumberjack/Extensions (1.9.1):
+    - CocoaLumberjack/Core
   - FBSnapshotTestCase (1.1)
   - Kiwi/ARC (2.2.4)
   - Kiwi/NonARC (2.2.4)
@@ -37,6 +43,8 @@ PODS:
     - OHHTTPStubs (~> 3.1.2)
 
 DEPENDENCIES:
+  - Aspects (~> 1.4.1)
+  - CocoaLumberjack (~> 1.9.1)
   - FBSnapshotTestCase
   - Kiwi/XCTest
   - OCMock (~> 2.2.4)
@@ -48,6 +56,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 6d7b76aa5d04c8c37daad3eef4b7e3f2a7620da3
+  Aspects: a6368eba05295b24ffe0e9acfb9080cc3b0f4b5f
+  CocoaLumberjack: 94accd5749f5c5d15134c8d50f34a973aed8ef69
   FBSnapshotTestCase: 9053afee1d66b4c7c313fcb0ae582a5e47bea9d0
   Kiwi: c73667f2b84cbf36f1a3830267c5a4ae8dcbd8ba
   Mantle: c67a7e45e14196ed42b2a7cbb98ff6a9920e6b92

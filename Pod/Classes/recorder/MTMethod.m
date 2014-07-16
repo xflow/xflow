@@ -285,9 +285,9 @@ static NSInteger sessionGroupInvocationIndex;
     
     if(  method.isVoidWithOneObject ){
         MTMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
-        MTMethodArgumentValue * arg0Value = (MTMethodArgumentValue *)arg0.argumentValue;
-        [obj performSelector:sel
-                  withObject:arg0Value.value];
+        NSValue * arg0Value = arg0.argumentValue;
+        NSObject * argObj = arg0Value.nonretainedObjectValue;
+        [obj performSelector:sel withObject:argObj];
     }
     
     if (method.isVoidAndNoArguments ) {
