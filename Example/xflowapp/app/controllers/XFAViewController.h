@@ -7,20 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-@class MTLabel;
-@class MTButton;
+
+
 
 @interface XFAViewController : UIViewController
 
 
 @property (nonatomic,weak) IBOutlet UILabel *labelConnected;
-@property (nonatomic,weak) IBOutlet MTLabel *labelCustomConnected;
+@property (nonatomic,weak) IBOutlet UILabel *labelCustomConnected;
 @property (nonatomic,weak) IBOutlet UILabel *labelNotConnected;
 @property (nonatomic,strong) UILabel *labelNil;
 @property (nonatomic,weak) IBOutlet UILabel *labelNilAlways;
 
 @property (nonatomic,weak) IBOutlet UIButton *buttonConnected;
-@property (nonatomic,weak) IBOutlet MTButton *buttonCustomConnected;
+@property (nonatomic,weak) IBOutlet UIButton *buttonCustomConnected;
 @property (nonatomic,weak) IBOutlet UIButton *buttonNotConnected;
 
 @property (nonatomic,weak) IBOutlet UISegmentedControl *segmentedControlWithAction;
@@ -45,7 +45,7 @@
 
 - (IBAction)actionSlider:(id)sender;
 
-- (IBAction)actionButton:(id)sender;
+-(IBAction)actionButton:(id)sender event:(UIEvent*)event;
 
 -(void)dislayText;
 

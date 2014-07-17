@@ -369,7 +369,7 @@ id newMethodWithVarArgs(id firstArg, SEL _cmd, ...)
     
     if (method.isObjectAndOneArgument) {
         va_list args;
-        va_start(args,0);
+        va_start(args,_cmd);
         id val = va_arg(args,id);
         va_end(args);
         return callGetObject(firstArg,NSStringFromSelector(_cmd) ,val,nil);
@@ -377,7 +377,7 @@ id newMethodWithVarArgs(id firstArg, SEL _cmd, ...)
     
     if (method.isVoidWithOneObject) {
         va_list args;
-        va_start(args,0);
+        va_start(args,_cmd);
         id val = va_arg(args,id);
         va_end(args);
         voidCallObject(firstArg,NSStringFromSelector(_cmd) ,val,nil);
@@ -385,7 +385,7 @@ id newMethodWithVarArgs(id firstArg, SEL _cmd, ...)
     
     if (method.isObjectAndTwoArguments) {
         va_list args;
-        va_start(args,0);
+        va_start(args,_cmd);
         id val1 = va_arg(args,id);
         id val2 = va_arg(args,id);
         va_end(args);
@@ -394,7 +394,7 @@ id newMethodWithVarArgs(id firstArg, SEL _cmd, ...)
     
     if (method.isVoidWithTwoObjects) {
         va_list args;
-        va_start(args,0);
+        va_start(args,_cmd);
         id val1 = va_arg(args,id);
         id val2 = va_arg(args,id);
         va_end(args);

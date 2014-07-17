@@ -7,7 +7,7 @@
 //
 
 #import "XFAViewController.h"
-#import <TXEngine.h>
+
 @interface XFAViewController ()
 
 @end
@@ -20,6 +20,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     NSLog(@"MTViewController viewDidLoad");
     self.labelConnected.text = @"AAAAA";
+    [self.buttonCustomConnected addTarget:self action:@selector(actionButton2:event:) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -41,6 +42,10 @@
 
 - (IBAction)actionSlider:(id)sender {
     NSLog(@"MTViewController actionSlider");
+}
+
+-(IBAction)actionButton2:(id)sender event:(UIEvent*)event{
+    NSLog(@"MTViewController actionButton2 %@ %@",sender,event);
 }
 
 - (IBAction)actionButton:(id)sender {
