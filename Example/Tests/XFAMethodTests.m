@@ -11,9 +11,11 @@
 #import "TXTestViewController.h"
 #import "MTMethodInvocation.h"
 #import "MTMethodArgument.h"
+#import "MTVcMethodInvocation.h"
 #import <OCMock/OCMock.h>
 #import "XFAConstants.h"
 #import "UIViewController+XFAProperties.h"
+#import <Aspects/Aspects.h>
 
 @interface XFAMethodTests : XCTestCase
 
@@ -63,7 +65,7 @@
 }
 
 
-- (void)test_MTMethod_Monitor{
+- (void)test_MTMethod_Monitor_OLD_CODE{
     
     TXTestViewController * vc = TXTestViewController.new;
     
@@ -99,6 +101,52 @@
     XCTAssertEqualObjects(vc.string2, @"ACTION_BUTTON_1", @"should be PRESSED");
     
 }
+
+
+
+- (void)test_MTMethod_Monitor_AOP
+{
+    
+    TXTestViewController * vc = TXTestViewController.new;
+    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
+    vc.xfaProperties = @{}.mutableCopy;
+    
+    NSError * errorAspectHook = nil;
+    MTMethod * method = [self methodButton1:vc];
+    [TXTestViewController aspect_hookSelector:@selector(actionButton1:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo, id sender) {
+        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
+        mvcInvo.method = method;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_INVOCATION object:mvcInvo userInfo:nil];
+    } error:&errorAspectHook];
+    
+    XCTAssert(!errorAspectHook, @"aspect error:%@",errorAspectHook.localizedDescription);
+    
+    id observerMock = [OCMockObject observerMock];
+    
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
+                                                     name:NOTIF_METHOD_INVOCATION
+                                                   object:nil];
+    
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        XCTAssertNotNil(obj, @"no notification");
+        XCTAssert([obj isKindOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
+        MTMethodInvocation * methodInvoc = obj;
+        XCTAssertNotNil(methodInvoc.method, @"no notification");
+        XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"args soule be 1");
+    }] userInfo:[OCMArg any]];
+    
+    vc.string1 = @"ACTION_BUTTON_1";
+    
+    [vc actionButton1:vc.button1];
+    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
+    
+    
+    [observerMock verify];
+    
+    XCTAssertEqualObjects(vc.string2, @"ACTION_BUTTON_1", @"should be PRESSED");
+    
+}
+
 
 
 

@@ -13,9 +13,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    NSLog(@"launchOptions:%@",launchOptions);
+#ifdef TESTING
     [Txe on];
+#else
+#warning Testmode
+#endif
     return YES;
 }
+
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
