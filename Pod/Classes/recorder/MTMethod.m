@@ -20,7 +20,7 @@ static NSMutableDictionary * methodsMap;
 static NSMutableDictionary * classMethodNamesDic;
 
 static BOOL isFirstInVirtualStack;
-static NSInteger sessionGroupIndex;
+//static NSInteger sessionGroupIndex;
 static NSInteger sessionGroupInvocationIndex;
 
 @implementation MTMethod
@@ -30,7 +30,7 @@ static NSInteger sessionGroupInvocationIndex;
     if (self) {
         self.methodArguments = NSMutableArray.new;
         isFirstInVirtualStack = TRUE;
-        sessionGroupIndex = 0;
+//        sessionGroupIndex = 0;
         sessionGroupInvocationIndex = 0;
     }
     return self;
@@ -436,7 +436,7 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
         sessionGroupInvocationIndex++;
     }
 
-    methodInvocation.sessionGroupIndex = sessionGroupIndex;
+//    methodInvocation.sessionGroupIndex = sessionGroupIndex;
     methodInvocation.sessionGroupInvocationIndex = sessionGroupInvocationIndex;
     
     [myInvocation invoke];
@@ -445,7 +445,7 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
     [methodInvocation saveVcStateAfter];
     
     isFirstInVirtualStack = TRUE;
-    sessionGroupIndex = 0;
+//    sessionGroupIndex = 0;
     sessionGroupInvocationIndex = 0;
     
     [[NSNotificationCenter defaultCenter]postNotificationName:NOTIF_METHOD_INVOCATION object:methodInvocation userInfo:nil];
