@@ -12,56 +12,58 @@
 #import "MTVcMethodInvocation.h"
 #import "XFAConstants.h"
 
+@interface XFAInvocationAOP(){
+
+}
+
+@property(nonatomic,strong) NSMutableArray * stackArray;
+@property(nonatomic,strong) NSMutableDictionary * stackInvocationsDictionary;
+@property(nonatomic,strong) NSMutableArray * aspectTokens;
+
+@end
+
 @implementation XFAInvocationAOP
 
-
-
- NSMutableArray * stackArray;
- NSMutableDictionary * stackInvocationsDictionary;
-
-
-+(NSMutableDictionary*)stackInvocations{
-    if (! stackInvocationsDictionary) {
-        stackInvocationsDictionary = NSMutableDictionary.new;
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _stackInvocationsDictionary = NSMutableDictionary.new;
+        _stackArray = NSMutableArray.new;
+        _aspectTokens = NSMutableArray.new;
     }
-    return stackInvocationsDictionary;
+    return self;
 }
 
-+(NSMutableArray*)stack{
-    if (! stackArray) {
-        stackArray = NSMutableArray.new;
-    }
-    return stackArray;
-}
 
-+(void)pushIntoStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
-    invo.invocationIndexWithStack = [XFAInvocationAOP stack].count;
-    [[XFAInvocationAOP stack] addObject:invo];
+-(void)pushIntoStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
+    invo.invocationIndexWithStack = self.stackArray.count;
+    [self.stackArray addObject:invo];
     
-    if (! [[XFAInvocationAOP stackInvocations] objectForKey:k] ) {
-        [[XFAInvocationAOP stackInvocations] setObject:[NSMutableArray array] forKey:k];
+    if (! [self.stackInvocationsDictionary objectForKey:k] ) {
+        [self.stackInvocationsDictionary setObject:[NSMutableArray array] forKey:k];
     }
-    NSMutableArray * arr = [[XFAInvocationAOP stackInvocations] objectForKey:k];
+    NSMutableArray * arr = [self.stackInvocationsDictionary objectForKey:k];
     [arr addObject:invo];
     
 }
 
-+(void)popFromStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
-    [[XFAInvocationAOP stack] removeObject:invo];
-    NSMutableArray * arr = [[XFAInvocationAOP stackInvocations] objectForKey:k];
+-(void)popFromStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
+    [self.stackArray removeObject:invo];
+    NSMutableArray * arr = [self.stackInvocationsDictionary objectForKey:k];
     NSAssert(arr, @"does not exist");
     NSAssert([arr indexOfObject:invo] != NSNotFound, @"invo not found");
     [arr removeObject:invo];
-    if ([XFAInvocationAOP stack].count == 0) {
+    /*if (stackArray.count == 0) {
         [[XFAInvocationAOP stack] removeAllObjects];
         stackArray = nil;
         [[XFAInvocationAOP stackInvocations]removeAllObjects];
         stackInvocationsDictionary = nil;
-    }
+    }*/
 }
 
 
-+(id<AspectToken>)invoAopPre:(NSObject *)obj method:(MTMethod*)method{
+-(id<AspectToken>)invoAopPre:(NSObject *)obj method:(MTMethod*)method{
     
     NSError * errorAspectHook = nil;
     
@@ -72,32 +74,46 @@
         
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
         NSAssert(k, @"can't generate key for selector");
-        [XFAInvocationAOP pushIntoStackInvocation:mvcInvo withKey:k];
+        [self pushIntoStackInvocation:mvcInvo withKey:k];
         NSAssert(mvcInvo, @"no obj");
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:mvcInvo userInfo:nil];
         
     } error:&errorAspectHook];
     NSAssert(! errorAspectHook , @"errorAspectHook AspectPositionBefore:%@",errorAspectHook);
+    [self.aspectTokens addObject:token];
     return token;
 }
 
-+(id<AspectToken>)invoAopPost:(NSObject *)obj method:(MTMethod*)method{
+-(id<AspectToken>)invoAopPost:(NSObject *)obj method:(MTMethod*)method{
     NSError * errorAspectHook = nil;
     id<AspectToken> token = [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
         
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
-        NSArray * arr = [[XFAInvocationAOP stackInvocations]objectForKey:k];
+        NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
         MTVcMethodInvocation * mvcInvo = [arr firstObject];
         
         NSAssert(mvcInvo, @"invocation not found %@",k);
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:mvcInvo userInfo:nil];
-        [XFAInvocationAOP popFromStackInvocation:mvcInvo withKey:k];
+        [self popFromStackInvocation:mvcInvo withKey:k];
         
     } error:&errorAspectHook];
     NSAssert(! errorAspectHook , @"errorAspectHook AspectPositionAfter:%@",errorAspectHook);
+    [self.aspectTokens addObject:token];
     return token;
 }
 
+
+-(void)removeAllHooks{
+    for (id<AspectToken>aspectToken in self.aspectTokens) {
+        BOOL b = [aspectToken remove];
+        NSAssert(b, @"token not removed");
+    }
+}
+
+- (void)dealloc
+{
+    [self removeAllHooks];
+}
 
 @end

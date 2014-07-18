@@ -22,7 +22,7 @@
 
 
 @interface XFAMethodTests : XCTestCase{
-    NSMutableArray * aspectTokens;
+    XFAInvocationAOP * aop;
 }
 
 @end
@@ -32,14 +32,14 @@
 - (void)setUp
 {
     [super setUp];
+    aop = XFAInvocationAOP.new;
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    aspectTokens = NSMutableArray.new;
 }
 
 - (void)tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-
+    [aop removeAllHooks];
     [super tearDown];
 }
 
@@ -103,23 +103,18 @@
     
     NSError * errorAspectHook = nil;
     MTMethod * method = [self methodButton1:vc];
-    id token1 = [TXTestViewController aspect_hookSelector:@selector(actionButton1:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo, id sender) {
-        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
-        mvcInvo.method = method;
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_INVOCATION object:mvcInvo userInfo:nil];
-    } error:&errorAspectHook];
-    [aspectTokens addObject:token1];
+
+    [aop invoAopPre:vc method:method];
     
     XCTAssert(!errorAspectHook, @"aspect error:%@",errorAspectHook.localizedDescription);
     
     id observerMock = [OCMockObject observerMock];
     
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
-                                                     name:NOTIF_METHOD_INVOCATION
+                                                     name:NOTIF_METHOD_PRE_INVOCATION
                                                    object:nil];
     
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         XCTAssertNotNil(obj, @"no notification");
         XCTAssert([obj isKindOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
         MTMethodInvocation * methodInvoc = obj;
@@ -138,8 +133,8 @@
     vc.string1 = @"ACTION_BUTTON_1";
     
     [vc actionButton1:vc.button1];
-    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
     
     [observerMock verify];
     
@@ -164,27 +159,27 @@
     ObjectMultiCalls * objTestSubject = ObjectMultiCalls.new;
     
     MTMethod * method0 = [self methodCall:objTestSubject selector:@selector(call0)];
-    [XFAInvocationAOP invoAopPre:objTestSubject method:method0];
-    [XFAInvocationAOP invoAopPost:objTestSubject method:method0];
+    [aop invoAopPre:objTestSubject method:method0];
+    [aop invoAopPost:objTestSubject method:method0];
 
     __block MTMethodInvocation * invo0 = nil;
     
     MTMethod * method1 = [self methodCall:objTestSubject selector:@selector(call1)];
-    [XFAInvocationAOP invoAopPre:objTestSubject method:method1];
-    [XFAInvocationAOP invoAopPost:objTestSubject method:method1];
+    [aop invoAopPre:objTestSubject method:method1];
+    [aop invoAopPost:objTestSubject method:method1];
 
     __block MTMethodInvocation * invo1 = nil;
     
     MTMethod * method2 = [self methodCall:objTestSubject selector:@selector(call2)];
-    [XFAInvocationAOP invoAopPre:objTestSubject method:method2];
-    [XFAInvocationAOP invoAopPost:objTestSubject method:method2];
+    [aop invoAopPre:objTestSubject method:method2];
+    [aop invoAopPost:objTestSubject method:method2];
 
     __block MTMethodInvocation * invo2 = nil;
     
     MTMethod * method3 = [self methodCall:objTestSubject selector:@selector(call3)];
     
-    [XFAInvocationAOP invoAopPre:objTestSubject method:method3];
-    [XFAInvocationAOP invoAopPost:objTestSubject method:method3];
+    [aop invoAopPre:objTestSubject method:method3];
+    [aop invoAopPost:objTestSubject method:method3];
 
     __block MTMethodInvocation * invo3 = nil;
     
@@ -198,7 +193,7 @@
                                                      name:NOTIF_METHOD_POST_INVOCATION
                                                    object:nil];
     
-    
+
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         MTMethodInvocation * invo = (MTMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
@@ -302,6 +297,8 @@
     [objTestSubject call0];
     
     [observerMock verify];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
 
 }
 
@@ -312,18 +309,17 @@
     
     MTMethod * method0 = [self methodCall:objcTestSubject selector:@selector(callfirst)];
 
-    [XFAInvocationAOP invoAopPre:objcTestSubject method:method0];
-    [XFAInvocationAOP invoAopPost:objcTestSubject method:method0];
+    [aop invoAopPre:objcTestSubject method:method0];
+    [aop invoAopPost:objcTestSubject method:method0];
     
     __block MTMethodInvocation * invo0 = nil;
     
     MTMethod * method1 = [self methodCall:objcTestSubject selector:@selector(calledTwoTimes)];
 
-    [XFAInvocationAOP invoAopPre:objcTestSubject method:method1];
-    [XFAInvocationAOP invoAopPost:objcTestSubject method:method1];
+    [aop invoAopPre:objcTestSubject method:method1];
+    [aop invoAopPost:objcTestSubject method:method1];
     
     __block MTMethodInvocation * invo1 = nil;
-
     __block MTMethodInvocation * invo2 = nil;
     
     id observerMock = [OCMockObject observerMock];
@@ -418,8 +414,8 @@
     [objcTestSubject callfirst];
     
     [observerMock verify];
-
     
+    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
 }
 
 @end

@@ -27,7 +27,7 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
-             @"method"          : @"method",
+             @"method" : @"method",
              @"invocationIndexWithStack" : @"invocationIndexWithStack",
            };
 }

@@ -13,7 +13,8 @@
 
 @interface XFAInvocationAOP : NSObject
 
-+(id<AspectToken>)invoAopPre:(NSObject *)obj method:(MTMethod*)method;
-+(id<AspectToken>)invoAopPost:(NSObject *)obj method:(MTMethod*)method;
+-(id<AspectToken>)invoAopPre:(NSObject *)obj method:(MTMethod*)method;
+-(id<AspectToken>)invoAopPost:(NSObject *)obj method:(MTMethod*)method;
+-(void)removeAllHooks;
 
 @end
