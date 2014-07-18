@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <Mantle.h>
 
-typedef NS_ENUM(NSInteger, BoolExtended) {
-    BoolExtendedUnknown = -1,
-    BoolExtendedFalse   = 0,
-    BoolExtendedTrue    = 1
-};
-
 @class MTMethod;
 
 @interface MTMethodInvocation : MTLModel <MTLJSONSerializing>
@@ -22,7 +16,7 @@ typedef NS_ENUM(NSInteger, BoolExtended) {
 @property (nonatomic,strong) MTMethod * method;
 @property (nonatomic,strong) UIViewController * invocationTarget;
 
-@property (nonatomic,assign) BoolExtended isFirstInVirtualStack;
+@property (nonatomic,assign) BOOL isFirstInVirtualStack;
 @property (nonatomic,assign) NSInteger sessionGroupIndex;
 @property (nonatomic,assign) NSInteger sessionGroupInvocationIndex;
 

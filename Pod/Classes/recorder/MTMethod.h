@@ -16,9 +16,9 @@
 @interface MTMethod : MTLModel <MTLJSONSerializing>
 
 
-@property(nonatomic,strong) NSString* methodName;
-@property(nonatomic,strong) NSString* methodReturnType;
-@property(nonatomic,strong) NSString* methodTypeEncoding;
+@property(nonatomic,strong) NSString * methodName;
+@property(nonatomic,strong) NSString * methodReturnType;
+@property(nonatomic,strong) NSString * methodTypeEncoding;
 @property(nonatomic,assign) BOOL isUserDefined;
 @property(nonatomic,assign) BOOL isMonitored;
 @property(nonatomic,assign) BOOL isChildVcEntryPoint;
@@ -43,6 +43,8 @@
 
 @property (nonatomic,readonly) BOOL isApplicable;
 
+@property (nonatomic,readonly) SEL selector;
+
 @property (nonatomic,strong) NSMutableArray * methodArguments;
 
 @property (nonatomic,strong) NSMutableArray * methodPreAssertions;
@@ -59,5 +61,7 @@
 
 +(BOOL)isVcClassProcessed:(Class)vcClass;
 +(void)setVcClassAsProcessed:(Class)vcClass;
+
++(void)invoAOP:(NSObject *)obj method:(MTMethod*)method;
 
 @end

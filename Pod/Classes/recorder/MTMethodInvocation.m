@@ -16,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        self.isFirstInVirtualStack = BoolExtendedUnknown;
+        self.isFirstInVirtualStack = FALSE;
         self.sessionGroupIndex = -1;
         self.sessionGroupInvocationIndex = -1;
     }

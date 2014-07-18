@@ -14,7 +14,7 @@
 #import "XFAConstants.h"
 #import "MTMethodArgumentValue.h"
 #import "TXAssertion.h"
-
+#import <Aspects/Aspects.h>
 
 static NSMutableDictionary * methodsMap;
 static NSMutableDictionary * classMethodNamesDic;
@@ -511,7 +511,33 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
 
 
 
+-(SEL)selector{
+    return NSSelectorFromString(self.methodName);
+}
 
+# pragma mark - AOP
+
+
++(void)invoAOP:(NSObject *)obj method:(MTMethod*)method{
+    
+    NSError * errorAspectHook = nil;
+    
+    [obj aspect_hookSelector:method.selector withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo) {
+        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
+        mvcInvo.method = method;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:mvcInvo userInfo:nil];
+    } error:&errorAspectHook];
+    NSAssert(! errorAspectHook , @"errorAspectHook:%@",errorAspectHook);
+    
+    [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
+        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
+        mvcInvo.method = method;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:mvcInvo userInfo:nil];
+    } error:&errorAspectHook];
+    NSAssert(! errorAspectHook , @"errorAspectHook:%@",errorAspectHook);
+}
 
 
 
