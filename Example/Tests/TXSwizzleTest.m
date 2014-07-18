@@ -140,7 +140,7 @@
 
 
 
-
+/*
 -(void)testInvocationNotification{
     
     TXTestViewController * vc = TXTestViewController.new;
@@ -172,7 +172,7 @@
 //    XCTAssertEqualObjects(vc.label.text, @"TEXT2", @"should be TEXT2");
     
 }
-
+*/
 
 
 -(void)testPlay{

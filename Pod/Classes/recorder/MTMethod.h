@@ -57,11 +57,11 @@
 
 -(void)applyTo:(NSObject*)obj;
 
--(void)monitorForObject:(NSObject*)obj;
 
 +(BOOL)isVcClassProcessed:(Class)vcClass;
 +(void)setVcClassAsProcessed:(Class)vcClass;
 
-+(void)invoAOP:(NSObject *)obj method:(MTMethod*)method;
+-(void)aopOn;
+-(void)aopOff;
 
 @end

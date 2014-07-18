@@ -170,7 +170,7 @@ NSString * const ENV_PLAN_K = @"XX";
         for (MTMethod * method in methods) {
             NSLog(@"doVc: %@, method:%@",[vc class],method);
             if (method.isMonitored) {
-                [method monitorForObject:vc];
+//                [method monito/rForObject:vc];
             }
             
         }

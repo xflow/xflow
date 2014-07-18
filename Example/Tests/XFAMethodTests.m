@@ -17,8 +17,13 @@
 #import "UIViewController+XFAProperties.h"
 #import <Aspects/Aspects.h>
 #import "ObjectMultiCalls.h"
+#import "ObjectRecursiveCalls.h"
+#import "XFAInvocationAOP.h"
 
-@interface XFAMethodTests : XCTestCase
+
+@interface XFAMethodTests : XCTestCase{
+    NSMutableArray * aspectTokens;
+}
 
 @end
 
@@ -28,11 +33,13 @@
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    aspectTokens = NSMutableArray.new;
 }
 
 - (void)tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
+
     [super tearDown];
 }
 
@@ -96,12 +103,13 @@
     
     NSError * errorAspectHook = nil;
     MTMethod * method = [self methodButton1:vc];
-    [TXTestViewController aspect_hookSelector:@selector(actionButton1:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo, id sender) {
+    id token1 = [TXTestViewController aspect_hookSelector:@selector(actionButton1:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo, id sender) {
         MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
         mvcInvo.method = method;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_INVOCATION object:mvcInvo userInfo:nil];
     } error:&errorAspectHook];
+    [aspectTokens addObject:token1];
     
     XCTAssert(!errorAspectHook, @"aspect error:%@",errorAspectHook.localizedDescription);
     
@@ -140,12 +148,6 @@
 }
 
 
--(void)testMultiCalls_OLD_CODE
-{
-    
-}
-
-
 
 -(MTMethod*)methodCall:(NSObject *)vc selector:(SEL)selector{
     MTMethod * method = MTMethod.new;
@@ -156,25 +158,34 @@
 }
 
 
--(void)testMultiCalls_AOP
+-(void)test_Multi_Calls_AOP
 {
     
-    ObjectMultiCalls * obj1 = ObjectMultiCalls.new;
+    ObjectMultiCalls * objTestSubject = ObjectMultiCalls.new;
     
-    MTMethod * method0 = [self methodCall:obj1 selector:@selector(call0)];
-    [MTMethod invoAOP:obj1 method:method0];
+    MTMethod * method0 = [self methodCall:objTestSubject selector:@selector(call0)];
+    [XFAInvocationAOP invoAopPre:objTestSubject method:method0];
+    [XFAInvocationAOP invoAopPost:objTestSubject method:method0];
+
     __block MTMethodInvocation * invo0 = nil;
     
-    MTMethod * method1 = [self methodCall:obj1 selector:@selector(call1)];
-    [MTMethod invoAOP:obj1 method:method1];
+    MTMethod * method1 = [self methodCall:objTestSubject selector:@selector(call1)];
+    [XFAInvocationAOP invoAopPre:objTestSubject method:method1];
+    [XFAInvocationAOP invoAopPost:objTestSubject method:method1];
+
     __block MTMethodInvocation * invo1 = nil;
     
-    MTMethod * method2 = [self methodCall:obj1 selector:@selector(call2)];
-    [MTMethod invoAOP:obj1 method:method2];
+    MTMethod * method2 = [self methodCall:objTestSubject selector:@selector(call2)];
+    [XFAInvocationAOP invoAopPre:objTestSubject method:method2];
+    [XFAInvocationAOP invoAopPost:objTestSubject method:method2];
+
     __block MTMethodInvocation * invo2 = nil;
     
-    MTMethod * method3 = [self methodCall:obj1 selector:@selector(call3)];
-    [MTMethod invoAOP:obj1 method:method3];
+    MTMethod * method3 = [self methodCall:objTestSubject selector:@selector(call3)];
+    
+    [XFAInvocationAOP invoAopPre:objTestSubject method:method3];
+    [XFAInvocationAOP invoAopPost:objTestSubject method:method3];
+
     __block MTMethodInvocation * invo3 = nil;
     
     id observerMock = [OCMockObject observerMock];
@@ -196,7 +207,7 @@
         }
         invo3 = (MTMethodInvocation *)obj;
         XCTAssertFalse(invo3.isFirstInVirtualStack, @"should not be first");
-        return [invo3.method isEqual:method3];
+        return YES;
     }] userInfo:[OCMArg any]];
     
     
@@ -242,7 +253,7 @@
         }
         XCTAssertEqualObjects(invo0, obj, @"expeted invo0");
         XCTAssertTrue(invo0.isFirstInVirtualStack, @"should be first");
-        return [invo0.method isEqual:method0];
+        return YES;
     }] userInfo:[OCMArg any]];
 
     
@@ -256,7 +267,7 @@
         
         XCTAssertEqualObjects(invo1, obj, @"expeted invo0");
         XCTAssertFalse(invo1.isFirstInVirtualStack, @"should not be first");
-        return [invo1.method isEqual:method1];
+        return YES;
     }] userInfo:[OCMArg any]];
 
     
@@ -271,7 +282,7 @@
         
         XCTAssertEqualObjects(invo2, obj, @"expeted invo2");
         XCTAssertFalse(invo2.isFirstInVirtualStack, @"should not be first");
-        return [invo2.method isEqual:method2];
+        return YES;
     }] userInfo:[OCMArg any]];
 
     
@@ -285,15 +296,130 @@
         
         XCTAssertEqualObjects(invo3, obj, @"expeted invo0");
         XCTAssertFalse(invo3.isFirstInVirtualStack, @"should not be first");
-        return [invo3.method isEqual:method3];
+        return YES;
     }] userInfo:[OCMArg any]];
 
-    [obj1 call0];
+    [objTestSubject call0];
     
     [observerMock verify];
 
 }
 
 
+-(void)test_twice_Recursive_Calls{
+    
+    ObjectRecursiveCalls * objcTestSubject = ObjectRecursiveCalls.new;
+    
+    MTMethod * method0 = [self methodCall:objcTestSubject selector:@selector(callfirst)];
+
+    [XFAInvocationAOP invoAopPre:objcTestSubject method:method0];
+    [XFAInvocationAOP invoAopPost:objcTestSubject method:method0];
+    
+    __block MTMethodInvocation * invo0 = nil;
+    
+    MTMethod * method1 = [self methodCall:objcTestSubject selector:@selector(calledTwoTimes)];
+
+    [XFAInvocationAOP invoAopPre:objcTestSubject method:method1];
+    [XFAInvocationAOP invoAopPost:objcTestSubject method:method1];
+    
+    __block MTMethodInvocation * invo1 = nil;
+
+    __block MTMethodInvocation * invo2 = nil;
+    
+    id observerMock = [OCMockObject observerMock];
+    
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
+                                                     name:NOTIF_METHOD_PRE_INVOCATION
+                                                   object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
+                                                     name:NOTIF_METHOD_POST_INVOCATION
+                                                   object:nil];
+    
+     // 1
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION 1 %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"callfirst"]) {
+            return NO;
+        }
+        invo0 = invo;
+        XCTAssertTrue(invo0.isFirstInVirtualStack, @"should be first");
+        return YES;
+    }] userInfo:[OCMArg any]];
+    
+    // 2
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION 2 %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
+            return NO;
+        }
+        invo1 = invo;
+        XCTAssertFalse(invo1.isFirstInVirtualStack, @"should be first");
+        return YES;
+    }] userInfo:[OCMArg any]];
+    
+    // 3
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION 3 %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
+            return NO;
+        }
+        invo2 = invo;
+        XCTAssertNotEqual(invo, invo1, @"should not be equal")
+        ;        XCTAssertFalse(invo2.isFirstInVirtualStack, @"should be first");
+        return YES;
+    }] userInfo:[OCMArg any]];
+    
+    // 4
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION 4 %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"callfirst"]) {
+            return NO;
+        }
+        
+        XCTAssertEqualObjects(invo0, obj, @"expeted invo0");
+        XCTAssertTrue(invo0.isFirstInVirtualStack, @"should not be first");
+        return YES;
+    }] userInfo:[OCMArg any]];
+    
+     // 5
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION 5 %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
+            return NO;
+        }
+        
+        XCTAssertEqualObjects(invo1, obj, @"expeted invo0");
+        XCTAssertFalse(invo1.isFirstInVirtualStack, @"should not be first");
+        return YES;
+    }] userInfo:[OCMArg any]];
+    
+    // 6
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION 6 %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
+            return NO;
+        }
+        
+        XCTAssertEqualObjects(invo2, obj, @"expeted invo0");
+        XCTAssertFalse(invo2.isFirstInVirtualStack, @"should not be first");
+        return YES;
+    }] userInfo:[OCMArg any]];
+    
+    [objcTestSubject callfirst];
+    
+    [observerMock verify];
+
+    
+}
 
 @end

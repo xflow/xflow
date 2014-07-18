@@ -17,6 +17,7 @@
 		10157F84197378340010B954 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10157F7C197378340010B954 /* Main.storyboard */; };
 		10157F861977195F0010B954 /* XFAMethodTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F851977195F0010B954 /* XFAMethodTests.m */; };
 		10157F8C1978179A0010B954 /* ObjectMultiCalls.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F8B1978179A0010B954 /* ObjectMultiCalls.m */; };
+		10157F8F1978E6690010B954 /* ObjectRecursiveCalls.m in Sources */ = {isa = PBXBuildFile; fileRef = 10157F8E1978E6690010B954 /* ObjectRecursiveCalls.m */; };
 		1058ECE0196CE33000C6ACD0 /* TXSwizzleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDA196CE33000C6ACD0 /* TXSwizzleTest.m */; };
 		1058ECE1196CE33000C6ACD0 /* TXTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDC196CE33000C6ACD0 /* TXTestObject.m */; };
 		1058ECE2196CE33000C6ACD0 /* TXTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */; };
@@ -68,6 +69,8 @@
 		10157F851977195F0010B954 /* XFAMethodTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFAMethodTests.m; sourceTree = "<group>"; };
 		10157F8A1978179A0010B954 /* ObjectMultiCalls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectMultiCalls.h; sourceTree = "<group>"; };
 		10157F8B1978179A0010B954 /* ObjectMultiCalls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectMultiCalls.m; sourceTree = "<group>"; };
+		10157F8D1978E6690010B954 /* ObjectRecursiveCalls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectRecursiveCalls.h; sourceTree = "<group>"; };
+		10157F8E1978E6690010B954 /* ObjectRecursiveCalls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectRecursiveCalls.m; sourceTree = "<group>"; };
 		1058ECDA196CE33000C6ACD0 /* TXSwizzleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXSwizzleTest.m; sourceTree = "<group>"; };
 		1058ECDB196CE33000C6ACD0 /* TXTestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXTestObject.h; sourceTree = "<group>"; };
 		1058ECDC196CE33000C6ACD0 /* TXTestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXTestObject.m; sourceTree = "<group>"; };
@@ -233,6 +236,8 @@
 				10157F851977195F0010B954 /* XFAMethodTests.m */,
 				10157F8A1978179A0010B954 /* ObjectMultiCalls.h */,
 				10157F8B1978179A0010B954 /* ObjectMultiCalls.m */,
+				10157F8D1978E6690010B954 /* ObjectRecursiveCalls.h */,
+				10157F8E1978E6690010B954 /* ObjectRecursiveCalls.m */,
 				1058ECDB196CE33000C6ACD0 /* TXTestObject.h */,
 				1058ECDC196CE33000C6ACD0 /* TXTestObject.m */,
 				1058ECDD196CE33000C6ACD0 /* TXTestViewController.h */,
@@ -452,6 +457,7 @@
 				6003F5BC195388D20070C39A /* Tests.m in Sources */,
 				1058ECE1196CE33000C6ACD0 /* TXTestObject.m in Sources */,
 				10157F8C1978179A0010B954 /* ObjectMultiCalls.m in Sources */,
+				10157F8F1978E6690010B954 /* ObjectRecursiveCalls.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

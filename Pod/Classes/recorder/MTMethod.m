@@ -10,18 +10,15 @@
 #import "MTMethodArgument.h"
 #import <objc/runtime.h>
 #import "Swizzle.h"
-#import "MTVcMethodInvocation.h"
 #import "XFAConstants.h"
 #import "MTMethodArgumentValue.h"
 #import "TXAssertion.h"
-#import <Aspects/Aspects.h>
+#import "XFAInvocationAOP.h"
+
 
 static NSMutableDictionary * methodsMap;
 static NSMutableDictionary * classMethodNamesDic;
 
-//static BOOL isFirstInVirtualStack;
-//static NSInteger sessionGroupIndex;
-//static NSInteger sessionGroupInvocationIndex;
 
 @implementation MTMethod
 - (id)init
@@ -29,9 +26,6 @@ static NSMutableDictionary * classMethodNamesDic;
     self = [super init];
     if (self) {
         self.methodArguments = NSMutableArray.new;
-//        isFirstInVirtualStack = TRUE;
-//        sessionGroupIndex = 0;
-//        sessionGroupInvocationIndex = 0;
     }
     return self;
 }
@@ -47,11 +41,6 @@ static NSMutableDictionary * classMethodNamesDic;
     return iv;
 }
 
-/*
- name:anObject, typeEncoding:@8@0:4, returnType:@",
- "name:anObjectWith:, typeEncoding:@12@0:4@8, returnType:@",
- "name:anObjectWithOne:two:, typeEncoding:@16@0:4@8@12, returnType:@",
- */
 
 -(BOOL)isObjectAndNoArguments{
     BOOL iv = [self.methodTypeEncoding isEqualToString:@"@8@0:4"];
@@ -189,31 +178,6 @@ static NSMutableDictionary * classMethodNamesDic;
     [MTMethod applyMethod:self toObject:obj];
 }
 
-/*
--(void)monitorForObject:(NSObject*)obj
-{
-    NSAssert([obj respondsToSelector:NSSelectorFromString(self.methodName)], @"%@ does not respond to: %@",obj.class, self.methodName);
-    
-    NSLog(@"[%@ %@] - monitorForObject", obj.class, self.methodName);
-    
-    SEL replacementSel = NSSelectorFromString(replacement(self.methodName));
-
-    if ([obj respondsToSelector:replacementSel]) {
-        NSLog(@"allready respondsToSelector  monitorForObject %@ %@",
-              replacement( self.methodName ),
-              [obj class]);
-//        NSAssert(FALSE , @"calling twice [%@ %@]",obj.class,self.methodName);
-//        return;
-    }
-    
-    if ([[MTMethod methodsMap] valueForKeyPath:self.methodName]) {
-//        NSAssert(FALSE , @"twice htiu");
-//        return;
-    }
-    
-    [MTMethod swizzleMethod:self forClass:obj.class];
-    [MTMethod addMethodName:self.methodName forClassName:NSStringFromClass(obj.class)];
-}*/
 
 +(void)setVcClassAsProcessed:(Class)vcClass{
     if (! [[MTMethod classMethodNamesDic] valueForKey:NSStringFromClass(vcClass)] ) {
@@ -244,30 +208,7 @@ static NSMutableDictionary * classMethodNamesDic;
 +(void)swizzleMethod:(MTMethod*)method ofObject:(NSObject*)obj{
     NSAssert(FALSE, @"calling old mehtod");
 }
-/*
-+(void)swizzleMethod:(MTMethod*)method forClass:(Class)objClass{
 
-    NSString * replacementMethodName = replacement(method.methodName);
-    
-    [[MTMethod methodsMap] setValue:method forKey:method.methodName];
-    
-   BOOL added = class_addMethod(objClass ,
-                    NSSelectorFromString(replacementMethodName),
-                    (IMP) invokeMethodWithInvoker ,
-                    [method.methodTypeEncoding cStringUsingEncoding:NSUTF8StringEncoding]);
-    
-    NSAssert(added, @"class_addMethod FAILED for: %@ %@",replacementMethodName , objClass );
-    
-    SEL targetSelector2 = NSSelectorFromString(replacementMethodName);
-    
-    NSLog(@" • swizzleMethod:%@ for object:%@", method.methodName, objClass);
-    
-    Swizzle(objClass,
-            NSSelectorFromString( method.methodName ),
-            targetSelector2 );
-    
-}
-*/
 
 +(void*)applyMethod:(MTMethod*)method toObject:(NSObject*)obj{
     
@@ -361,119 +302,6 @@ NSString * replacement(NSString* methodName)
     return methodsMap;
 }
 
-/*
-void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
-{
-    
-    NSString * originalMethodName =  NSStringFromSelector(_cmd);
-    
-    NSLog(@"%@ %@", objId, originalMethodName);
-    
-    NSLog(@"invokeMethodWithInvoker method key:%@", originalMethodName);
-    
-    MTMethod * method = [methodsMap valueForKey:originalMethodName];
-
-    NSString * assertMsg = [NSString stringWithFormat:@"no method found: %@", originalMethodName];
-    
-    NSCAssert(method, assertMsg);
-    
-    NSString * r = replacement(method.methodName);
-    
-    NSObject * obj = objId;
-    
-    NSCAssert(obj, @"invokeMethodWithInvoker obj is not");
-    
-    NSLog(@"newMethodWithInvoker :%@",NSStringFromSelector(_cmd));
-    
-    SEL replacementSel = NSSelectorFromString(r);
-    
-    NSMethodSignature * mySignature = [[obj class] instanceMethodSignatureForSelector:_cmd];
-    
-    NSInvocation * myInvocation = [NSInvocation invocationWithMethodSignature:mySignature];
-    
-    [myInvocation setTarget:obj];
-    
-    [myInvocation setSelector:replacementSel];
-    
-//    NSLog(@"method.methodArguments:%@",method.methodArguments);
-    
-    MTVcMethodInvocation * methodInvocation = MTVcMethodInvocation.new;
-    
-    methodInvocation.method = method;
-    NSCAssert([obj isKindOfClass:[UIViewController class]], @"obj is not a UIViewController");
-    methodInvocation.invocationTarget = (UIViewController *)obj;
-    [methodInvocation saveVcStateBefore];
-    va_list args;
-    // va_start needs it to know where to start processing the variable-arguments.
-    va_start(args,_cmd);
-    for (int i = 0; i < method.methodArguments.count ; i++) {
-
-        MTMethodArgument * mArg = [method.methodArguments objectAtIndex:i];
-        if (mArg.type == MTMethodArgumentTypeObject) {
-            id val = va_arg(args,id);
-            [myInvocation setArgument:&val atIndex:i+2];
-            mArg.argumentValue = val;
-        } else {
-            int val = va_arg(args,int);
-            [myInvocation setArgument:&val atIndex:i+2];
-        }
-        
-    }
-    
-    va_end(args);
-
-
-    NSUInteger returnLength = [[myInvocation methodSignature] methodReturnLength];
-    
-    NSLog(@"invokeMethodWithInvoker:%@ returnLength:%d",NSStringFromSelector(_cmd),returnLength);
-    
-    
-    methodInvocation.isFirstInVirtualStack = isFirstInVirtualStack;
-    
-    if (isFirstInVirtualStack){
-        NSLog(@"invokeMethodWithInvoker:%@, isFirst:%d", NSStringFromSelector(_cmd), isFirstInVirtualStack );
-        isFirstInVirtualStack = FALSE;
-        sessionGroupInvocationIndex = 0;
-    } else {
-        sessionGroupInvocationIndex++;
-    }
-
-//    methodInvocation.sessionGroupIndex = sessionGroupIndex;
-    methodInvocation.invocationIndexWithStack = sessionGroupInvocationIndex;
-    
-    [myInvocation invoke];
-    
-    [method runArgumentsAssertions];
-    [methodInvocation saveVcStateAfter];
-    
-    isFirstInVirtualStack = TRUE;
-//    sessionGroupIndex = 0;
-    sessionGroupInvocationIndex = 0;
-    
-    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIF_METHOD_INVOCATION object:methodInvocation userInfo:nil];
-    
-    NSCAssert(method.methodReturnType, @"no method return type set");
-    
-    if (method.isVoid) {
-        return nil;
-    } else if (method.isScalar) {
-        void * result = malloc(returnLength);
-        [myInvocation getReturnValue:result];
-        return result;
-    } else if (method.isObject){
-        __unsafe_unretained id result;
-        [myInvocation getReturnValue:&result];
-        return (__bridge void *)(result);
-    } else {
-        NSCAssert(FALSE, @"unknowssss");
-    }
-    
-
-    return nil;
-    
-}
-*/
-
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"methodName"          : @"methodName",
@@ -515,63 +343,6 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
 
 -(SEL)selector{
     return NSSelectorFromString(self.methodName);
-}
-
-# pragma mark - AOP
-
-static NSMutableArray * stack;
-static NSMutableDictionary * stackInvocations;
-
-
-+(NSMutableDictionary*)stackInvocations{
-    if (! stackInvocations) {
-        stackInvocations = NSMutableDictionary.new;
-    }
-    return stackInvocations;
-}
-
-+(NSMutableArray*)stack{
-    if (! stack) {
-        stack = NSMutableArray.new;
-    }
-    return stack;
-}
-
-+(void)pushIntoStackMethod:(MTMethodInvocation*)invo{
-    invo.invocationIndexWithStack = stack.count;
-    [MTMethod.stack addObject:invo];
-}
-
-+(void)popFromStackMethod:(MTMethodInvocation*)invo{
-    [MTMethod.stack removeObject:invo];
-}
-
-+(void)invoAOP:(NSObject *)obj method:(MTMethod*)method{
-    
-    NSError * errorAspectHook = nil;
-    
-    [obj aspect_hookSelector:method.selector withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo) {
-        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
-        mvcInvo.method = method;
-        NSString * s = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
-        [[MTMethod stackInvocations]setObject:mvcInvo forKey:s];
-                                          
-        [MTMethod pushIntoStackMethod:mvcInvo];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:mvcInvo userInfo:nil];
-        
-    } error:&errorAspectHook];
-    NSAssert(! errorAspectHook , @"errorAspectHook:%@",errorAspectHook);
-    
-    [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
-        
-        NSString * s = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
-        MTVcMethodInvocation * mvcInvo = [[MTMethod stackInvocations]objectForKey:s];
-        NSAssert(mvcInvo, @"invocation not found %@",s);
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:mvcInvo userInfo:nil];
-        [MTMethod popFromStackMethod:mvcInvo];
-    } error:&errorAspectHook];
-    NSAssert(! errorAspectHook , @"errorAspectHook:%@",errorAspectHook);
-    
 }
 
 
