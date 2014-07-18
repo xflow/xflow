@@ -85,132 +85,6 @@
 }
 
 
-- (void)test_MTMethod_Monitor_OLD_CODE{
-    
-    TXTestViewController * vc = TXTestViewController.new;
-    
-    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    vc.xfaProperties = @{}.mutableCopy;
-    
-    MTMethod * method = [self methodButton1:vc];
-    
-    [method monitorForObject:vc];
-    
-    id observerMock = [OCMockObject observerMock];
-    
-    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
-                                                     name:NOTIF_METHOD_INVOCATION
-                                                   object:nil];
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        XCTAssertNotNil(obj, @"no notification");
-        XCTAssert([obj isKindOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
-        MTMethodInvocation * methodInvoc = obj;
-        XCTAssertNotNil(methodInvoc.method, @"no notification");
-        XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"args should be: 1");
-        MTMethodArgument * argv = methodInvoc.method.methodArguments.firstObject;
-        
-        XCTAssertEqual(argv.argumentValue ,(NSValue*)vc.button1, @"args should be:%@, not: %@ ",vc.button1, methodInvoc.method.methodArguments.firstObject);
-    }] userInfo:[OCMArg any]];
-    
-    vc.string1 = @"ACTION_BUTTON_1";
-    
-    [vc actionButton1:vc.button1];
-    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
-    
-    [observerMock verify];
-    
-    XCTAssertEqualObjects(vc.string2, @"ACTION_BUTTON_1", @"should be PRESSED");
-    
-}
-
-
-- (void)test_MTMethod_Monitor_void_one_object_arg{
-    
-    TXTestViewController * vc = TXTestViewController.new;
-    
-    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    vc.xfaProperties = @{}.mutableCopy;
-    
-    MTMethod * method = [self methodButton1:vc];
-    
-    [method monitorForObject:vc];
-    
-    id observerMock = [OCMockObject observerMock];
-    
-    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
-                                                     name:NOTIF_METHOD_INVOCATION
-                                                   object:nil];
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        XCTAssertNotNil(obj, @"no notification");
-        XCTAssert([obj isKindOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
-        MTMethodInvocation * methodInvoc = obj;
-        XCTAssertNotNil(methodInvoc.method, @"no notification");
-        XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"args should be: 1");
-        MTMethodArgument * argv = methodInvoc.method.methodArguments.firstObject;
-        
-        XCTAssertEqual(argv.argumentValue ,(NSValue*)vc.button1, @"args should be:%@, not: %@ ",vc.button1, methodInvoc.method.methodArguments.firstObject);
-    }] userInfo:[OCMArg any]];
-    
-    vc.string1 = @"ACTION_BUTTON_1";
-    
-    [vc actionButton1:vc.button1];
-    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
-    
-    [observerMock verify];
-    
-    XCTAssertEqualObjects(vc.string2, @"ACTION_BUTTON_1", @"should be PRESSED");
-    
-}
-
-
-- (void)test_MTMethod_Monitor_void_two_object_arg{
-    
-    TXTestViewController * vc = TXTestViewController.new;
-    
-    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    vc.xfaProperties = @{}.mutableCopy;
-    
-    MTMethod * method = [self methodButton2:vc];
-    
-    [method monitorForObject:vc];
-    
-    id observerMock = [OCMockObject observerMock];
-    
-    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
-                                                     name:NOTIF_METHOD_INVOCATION
-                                                   object:nil];
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        XCTAssertNotNil(obj, @"no notification");
-        XCTAssert([obj isKindOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
-        MTMethodInvocation * methodInvoc = obj;
-        XCTAssertNotNil(methodInvoc.method, @"no notification");
-        XCTAssertEqual(methodInvoc.method.methodArguments.count, 2, @"args should be: 1");
-        MTMethodArgument * argv1 = methodInvoc.method.methodArguments.firstObject;
-        
-        XCTAssertEqual(argv1.argumentValue ,(NSValue*)vc.button2, @"args should be:%@, not: %@ ",vc.button1, methodInvoc.method.methodArguments.firstObject);
-        
-        MTMethodArgument * argv2 = [methodInvoc.method.methodArguments objectAtIndex:1];
-        
-        XCTAssert([argv2.argumentValue isKindOfClass:[UIEvent class]]);
-        
-    }] userInfo:[OCMArg any]];
-    
-    vc.string1 = @"ACTION_BUTTON_1";
-    
-    [vc actionButton2:vc.button2 event:UIEvent.new];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
-    
-    [observerMock verify];
-    
-    XCTAssertEqualObjects(vc.string2, @"ACTION_BUTTON_1", @"should be PRESSED");
-    
-}
-
-
 
 
 - (void)test_MTMethod_Monitor_AOP
@@ -289,13 +163,20 @@
     
     MTMethod * method0 = [self methodCall:obj1 selector:@selector(call0)];
     [MTMethod invoAOP:obj1 method:method0];
+    __block MTMethodInvocation * invo0 = nil;
+    
     MTMethod * method1 = [self methodCall:obj1 selector:@selector(call1)];
     [MTMethod invoAOP:obj1 method:method1];
+    __block MTMethodInvocation * invo1 = nil;
+    
     MTMethod * method2 = [self methodCall:obj1 selector:@selector(call2)];
     [MTMethod invoAOP:obj1 method:method2];
+    __block MTMethodInvocation * invo2 = nil;
+    
     MTMethod * method3 = [self methodCall:obj1 selector:@selector(call3)];
     [MTMethod invoAOP:obj1 method:method3];
-        
+    __block MTMethodInvocation * invo3 = nil;
+    
     id observerMock = [OCMockObject observerMock];
     
     [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
@@ -306,70 +187,105 @@
                                                      name:NOTIF_METHOD_POST_INVOCATION
                                                    object:nil];
     
+    
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_PRE_INVOCATION");
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-//        XCTAssertTrue(invo.isFirstInVirtualStack, @"should be first");
-        return [invo.method isEqual:method0];
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call3"]) {
+            return NO;
+        }
+        invo3 = (MTMethodInvocation *)obj;
+        XCTAssertFalse(invo3.isFirstInVirtualStack, @"should not be first");
+        return [invo3.method isEqual:method3];
+    }] userInfo:[OCMArg any]];
+    
+    
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call0"]) {
+            return NO;
+        }
+        invo0 = invo;
+        XCTAssertTrue(invo0.isFirstInVirtualStack, @"should be first");
+        return YES;
     }] userInfo:[OCMArg any]];
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_PRE_INVOCATION");
-        
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-        XCTAssertFalse(invo.isFirstInVirtualStack, @"should not be first");
-        return [invo.method isEqual:method1];
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call1"]) {
+            return NO;
+        }
+        invo1 = (MTMethodInvocation *)obj;
+        XCTAssertFalse(invo1.isFirstInVirtualStack, @"should not be first");
+        return YES;
     }] userInfo:[OCMArg any]];
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_PRE_INVOCATION");
-        
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-        XCTAssertFalse(invo.isFirstInVirtualStack, @"should not be first");
-        return [invo.method isEqual:method2];
-    }] userInfo:[OCMArg any]];
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_PRE_INVOCATION");
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-        XCTAssertFalse(invo.isFirstInVirtualStack, @"should not be first");
-        return [invo.method isEqual:method3];
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call2"]) {
+            return NO;
+        }
+        invo2 = (MTMethodInvocation *)obj;
+        XCTAssertFalse(invo2.isFirstInVirtualStack, @"should not be first");
+        return YES;
     }] userInfo:[OCMArg any]];
     
 
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_POST_INVOCATION");
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call0"]) {
+            return NO;
+        }
+        XCTAssertEqualObjects(invo0, obj, @"expeted invo0");
+        XCTAssertTrue(invo0.isFirstInVirtualStack, @"should be first");
+        return [invo0.method isEqual:method0];
+    }] userInfo:[OCMArg any]];
+
+    
+    [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-//        XCTAssertTrue(invo.isFirstInVirtualStack, @"should be first");
-        return [invo.method isEqual:method0];
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call1"]) {
+            return NO;
+        }
+        
+        XCTAssertEqualObjects(invo1, obj, @"expeted invo0");
+        XCTAssertFalse(invo1.isFirstInVirtualStack, @"should not be first");
+        return [invo1.method isEqual:method1];
     }] userInfo:[OCMArg any]];
 
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         NSLog(@"NOTIF_METHOD_POST_INVOCATION");
         
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-        XCTAssertFalse(invo.isFirstInVirtualStack, @"should not be first");
-        return [invo.method isEqual:method1];
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call2"]) {
+            return NO;
+        }
+        
+        XCTAssertEqualObjects(invo2, obj, @"expeted invo2");
+        XCTAssertFalse(invo2.isFirstInVirtualStack, @"should not be first");
+        return [invo2.method isEqual:method2];
     }] userInfo:[OCMArg any]];
 
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_POST_INVOCATION");
         
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-        XCTAssertFalse(invo.isFirstInVirtualStack, @"should not be first");
-        return [invo.method isEqual:method2];
-    }] userInfo:[OCMArg any]];
-
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        NSLog(@"NOTIF_METHOD_POST_INVOCATION");
+        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
+        if (![invo.method.methodName isEqualToString:@"call3"]) {
+            return NO;
+        }
         
-        MTMethodInvocation * invo = (MTMethodInvocation *)obj;
-        XCTAssertFalse(invo.isFirstInVirtualStack, @"should not be first");
-        return [invo.method isEqual:method3];
+        XCTAssertEqualObjects(invo3, obj, @"expeted invo0");
+        XCTAssertFalse(invo3.isFirstInVirtualStack, @"should not be first");
+        return [invo3.method isEqual:method3];
     }] userInfo:[OCMArg any]];
 
     [obj1 call0];

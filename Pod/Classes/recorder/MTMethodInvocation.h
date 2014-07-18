@@ -16,8 +16,7 @@
 @property (nonatomic,strong) MTMethod * method;
 @property (nonatomic,strong) UIViewController * invocationTarget;
 
-@property (nonatomic,assign) BOOL isFirstInVirtualStack;
-@property (nonatomic,assign) NSInteger sessionGroupIndex;
-@property (nonatomic,assign) NSInteger sessionGroupInvocationIndex;
+@property (nonatomic,readonly) BOOL isFirstInVirtualStack;
+@property (nonatomic,assign) NSInteger invocationIndexWithStack;
 
 @end

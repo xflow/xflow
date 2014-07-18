@@ -16,20 +16,19 @@
 {
     self = [super init];
     if (self) {
-        self.isFirstInVirtualStack = FALSE;
-        self.sessionGroupIndex = -1;
-        self.sessionGroupInvocationIndex = -1;
+        self.invocationIndexWithStack = -1;
     }
     return self;
 }
 
+-(BOOL)isFirstInVirtualStack{
+    return self.invocationIndexWithStack == 0;
+}
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"method"          : @"method",
-             @"isFirstInVirtualStack" : @"isFirstInVirtualStack",
-             @"sessionGroupIndex" : @"sessionGroupIndex",
-             @"sessionGroupInvocationIndex" : @"sessionGroupInvocationIndex",
+             @"invocationIndexWithStack" : @"invocationIndexWithStack",
            };
 }
 

@@ -19,9 +19,9 @@
 static NSMutableDictionary * methodsMap;
 static NSMutableDictionary * classMethodNamesDic;
 
-static BOOL isFirstInVirtualStack;
+//static BOOL isFirstInVirtualStack;
 //static NSInteger sessionGroupIndex;
-static NSInteger sessionGroupInvocationIndex;
+//static NSInteger sessionGroupInvocationIndex;
 
 @implementation MTMethod
 - (id)init
@@ -29,9 +29,9 @@ static NSInteger sessionGroupInvocationIndex;
     self = [super init];
     if (self) {
         self.methodArguments = NSMutableArray.new;
-        isFirstInVirtualStack = TRUE;
+//        isFirstInVirtualStack = TRUE;
 //        sessionGroupIndex = 0;
-        sessionGroupInvocationIndex = 0;
+//        sessionGroupInvocationIndex = 0;
     }
     return self;
 }
@@ -189,6 +189,7 @@ static NSInteger sessionGroupInvocationIndex;
     [MTMethod applyMethod:self toObject:obj];
 }
 
+/*
 -(void)monitorForObject:(NSObject*)obj
 {
     NSAssert([obj respondsToSelector:NSSelectorFromString(self.methodName)], @"%@ does not respond to: %@",obj.class, self.methodName);
@@ -212,7 +213,7 @@ static NSInteger sessionGroupInvocationIndex;
     
     [MTMethod swizzleMethod:self forClass:obj.class];
     [MTMethod addMethodName:self.methodName forClassName:NSStringFromClass(obj.class)];
-}
+}*/
 
 +(void)setVcClassAsProcessed:(Class)vcClass{
     if (! [[MTMethod classMethodNamesDic] valueForKey:NSStringFromClass(vcClass)] ) {
@@ -243,7 +244,7 @@ static NSInteger sessionGroupInvocationIndex;
 +(void)swizzleMethod:(MTMethod*)method ofObject:(NSObject*)obj{
     NSAssert(FALSE, @"calling old mehtod");
 }
-
+/*
 +(void)swizzleMethod:(MTMethod*)method forClass:(Class)objClass{
 
     NSString * replacementMethodName = replacement(method.methodName);
@@ -266,7 +267,7 @@ static NSInteger sessionGroupInvocationIndex;
             targetSelector2 );
     
 }
-
+*/
 
 +(void*)applyMethod:(MTMethod*)method toObject:(NSObject*)obj{
     
@@ -360,6 +361,7 @@ NSString * replacement(NSString* methodName)
     return methodsMap;
 }
 
+/*
 void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
 {
     
@@ -437,7 +439,7 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
     }
 
 //    methodInvocation.sessionGroupIndex = sessionGroupIndex;
-    methodInvocation.sessionGroupInvocationIndex = sessionGroupInvocationIndex;
+    methodInvocation.invocationIndexWithStack = sessionGroupInvocationIndex;
     
     [myInvocation invoke];
     
@@ -470,7 +472,7 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
     return nil;
     
 }
-
+*/
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
@@ -517,6 +519,32 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
 
 # pragma mark - AOP
 
+static NSMutableArray * stack;
+static NSMutableDictionary * stackInvocations;
+
+
++(NSMutableDictionary*)stackInvocations{
+    if (! stackInvocations) {
+        stackInvocations = NSMutableDictionary.new;
+    }
+    return stackInvocations;
+}
+
++(NSMutableArray*)stack{
+    if (! stack) {
+        stack = NSMutableArray.new;
+    }
+    return stack;
+}
+
++(void)pushIntoStackMethod:(MTMethodInvocation*)invo{
+    invo.invocationIndexWithStack = stack.count;
+    [MTMethod.stack addObject:invo];
+}
+
++(void)popFromStackMethod:(MTMethodInvocation*)invo{
+    [MTMethod.stack removeObject:invo];
+}
 
 +(void)invoAOP:(NSObject *)obj method:(MTMethod*)method{
     
@@ -525,18 +553,25 @@ void * invokeMethodWithInvoker(id objId, SEL _cmd, ...)
     [obj aspect_hookSelector:method.selector withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo) {
         MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
         mvcInvo.method = method;
-        
+        NSString * s = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
+        [[MTMethod stackInvocations]setObject:mvcInvo forKey:s];
+                                          
+        [MTMethod pushIntoStackMethod:mvcInvo];
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:mvcInvo userInfo:nil];
+        
     } error:&errorAspectHook];
     NSAssert(! errorAspectHook , @"errorAspectHook:%@",errorAspectHook);
     
     [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
-        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
-        mvcInvo.method = method;
         
+        NSString * s = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
+        MTVcMethodInvocation * mvcInvo = [[MTMethod stackInvocations]objectForKey:s];
+        NSAssert(mvcInvo, @"invocation not found %@",s);
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:mvcInvo userInfo:nil];
+        [MTMethod popFromStackMethod:mvcInvo];
     } error:&errorAspectHook];
     NSAssert(! errorAspectHook , @"errorAspectHook:%@",errorAspectHook);
+    
 }
 
 
