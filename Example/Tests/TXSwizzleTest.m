@@ -110,28 +110,32 @@
 - (void)testTXTestViewControllerBasicFunc3{
     TXTestViewController * vc = TXTestViewController.new;
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
+    NSString * const SOME_STRING = @"SOME_STRING";
 
-    MTMethod * method = [self methodButton2];
-    vc.string1 = @"PRESSED";
-    [method applyTo:vc];
+    XCTAssertNotEqualObjects(vc.string1, SOME_STRING,@"should not be %@",SOME_STRING);
+    vc.string1 = SOME_STRING;
     
-    
-}
-
-
-
-
--(MTMethod*)methodButton2{
-    MTMethod * method = MTMethod.new;
+    MTMethod * method = [MTMethod new];
     method.methodName = @"actionButton2:event:";
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v16@0:4@8@12";
+    UIButton * btn = vc.button2;
+    XCTAssert(btn, @"no button");
+    NSValue * val = [NSValue valueWithNonretainedObject:btn];
     MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
+    XCTAssert(val.nonretainedObjectValue, @"no value");
+    arg1.argumentValue = val;
     [method.methodArguments addObject:arg1];
-    
     MTMethodArgument * arg2 = [MTMethodArgument argumentForType:@"@"];
+    UIEvent * event;
+    event = [UIEvent new];
+    arg2.argumentValue =[NSValue valueWithNonretainedObject:event];
     [method.methodArguments addObject:arg2];
-    return method;
+    
+    [method applyTo:vc];
+    
+    XCTAssertEqualObjects(vc.string2, SOME_STRING , @"should be PRESSEDxxx");
+    
 }
 
 

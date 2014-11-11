@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "TXViewControllerState.h"
+@import UIKit;
 
 @interface TXViewControllerStateTests : XCTestCase
 

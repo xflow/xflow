@@ -22,7 +22,7 @@
 		1058ECE1196CE33000C6ACD0 /* TXTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDC196CE33000C6ACD0 /* TXTestObject.m */; };
 		1058ECE2196CE33000C6ACD0 /* TXTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */; };
 		1058ECE3196CE33000C6ACD0 /* TXViewControllerStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDF196CE33000C6ACD0 /* TXViewControllerStateTests.m */; };
-		45578055E4624387A352A16A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3E835BC437465B9B153F76 /* libPods.a */; };
+		1A1C7434A520EDA806D2EA25 /* libPods-xflowapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 783DD10D67964883A440D19B /* libPods-xflowapp.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -36,7 +36,6 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		6672224CF2694DC3B98C9274 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9506E7D41E0401AB2A0B232 /* libPods-Tests.a */; };
-		B8D9588245F9419E8DA5FB02 /* libPods-xflowapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 783DD10D67964883A440D19B /* libPods-xflowapp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +49,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0456114376C44C88B7D67CC5 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		10157F6D197378340010B954 /* XFADummy1VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFADummy1VC.h; sourceTree = "<group>"; };
 		10157F6E197378340010B954 /* XFADummy1VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFADummy1VC.m; sourceTree = "<group>"; };
 		10157F6F197378340010B954 /* XFADummy2VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFADummy2VC.h; sourceTree = "<group>"; };
@@ -77,6 +75,8 @@
 		1058ECDD196CE33000C6ACD0 /* TXTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXTestViewController.h; sourceTree = "<group>"; };
 		1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXTestViewController.m; sourceTree = "<group>"; };
 		1058ECDF196CE33000C6ACD0 /* TXViewControllerStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXViewControllerStateTests.m; sourceTree = "<group>"; };
+		2A5BCCA6533785C41B71B7F7 /* Pods-xflowapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp.debug.xcconfig"; sourceTree = "<group>"; };
+		2D789EF1464C389CD48F3AD1 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* xflowapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = xflowapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -94,14 +94,16 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		6E920C50574CF92B68456FC4 /* Pods-xflowapp.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.testing.xcconfig"; path = "Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp.testing.xcconfig"; sourceTree = "<group>"; };
+		72E51654E624816C5E3DA8A5 /* Pods-xflowapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp.release.xcconfig"; sourceTree = "<group>"; };
 		783DD10D67964883A440D19B /* libPods-xflowapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-xflowapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C3E835BC437465B9B153F76 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		96F9454DABDE1D9205D69E7E /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
+		99F97EFEF6EE23A784A8CB1B /* Pods-Tests.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.testing.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.testing.xcconfig"; sourceTree = "<group>"; };
 		9F1FF059FAE8432197B2881E /* xflowapp.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = xflowapp.podspec; path = ../xflowapp.podspec; sourceTree = "<group>"; };
 		C48FDF3444364478A84B8B0D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		E7F2C1AE72C148FFAF080114 /* Pods-Tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.xcconfig"; path = "Pods/Pods-Tests.xcconfig"; sourceTree = "<group>"; };
 		E9506E7D41E0401AB2A0B232 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD42187A40404CB0BB208284 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		FF44A7E76FF04259989A7AC0 /* Pods-xflowapp.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.xcconfig"; path = "Pods/Pods-xflowapp.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,8 +114,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				B8D9588245F9419E8DA5FB02 /* libPods-xflowapp.a in Frameworks */,
-				45578055E4624387A352A16A /* libPods.a in Frameworks */,
+				1A1C7434A520EDA806D2EA25 /* libPods-xflowapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,9 +178,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				E7F2C1AE72C148FFAF080114 /* Pods-Tests.xcconfig */,
-				FF44A7E76FF04259989A7AC0 /* Pods-xflowapp.xcconfig */,
-				0456114376C44C88B7D67CC5 /* Pods.xcconfig */,
+				D38664B200AE19EF251334F2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -269,6 +268,19 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		D38664B200AE19EF251334F2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2D789EF1464C389CD48F3AD1 /* Pods-Tests.debug.xcconfig */,
+				99F97EFEF6EE23A784A8CB1B /* Pods-Tests.testing.xcconfig */,
+				96F9454DABDE1D9205D69E7E /* Pods-Tests.release.xcconfig */,
+				2A5BCCA6533785C41B71B7F7 /* Pods-xflowapp.debug.xcconfig */,
+				6E920C50574CF92B68456FC4 /* Pods-xflowapp.testing.xcconfig */,
+				72E51654E624816C5E3DA8A5 /* Pods-xflowapp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -276,11 +288,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "xflowapp" */;
 			buildPhases = (
-				0D6B3DA7A03340A6B8942A56 /* Check Pods Manifest.lock */,
+				BC814E8912534C96A103104C /* Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				6D8065B0FF8A4DA5988C8F41 /* Copy Pods Resources */,
+				26753D77AB5CAD37C9A09DAE /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -367,19 +379,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0D6B3DA7A03340A6B8942A56 /* Check Pods Manifest.lock */ = {
+		26753D77AB5CAD37C9A09DAE /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2822B855D66547D4ACB70C85 /* Check Pods Manifest.lock */ = {
@@ -409,22 +421,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-Tests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6D8065B0FF8A4DA5988C8F41 /* Copy Pods Resources */ = {
+		BC814E8912534C96A103104C /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -532,7 +544,7 @@
 		};
 		10157F8819776A7F0010B954 /* Testing */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0456114376C44C88B7D67CC5 /* Pods.xcconfig */;
+			baseConfigurationReference = 6E920C50574CF92B68456FC4 /* Pods-xflowapp.testing.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -551,7 +563,7 @@
 		};
 		10157F8919776A7F0010B954 /* Testing */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E7F2C1AE72C148FFAF080114 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = 99F97EFEF6EE23A784A8CB1B /* Pods-Tests.testing.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/xflowapp.app/xflowapp";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -646,7 +658,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0456114376C44C88B7D67CC5 /* Pods.xcconfig */;
+			baseConfigurationReference = 2A5BCCA6533785C41B71B7F7 /* Pods-xflowapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -660,7 +672,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0456114376C44C88B7D67CC5 /* Pods.xcconfig */;
+			baseConfigurationReference = 72E51654E624816C5E3DA8A5 /* Pods-xflowapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -674,7 +686,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E7F2C1AE72C148FFAF080114 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = 2D789EF1464C389CD48F3AD1 /* Pods-Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/xflowapp.app/xflowapp";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -697,7 +709,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E7F2C1AE72C148FFAF080114 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = 96F9454DABDE1D9205D69E7E /* Pods-Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/xflowapp.app/xflowapp";
 				FRAMEWORK_SEARCH_PATHS = (

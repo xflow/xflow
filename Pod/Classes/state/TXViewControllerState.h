@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class UIViewController;
 
 @interface TXViewControllerState : NSObject
 

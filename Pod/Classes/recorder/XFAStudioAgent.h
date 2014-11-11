@@ -10,7 +10,7 @@
 
 @class XFAStudioAgentVCResponse;
 @class AFHTTPRequestOperation;
-
+@class UIViewController;
 
 @interface XFAStudioAgent : NSObject
 

@@ -32,10 +32,12 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
+  s.frameworks = 'UIKit'
 
-  s.dependency 'AFNetworking', '~> 2.3'
-  s.dependency 'Mantle', '~> 1.5'
+  s.dependency 'AFNetworking', '~> 2.4.1'
+  s.dependency 'Mantle', '~> 1.5.1'
   s.dependency 'OHHTTPStubs', '~> 3.1.2'
+  s.dependency 'Aspects', '~> 1.4.1'
 
 end
 

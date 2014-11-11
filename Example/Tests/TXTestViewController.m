@@ -50,6 +50,8 @@
 
 -(IBAction)actionButton2:(id)sender event:(UIEvent*)event{
     NSLog(@"event:%@",event);
+    NSParameterAssert(sender);
+    NSParameterAssert(event);
     NSAssert(sender, @"no sender");
     NSAssert([sender isEqual:self.button2], @"expected button2 !");
     _string2 = self.string1;
