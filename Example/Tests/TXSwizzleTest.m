@@ -134,7 +134,7 @@
     
     [method applyTo:vc];
     
-    XCTAssertEqualObjects(vc.string2, SOME_STRING , @"should be PRESSEDxxx");
+    XCTAssertEqualObjects(vc.string2, SOME_STRING , @"should be %@",SOME_STRING);
     
 }
 
