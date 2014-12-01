@@ -10,7 +10,7 @@
 
 #import "MTSwizzleManager.h"
 #import "XFACrawler.h"
-#import "XFAStudioAgent.h"
+#import "XFAFeedService.h"
 #import "XFAStudioAgentVCResponse.h"
 #import "MTMethod.h"
 #import "XFAVCProperty.h"
@@ -32,8 +32,9 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 }
 
 @property (nonatomic, strong) UIWindow      * mainWindow;
-@property (nonatomic, strong) XFAStudioAgent * studioAgent;
+@property (nonatomic, strong) XFAFeedService * feedService;
 @property (nonatomic, assign) TXEngineMode engineMode;
+@property (nonatomic, strong) NSString * apiToken;
 
 @end
 
@@ -78,11 +79,11 @@ NSString * const ENV_PLAN_K = @"XX";
 }
 
 
--(void)on{
+-(void)startWithFeedServer:(NSString*)feedServer withPlayServer:(NSString*)playServer withApiToken:(NSString*)apiToken{
     NSLog(@"TXEngine on");
-    
+    self.apiToken = apiToken;
     UIViewController * vc = self.mainWindow.rootViewController;
-    self.studioAgent = XFAStudioAgent.new;
+    self.feedService = [XFAFeedService new];
 
     self.engineMode = [self figureOutEngineMode];
         
@@ -92,22 +93,24 @@ NSString * const ENV_PLAN_K = @"XX";
     NSString * feedUrl = nil;
     if (self.engineMode == TXEngineModeCapture)
     {
-        feedUrl = [NSString stringWithFormat:@"http://%@:%@/%@", @"localhost", @"3000", @"v1/feed/invocations"];
-        newSessionUrl = [NSString stringWithFormat:@"http://%@:%@/%@", @"localhost", @"3000", @"v1/feed/xsessions"];
+//        feedUrl = [NSString stringWithFormat:@"%@/%@", feedServer , @"v"];
+        newSessionUrl = [NSString stringWithFormat:@"%@/%@", feedServer, @"v1/feed/xsessions"];
     }
     else if (self.engineMode == TXEngineModeCruiseControl)
     {
-        feedUrl = [NSString stringWithFormat:@"http://%@:%@/%@", @"localhost", @"3000", @"v1/play/invocations"];
-        newSessionUrl = [NSString stringWithFormat:@"http://%@:%@/%@", @"localhost", @"3000", @"v1/play/xsessions"];
+        feedUrl = [NSString stringWithFormat:@"%@/%@",playServer, @"v1/play/invocations"];
+        newSessionUrl = [NSString stringWithFormat:@"%@/%@", playServer , @"v1/play/xsessions"];
     }
     
-    self.studioAgent.feedUrl = feedUrl;
-    [self.studioAgent listenToMethodInvocations];
+    self.feedService.feedServer = feedServer;
+    self.feedService.apiToken = apiToken;
+    [self.feedService listenToMethodInvocations];
     
-    [self.studioAgent startFreshStudioXSessionToUrl:newSessionUrl withSuccess:^{
+    [self.feedService startFreshStudioXSessionToUrl:newSessionUrl withSuccess:^{
         [self doVC:vc];
     } withFailure:^(NSError *error) {
-        NSAssert(FALSE, @"can't start new studio x session ");
+        
+        NSAssert(FALSE, @"%s can't start new studio x session %@",__FUNCTION__,error);
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vcDetectedWithNotif:) name:NOTIF_VC object:nil];
@@ -117,7 +120,7 @@ NSString * const ENV_PLAN_K = @"XX";
 
 //        http://localhost:3000/v1/plans/534e3b81019fad09d740bc24
         NSString * planUrl = @"http://localhost:3000/v1/plans/534e3b81019fad09d740bc24/xactions";
-        [self.studioAgent requestXActionsWithURL:planUrl onSuccess:^(NSArray *xactions) {
+        [self.feedService requestXActionsWithURL:planUrl onSuccess:^(NSArray *xactions) {
             
             for (TXAction * xaction in xactions) {
                 NSLog(@"xactions:%@",xaction);
@@ -155,16 +158,13 @@ NSString * const ENV_PLAN_K = @"XX";
         [MTMethod setVcClassAsProcessed:vc.class];
     }
     
-    
-    [self.studioAgent requestForVC:vc onSuccess:^(XFAStudioAgentVCResponse * vcresp){
+    [self.feedService feedVC:vc onSuccess:^(XFAStudioAgentVCResponse * vcresp){
         
-        NSString * childrenKey = vcresp.childrenKey;
+        NSLog(@"vcresp:%@",vcresp);
         
-        NSAssert(childrenKey, @"doVC no childrenKey");
-
         NSArray * methods = vcresp.methods;
         
-        NSAssert(methods, @"doVC no methods at all");
+//        NSAssert(methods, @"doVC:'%@' no methods at all", vc.class);
 //        NSAssert(methods.count > 0, @"doVC no methods %@",vc.class);
         
         for (MTMethod * method in methods) {
@@ -172,12 +172,11 @@ NSString * const ENV_PLAN_K = @"XX";
             if (method.isMonitored) {
 //                [method monito/rForObject:vc];
             }
-            
         }
         
         NSString * assertMsg = [NSString stringWithFormat:@"TXEngine doVC:%@ no vcresp.properties",[vc class]];
         
-        NSAssert(vcresp.properties, assertMsg);
+//        NSAssert(vcresp.properties, assertMsg);
         
         vc.xfaProperties = NSMutableArray.new;
         
@@ -185,8 +184,10 @@ NSString * const ENV_PLAN_K = @"XX";
             [vc.xfaProperties addObject:prop];
         }
         
-        NSAssert(vc.xfaProperties, @"TXEngine doVC vc.xfaProperties");
+//        NSAssert(vc.xfaProperties, @"TXEngine doVC vc.xfaProperties");
         
+        NSString * childrenKey = [XFACrawler childrenKeyForObject:vc];
+        NSAssert(childrenKey, @"doVC no childrenKey");
         NSArray * childVCs = [vc valueForKey:childrenKey];
         
         
@@ -196,11 +197,11 @@ NSString * const ENV_PLAN_K = @"XX";
 //        if (childVCs.count == 0) {}
         
     } onFailure:^(NSError *error) {
+        UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"xflow launch failed" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [av show];
         NSAssert(FALSE, @"doVC onFailure: %@",error.localizedDescription);
     }];
 
-//TODO: do something
-//    [self loadUI];
     
 }
 

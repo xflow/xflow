@@ -14,11 +14,11 @@
 {
     // Override point for customization after application launch.
     NSLog(@"launchOptions:%@",launchOptions);
-#ifdef TESTING
-    [Txe on];
-#else
-#warning Testmode
-#endif
+//#ifdef TESTING
+     [Txe startWithFeedServer:@"http://127.0.0.1:4000" withPlayServer:@"http://127.0.0.1:4000"  withApiToken:@"1ad0dd1cc533226fe6e219d3193c848b"];
+//#else
+//#warning Testmode
+//#endif
     return YES;
 }
 

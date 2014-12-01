@@ -12,6 +12,8 @@
 
 //-(void)crawl;
 
++(NSString *)childrenKeyForObject:(UIViewController*)obj;
+
 -(void)childControllers:(UIViewController *)viewController
                   level:(NSInteger)level
                   andDo:(void (^)(NSObject *obj))block;

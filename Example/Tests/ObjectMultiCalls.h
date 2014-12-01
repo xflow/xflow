@@ -7,6 +7,8 @@
 //
 
 
+#import <Foundation/Foundation.h>
+
 @interface ObjectMultiCalls : NSObject
 
 -(void)call0; // calls call1

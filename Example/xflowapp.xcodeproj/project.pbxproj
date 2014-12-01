@@ -34,7 +34,6 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		6672224CF2694DC3B98C9274 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9506E7D41E0401AB2A0B232 /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +91,6 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		6E920C50574CF92B68456FC4 /* Pods-xflowapp.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.testing.xcconfig"; path = "Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp.testing.xcconfig"; sourceTree = "<group>"; };
 		72E51654E624816C5E3DA8A5 /* Pods-xflowapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp.release.xcconfig"; sourceTree = "<group>"; };
@@ -242,7 +240,6 @@
 				1058ECDD196CE33000C6ACD0 /* TXTestViewController.h */,
 				1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */,
 				1058ECDF196CE33000C6ACD0 /* TXViewControllerStateTests.m */,
-				6003F5BB195388D20070C39A /* Tests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -466,7 +463,6 @@
 				1058ECE3196CE33000C6ACD0 /* TXViewControllerStateTests.m in Sources */,
 				1058ECE2196CE33000C6ACD0 /* TXTestViewController.m in Sources */,
 				1058ECE0196CE33000C6ACD0 /* TXSwizzleTest.m in Sources */,
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
 				1058ECE1196CE33000C6ACD0 /* TXTestObject.m in Sources */,
 				10157F8C1978179A0010B954 /* ObjectMultiCalls.m in Sources */,
 				10157F8F1978E6690010B954 /* ObjectRecursiveCalls.m in Sources */,

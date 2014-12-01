@@ -1,18 +1,15 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 xcodeproj 'xflowapp.xcodeproj'
-#link_with ['xflowapp']
+link_with ['xflowapp']
 
 target 'xflowapp', :exclusive => true do
-
   pod "xflowapp", :path => "../"
-  pod 'CocoaLumberjack', '~> 1.9.1'
+  pod 'CocoaLumberjack', '~> 1.9.2'
 end
 
 target 'Tests', :exclusive => true do
   pod "xflowapp", :path => "../"
   pod 'OCMock', '~> 2.2.4'
-  pod 'Kiwi', '~> 2.3.0'
+#  pod 'Kiwi', '~> 2.3.0'
 end
-
-#pod 'Aspects', '~> 1.4.1'

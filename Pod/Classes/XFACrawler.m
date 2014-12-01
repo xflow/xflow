@@ -22,14 +22,14 @@
 
 /* this should come from the API service  */
 
--(NSString *)childrenKeyForObject:(NSObject*)obj{
++(NSString *)childrenKeyForObject:(UIViewController*)obj{
     NSDictionary *dic = @{ @"UINavigationController": @"viewControllers",
                            @"UITabBarController": @"viewControllers",
                            @"UIViewController": @"childViewControllers",
                           };
     NSString * output = nil;
     for (NSString * k in dic.allKeys) {
-        NSLog(@"%@",k);
+//        NSLog(@"%s %@",__PRETTY_FUNCTION__,k);
         if ([obj isKindOfClass:NSClassFromString(k)]) {
             output = k;
             break;
@@ -43,19 +43,11 @@
                   andDo:(void (^)(NSObject *obj))block
 {
     
-    NSString *childrenKey = [self childrenKeyForObject:viewController];
-    /* if ([viewController isKindOfClass:[UINavigationController class]]) {
-        childrenKey = @"viewControllers";
-    } else if ([viewController isKindOfClass:[UITabBarController class]]) {
-        childrenKey = @"viewControllers";
-    } else {
-        childrenKey = @"childViewControllers";
-    }*/
-    
+    NSString *childrenKey = [XFACrawler childrenKeyForObject:viewController];
     
     NSArray *children = [viewController valueForKey:childrenKey];
     
-    NSLog(@"%@",viewController.class);
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,viewController.class);
     block(viewController);
 //    [self subviews:viewController.view level:0];
 

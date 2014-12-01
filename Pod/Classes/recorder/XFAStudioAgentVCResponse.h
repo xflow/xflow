@@ -10,8 +10,8 @@
 
 @interface XFAStudioAgentVCResponse : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString * childrenKey;
-@property (nonatomic, strong) NSArray * methods;
-@property (nonatomic, strong) NSArray * properties;
+//@property (nonatomic, strong) NSString * childrenKey;
+@property (nonatomic, readonly) NSArray * methods;
+@property (nonatomic, readonly) NSArray * properties;
 
 @end

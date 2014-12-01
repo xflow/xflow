@@ -10,26 +10,22 @@
 
 @class XFAStudioAgentVCResponse;
 @class AFHTTPRequestOperation;
-@class UIViewController;
 
-@interface XFAStudioAgent : NSObject
+@interface XFAFeedService : NSObject
 
 -(void)listenToMethodInvocations;
 
-@property (nonatomic,strong) NSString * studioHost;
-@property (nonatomic,strong) NSString * studioPort;
-
-@property (nonatomic, strong) NSString * feedUrl;
-
+@property (nonatomic, strong) NSString * feedServer;
+@property (nonatomic, strong) NSString * apiToken;
 
 -(AFHTTPRequestOperation *)startFreshStudioXSessionToUrl:(NSString*)urlString
                                              withSuccess:(void (^)(void))success
                                              withFailure:(void(^)(NSError * error))failure;
     
+-(AFHTTPRequestOperation *)feedVC:(UIViewController*)vc
+                        onSuccess:(void(^)(XFAStudioAgentVCResponse * resp))success
+                        onFailure:(void(^)(NSError * error))failure;
 
--(AFHTTPRequestOperation *)requestForVC:(UIViewController*)vc
-                          onSuccess:(void(^)(XFAStudioAgentVCResponse * resp))success
-                          onFailure:(void(^)(NSError * error))failure;
 
 
 -(AFHTTPRequestOperation *)requestXActionsWithURL:(NSString *)urlString

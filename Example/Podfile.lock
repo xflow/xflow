@@ -26,7 +26,6 @@ PODS:
   - CocoaLumberjack/Core (1.9.2)
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
-  - Kiwi (2.3.0)
   - Mantle (1.5.1):
     - Mantle/extobjc (= 1.5.1)
   - Mantle/extobjc (1.5.1)
@@ -41,8 +40,7 @@ PODS:
     - OHHTTPStubs (~> 3.1.2)
 
 DEPENDENCIES:
-  - CocoaLumberjack (~> 1.9.1)
-  - Kiwi (~> 2.3.0)
+  - CocoaLumberjack (~> 1.9.2)
   - OCMock (~> 2.2.4)
   - xflowapp (from `../`)
 
@@ -54,10 +52,9 @@ SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
   Aspects: a6368eba05295b24ffe0e9acfb9080cc3b0f4b5f
   CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
-  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
   Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
   OCMock: 6db79185520e24f9f299548f2b8b07e41d881bd5
   OHHTTPStubs: 6781373b69e0a67b27239799f11764d0fbefac55
   xflowapp: aaa7d30d342468803e33f8a57eb89816d9eb52c2
 
-COCOAPODS: 0.35.0.rc2
+COCOAPODS: 0.35.0

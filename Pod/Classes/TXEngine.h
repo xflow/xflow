@@ -12,7 +12,7 @@
 
 +(instancetype)sharedInstance;
 
--(void)on;
+-(void)startWithFeedServer:(NSString*)feedServer withPlayServer:(NSString*)playServer withApiToken:(NSString*)apiToken;
 
 @end
 

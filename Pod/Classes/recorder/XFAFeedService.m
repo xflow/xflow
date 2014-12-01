@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "XFAStudioAgent.h"
+#import "XFAFeedService.h"
 #import "XFAConstants.h"
 #import <AFNetworking/AFNetworking.h>
 #import <Mantle.h>
@@ -18,14 +18,14 @@
 #import "MTMethodArgument.h"
 #import "TXAction.h"
 
-@interface XFAStudioAgent (){
+@interface XFAFeedService (){
     
 }
 
 @end
 
 
-@implementation XFAStudioAgent
+@implementation XFAFeedService
 
 - (instancetype)init
 {
@@ -34,16 +34,6 @@
 
     }
     return self;
-}
-
--(NSString *)studioHost{
-    return _studioHost ? _studioHost : @"127.0.0.1";
-}
-
-
-
--(NSString *)studioPort{
-    return _studioPort ? _studioPort : @"3000";
 }
 
 
@@ -73,8 +63,8 @@
     NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
-  
-    
+
+    operation.responseSerializer = [AFJSONResponseSerializer new];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -121,13 +111,13 @@
 
     MTVcMethodInvocation * invoc = (MTVcMethodInvocation *) notif.object;
     
-    
+    /*
     [self feedAction:invoc toURL:self.feedUrl onSuccess:^{
         NSLog(@"feedInvocationToStudio %@",invoc.method);
     } onFailure:^(NSError *error) {
         NSLog(@"feedInvocationToStudio %@",error.localizedDescription);
     }];
-    
+    */
 }
 
 -(void)unlisten{
@@ -154,7 +144,7 @@
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
     operation.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    [operation  setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
 //        NSLog(@"success: %@", [responseObject class]);
         
@@ -200,8 +190,7 @@
 
     NSDictionary *invocationJSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:invocation];
 //    NSLog(@"invocationJSONDictionary:%@",invocationJSONDictionary);
-
-    
+ 
     NSDictionary * parameters = @{
                                   @"invocation": invocationJSONDictionary,
                                   @"vcStatePre":  invocation.vcStateBefore ,
@@ -212,8 +201,7 @@
     NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
-  
-    
+   
     [operation  setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
 
         NSString * reqBody = [[NSString alloc] initWithData:operation.request.HTTPBody encoding:NSUTF8StringEncoding];
@@ -243,24 +231,24 @@
 }
 
 
--(AFHTTPRequestOperation *)requestForVC:(UIViewController*)vc
+-(AFHTTPRequestOperation *)feedVC:(UIViewController*)vc
                               onSuccess:(void(^)(XFAStudioAgentVCResponse * resp))success
                               onFailure:(void(^)(NSError * error))failure{
     
-    NSString * path = [NSString stringWithFormat:@"v1/vc/%@/",NSStringFromClass(vc.class) ];
-    NSString * urlString = [NSString stringWithFormat:@"http://%@:%@/%@",
-                            self.studioHost, self.studioPort, path];
+    NSString * path = [NSString stringWithFormat:@"v1/vc/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@",
+                            self.feedServer , path];
     
     NSLog(@"requestForVC %@ urlString:%@",vc.class,urlString);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
-    AFHTTPRequestOperation * op = [manager GET:urlString parameters:@{} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    AFHTTPRequestOperation * op = [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSError * error = nil;
         
-        XFAStudioAgentVCResponse * vcResp = [MTLJSONAdapter modelOfClass:XFAStudioAgentVCResponse.class fromJSONDictionary:responseObject error:&error];
+        XFAStudioAgentVCResponse * vcResp = [MTLJSONAdapter modelOfClass:[XFAStudioAgentVCResponse class] fromJSONDictionary:responseObject error:&error];
         
 //        NSLog(@"JSON: %@, error:%@", responseObject,error);
         
@@ -269,7 +257,7 @@
         success(vcResp);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        NSLog(@"requestForVC Failure:%@",operation.responseString);
+        NSLog(@"requestForVC %@, Failure:%@",urlString,operation.responseString);
         NSLog(@"Error: %@", error);
         failure(error);
         
