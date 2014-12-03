@@ -20,12 +20,18 @@ static NSMutableDictionary * methodsMap;
 static NSMutableDictionary * classMethodNamesDic;
 
 
+@interface MTMethod () {
+
+}
+
+@end
+
 @implementation MTMethod
 - (id)init
 {
     self = [super init];
     if (self) {
-        self.methodArguments = NSMutableArray.new;
+        self.methodArguments = [NSArray new];
     }
     return self;
 }
@@ -165,7 +171,7 @@ static NSMutableDictionary * classMethodNamesDic;
 -(void)addArgument:(NSString *)t atIndex:(NSInteger)index{
     MTMethodArgument *arg = [MTMethodArgument argumentForType:t];
     arg.index = index;
-    [self.methodArguments addObject:arg];
+    self.methodArguments = [self.methodArguments arrayByAddingObject:arg];
 }
 
 -(BOOL)isApplicable{
@@ -302,6 +308,7 @@ NSString * replacement(NSString* methodName)
     return methodsMap;
 }
 
+/*
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"methodName"          : @"methodName",
@@ -310,9 +317,8 @@ NSString * replacement(NSString* methodName)
              @"isMonitored"         : @"isMonitored",
              @"methodArguments"     : @"methodArguments",
              @"isUserDefined"       : @"isUserDefined",
-             @"methodAssertions"    : @"methodAssertions",
              };
-}
+}*/
 
 
 + (NSValueTransformer *)methodArgumentsJSONTransformer {

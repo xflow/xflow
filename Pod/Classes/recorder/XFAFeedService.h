@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class XFAStudioAgentVCResponse;
+@class XFObjcVcClass;
 @class AFHTTPRequestOperation;
 
 @interface XFAFeedService : NSObject
@@ -23,7 +23,7 @@
                                              withFailure:(void(^)(NSError * error))failure;
     
 -(AFHTTPRequestOperation *)feedVC:(UIViewController*)vc
-                        onSuccess:(void(^)(XFAStudioAgentVCResponse * resp))success
+                        onSuccess:(void(^)(XFObjcVcClass * resp))success
                         onFailure:(void(^)(NSError * error))failure;
 
 

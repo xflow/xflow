@@ -56,7 +56,8 @@
     MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
     XCTAssert(val.nonretainedObjectValue, @"no value");
     arg1.argumentValue = val;
-    [method.methodArguments addObject:arg1];
+//    [method.methodArguments addObject:arg1];
+    method.methodArguments = [method.methodArguments arrayByAddingObject:arg1];
     return method;
 }
 
@@ -71,11 +72,13 @@
     MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
     XCTAssert(val.nonretainedObjectValue, @"no value");
     arg1.argumentValue = val;
-    [method.methodArguments addObject:arg1];
+//    [method.methodArguments addObject:arg1];
+    method.methodArguments = [method.methodArguments arrayByAddingObject:arg1];
     MTMethodArgument * arg2 = [MTMethodArgument argumentForType:@"@"];
     UIEvent * event = UIEvent.new;
     arg2.argumentValue = [NSValue valueWithNonretainedObject:event];
-    [method.methodArguments addObject:arg2];
+//    [method.methodArguments addObject:arg2];
+    method.methodArguments = [method.methodArguments arrayByAddingObject:arg2];
     return method;
 }
 

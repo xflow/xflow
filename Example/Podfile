@@ -5,11 +5,12 @@ link_with ['xflowapp']
 
 target 'xflowapp', :exclusive => true do
   pod "xflowapp", :path => "../"
+  pod  "xflowparser", :git  => "https://github.com/xflow/xflowparser.git"
   pod 'CocoaLumberjack', '~> 1.9.2'
 end
 
 target 'Tests', :exclusive => true do
   pod "xflowapp", :path => "../"
+  pod  "xflowparser", :git  => "https://github.com/xflow/xflowparser.git"
   pod 'OCMock', '~> 2.2.4'
-#  pod 'Kiwi', '~> 2.3.0'
 end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class XFAStudioAgentVCResponse;
+@class XFObjcVcClass;
 
 @interface TXViewControllerPropertiesScanner : NSObject
 

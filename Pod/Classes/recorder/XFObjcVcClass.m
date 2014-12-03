@@ -6,25 +6,20 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "XFAStudioAgentVCResponse.h"
+#import "XFObjcVcClass.h"
 #import "MTMethod.h"
 #import "XFAVCProperty.h"
-//#import <NSValueTransformer+MTLPredefinedTransformerAdditions.h>
 
 
-@interface XFAStudioAgentVCResponse (){
+@interface XFObjcVcClass (){
     
 }
 
-//@property (nonatomic, strong) NSString * childrenKey;
-@property (nonatomic, strong) NSArray * methods;
-@property (nonatomic, strong) NSArray * properties;
 
 @end
 
 
-@implementation XFAStudioAgentVCResponse
-
+@implementation XFObjcVcClass
 
 - (instancetype)init
 {
@@ -36,8 +31,6 @@
     return self;
 }
 
-
-
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
              @"childrenKey": @"children_key",
@@ -47,11 +40,13 @@
 }
 
 + (NSValueTransformer *)methodsJSONTransformer{
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[MTMethod class]];
+    Class klass = [MTMethod class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:klass];
 }
 
 + (NSValueTransformer *)propertiesJSONTransformer {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[XFAVCProperty class]];
+    Class klass = [XFAVCProperty class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:klass];
 }
 
 

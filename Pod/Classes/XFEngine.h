@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TXEngine : NSObject
+@interface XFEngine : NSObject
 
 +(instancetype)sharedInstance;
 
@@ -17,6 +17,4 @@
 @end
 
 
-#define Txe ( (TXEngine *) [TXEngine sharedInstance] )
-
-
+#define Xfe [XFEngine sharedInstance]

@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "TXEngine.h"
+#import "XFEngine.h"
 
 #import "MTSwizzleManager.h"
 #import "XFACrawler.h"
 #import "XFAFeedService.h"
-#import "XFAStudioAgentVCResponse.h"
+#import "XFObjcVcClass.h"
 #import "MTMethod.h"
 #import "XFAVCProperty.h"
 #import "UIViewController+XFAProperties.h"
@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
     TXEngineModeTest            = 4
 };
 
-@interface TXEngine (){
+@interface XFEngine (){
     
 }
 
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 @end
 
 
-@implementation TXEngine
+@implementation XFEngine
 
 +(instancetype)sharedInstance{
     static dispatch_once_t onceToken;
@@ -133,6 +133,8 @@ NSString * const ENV_PLAN_K = @"XX";
                 break;
             }
         } onFailure:^(NSError *error) {
+            UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [av show];
             NSAssert(FALSE, @"no xactions there");
         }];
         
@@ -158,7 +160,7 @@ NSString * const ENV_PLAN_K = @"XX";
         [MTMethod setVcClassAsProcessed:vc.class];
     }
     
-    [self.feedService feedVC:vc onSuccess:^(XFAStudioAgentVCResponse * vcresp){
+    [self.feedService feedVC:vc onSuccess:^(XFObjcVcClass * vcresp){
         
         NSLog(@"vcresp:%@",vcresp);
         
@@ -170,11 +172,11 @@ NSString * const ENV_PLAN_K = @"XX";
         for (MTMethod * method in methods) {
             NSLog(@"doVc: %@, method:%@",[vc class],method);
             if (method.isMonitored) {
-//                [method monito/rForObject:vc];
+//                [method monitorForObject:vc];
             }
         }
         
-        NSString * assertMsg = [NSString stringWithFormat:@"TXEngine doVC:%@ no vcresp.properties",[vc class]];
+        NSString * assertMsg = [NSString stringWithFormat:@"TXEngine doVC:%@ no vcresp.properties", [vc class]];
         
 //        NSAssert(vcresp.properties, assertMsg);
         

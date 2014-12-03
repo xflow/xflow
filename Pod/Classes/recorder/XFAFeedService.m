@@ -10,7 +10,7 @@
 #import "XFAConstants.h"
 #import <AFNetworking/AFNetworking.h>
 #import <Mantle.h>
-#import "XFAStudioAgentVCResponse.h"
+#import "XFObjcVcClass.h"
 #import "MTVcMethodInvocation.h"
 
 #import "UIViewController+XFAProperties.h"
@@ -232,7 +232,7 @@
 
 
 -(AFHTTPRequestOperation *)feedVC:(UIViewController*)vc
-                              onSuccess:(void(^)(XFAStudioAgentVCResponse * resp))success
+                              onSuccess:(void(^)(XFObjcVcClass * vcClass))success
                               onFailure:(void(^)(NSError * error))failure{
     
     NSString * path = [NSString stringWithFormat:@"v1/vc/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
@@ -248,7 +248,7 @@
         
         NSError * error = nil;
         
-        XFAStudioAgentVCResponse * vcResp = [MTLJSONAdapter modelOfClass:[XFAStudioAgentVCResponse class] fromJSONDictionary:responseObject error:&error];
+        XFObjcVcClass * vcResp = [MTLJSONAdapter modelOfClass:[XFObjcVcClass class] fromJSONDictionary:responseObject error:&error];
         
 //        NSLog(@"JSON: %@, error:%@", responseObject,error);
         

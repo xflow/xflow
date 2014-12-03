@@ -30,24 +30,24 @@
 
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
     
-    if ([JSONDictionary[@"objc_class_name"] isEqual:@"UILabel"]) {
+    if ([JSONDictionary[@"objcType"] isEqualToString:@"UILabel *"]) {
         return NSClassFromString(@"XFAVCLabelProperty");
     }
     
-    if ([JSONDictionary[@"objc_type"] isEqual:@"UIView"]) {
+    if ([JSONDictionary[@"objcType"] isEqualToString:@"UIView *"]) {
         return NSClassFromString(@"XFAVCViewProperty");
     }
 
-    if ([JSONDictionary[@"objc_type"] isEqual:@"IBoutlet"]) {
+    if ([JSONDictionary[@"objcType"] isEqualToString:@"IBOutlet"]) {
         return NSClassFromString(@"XFAVCIBOutletViewProperty");
     }
     
-    if ([JSONDictionary[@"objc_type"] isEqual:@"Scalar"]) {
+    if ([JSONDictionary[@"objcType"] isEqualToString:@"Scalar"]) {
         return NSClassFromString(@"XFAVCScalarProperty");
     }
     
     
-    NSAssert(NO, @"No matching class for the JSON dictionary '%@'.", JSONDictionary);
+    NSAssert(NO, @"%s No matching class for: '%@'.",__PRETTY_FUNCTION__, JSONDictionary[@"objc_type"]);
     return self;
 }
 

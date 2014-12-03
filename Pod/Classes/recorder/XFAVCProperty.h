@@ -7,8 +7,8 @@
 //
 
 #import <Mantle.h>
-
-@interface XFAVCProperty : MTLModel <MTLJSONSerializing>
+#import <xflowparser/XFPObjcProperty.h>
+@interface XFAVCProperty : XFPObjcProperty
 
 @property(nonatomic,strong) NSString * propertyName;
 

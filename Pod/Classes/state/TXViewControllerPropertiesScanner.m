@@ -8,7 +8,9 @@
 
 #import "TXViewControllerPropertiesScanner.h"
 #import "UIViewController+XFAProperties.h"
-#import "XFAVCProperty.h"
+//#import "XFAVCProperty.h"
+
+#import <XFAVCProperty.h>
 
 @implementation TXViewControllerPropertiesScanner
 

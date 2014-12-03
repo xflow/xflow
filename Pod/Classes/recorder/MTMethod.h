@@ -10,13 +10,12 @@
 
 @class MTClassTypeInstance;
 
-#import <Mantle.h>
+#import <xflowparser/XFPObjcMethod.h>
 
 
-@interface MTMethod : MTLModel <MTLJSONSerializing>
+@interface MTMethod : XFPObjcMethod
 
 
-@property(nonatomic,strong) NSString * methodName;
 @property(nonatomic,strong) NSString * methodReturnType;
 @property(nonatomic,strong) NSString * methodTypeEncoding;
 @property(nonatomic,assign) BOOL isUserDefined;
@@ -45,7 +44,6 @@
 
 @property (nonatomic,readonly) SEL selector;
 
-@property (nonatomic,strong) NSMutableArray * methodArguments;
 
 @property (nonatomic,strong) NSMutableArray * methodPreAssertions;
 @property (nonatomic,strong) NSMutableArray * methodPostAssertions;
@@ -61,7 +59,7 @@
 +(BOOL)isVcClassProcessed:(Class)vcClass;
 +(void)setVcClassAsProcessed:(Class)vcClass;
 
--(void)aopOn;
--(void)aopOff;
+//-(void)aopOn;
+//-(void)aopOff;
 
 @end

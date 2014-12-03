@@ -17,27 +17,31 @@ Pod::Spec.new do |s|
                        * Markdown format.
                        * Don't worry about the indent, we strip it!
                        DESC
-  s.homepage         = "https://github.com/xflowapp/xflowapp"
+  s.homepage         = "https://github.com/xflow/xflow"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "Mohammed O. Tillawy" => "tillawy@gmail.com" }
-  s.source           = { :git => "https://github.com/xflowapp/xflowapp.git", :tag => s.version.to_s }
+  s.source           = { 
+	  :git => "https://github.com/xflow/xflow.git",
+	  :tag => s.version.to_s 
+  }
   s.social_media_url = 'https://twitter.com/xflowapp'
 
-  s.platform     = :ios, '6.0'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*.{h,m,c}'
   s.resources = 'Pod/Assets/*.png'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
   s.frameworks = 'UIKit'
 
   s.dependency 'AFNetworking', '~> 2.4.1'
   s.dependency 'Mantle', '~> 1.5.1'
   s.dependency 'OHHTTPStubs', '~> 3.1.2'
   s.dependency 'Aspects', '~> 1.4.1'
+  #s.dependency 'xflowparser', '0.1.0'
+  #s.dependency 'xflowparser'
 
 end
 
