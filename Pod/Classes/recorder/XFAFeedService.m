@@ -235,7 +235,7 @@
                               onSuccess:(void(^)(XFObjcVcClass * vcClass))success
                               onFailure:(void(^)(NSError * error))failure{
     
-    NSString * path = [NSString stringWithFormat:@"v1/vc/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
+    NSString * path = [NSString stringWithFormat:@"v1/pod/vcs/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
     NSString * urlString = [NSString stringWithFormat:@"%@/%@",
                             self.feedServer , path];
     

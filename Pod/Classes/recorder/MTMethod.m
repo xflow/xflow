@@ -67,7 +67,7 @@ static NSMutableDictionary * classMethodNamesDic;
 
 
 -(BOOL)isVoidAndNoArguments{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"v8@0:4"];
+    BOOL iv = [self.methodTypeEncoding isEqualToString:@"v16@0:8"];
     return iv;
 }
 
@@ -346,6 +346,9 @@ NSString * replacement(NSString* methodName)
 }
 
 
+-(BOOL)isMonitored{
+    return self.isInterceptable;
+}
 
 -(SEL)selector{
     return NSSelectorFromString(self.methodName);

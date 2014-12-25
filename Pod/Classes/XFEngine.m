@@ -151,7 +151,7 @@ NSString * const ENV_PLAN_K = @"XX";
 
 -(void)doVC:(UIViewController*)vc{
     
-//    NSAssert(vc, @"doVC no vc");
+    NSAssert(vc, @"doVC no vc");
     
     if ([MTMethod isVcClassProcessed:vc.class]) {
         NSLog(@"%@ allready processed",vc.class);
@@ -199,9 +199,10 @@ NSString * const ENV_PLAN_K = @"XX";
 //        if (childVCs.count == 0) {}
         
     } onFailure:^(NSError *error) {
+        
         UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"xflow launch failed" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [av show];
-        NSAssert(FALSE, @"doVC onFailure: %@",error.localizedDescription);
+//        NSAssert(FALSE, @"doVC onFailure: %@",error.localizedDescription);
     }];
 
     

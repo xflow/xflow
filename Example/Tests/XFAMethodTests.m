@@ -32,21 +32,20 @@
 - (void)setUp
 {
     [super setUp];
-    aop = XFAInvocationAOP.new;
+    aop = [XFAInvocationAOP new];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [aop removeAllHooks];
     [super tearDown];
 }
 
 
 
 -(MTMethod*)methodButton1:(TXTestViewController*)vc{
-    MTMethod * method = MTMethod.new;
+    MTMethod * method = [MTMethod new];
     method.methodName = @"actionButton1:";
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v12@0:4@8";
@@ -84,7 +83,7 @@
 
 
 - (void)test_MTMethod_ApplyTo_{
-    TXTestViewController * vc = TXTestViewController.new;
+    TXTestViewController * vc = [TXTestViewController new];
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
     vc.string1 = @"TEXT2";
     
@@ -148,10 +147,10 @@
 
 
 -(MTMethod*)methodCall:(NSObject *)vc selector:(SEL)selector{
-    MTMethod * method = MTMethod.new;
+    MTMethod * method = [MTMethod new];
     method.methodName = NSStringFromSelector(selector);
     method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v8@0:4";
+    method.methodTypeEncoding = @"v16@0:8";
     return method;
 }
 
@@ -159,12 +158,13 @@
 -(void)test_Multi_Calls_AOP
 {
     
-    ObjectMultiCalls * objTestSubject = ObjectMultiCalls.new;
+    ObjectMultiCalls * objTestSubject = [ObjectMultiCalls new];
     
     MTMethod * method0 = [self methodCall:objTestSubject selector:@selector(call0)];
-    [aop invoAopPre:objTestSubject method:method0];
-    [aop invoAopPost:objTestSubject method:method0];
-
+    id<AspectToken>tok00 = [aop invoAopPre:objTestSubject method:method0];
+    id<AspectToken>tok01 = [aop invoAopPost:objTestSubject method:method0];
+    XCTAssert(tok00);
+    XCTAssert(tok01);
     __block MTMethodInvocation * invo0 = nil;
     
     MTMethod * method1 = [self methodCall:objTestSubject selector:@selector(call1)];
@@ -208,7 +208,7 @@
         return YES;
     }] userInfo:[OCMArg any]];
     
-    
+
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         MTMethodInvocation * invo = (MTMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
@@ -219,7 +219,7 @@
         XCTAssertTrue(invo0.isFirstInVirtualStack, @"should be first");
         return YES;
     }] userInfo:[OCMArg any]];
-    
+
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         MTMethodInvocation * invo = (MTMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
@@ -302,7 +302,7 @@
     [observerMock verify];
     
     [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
-
+    [aop removeAllHooks];
 }
 
 
@@ -419,6 +419,7 @@
     [observerMock verify];
     
     [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
+    [aop removeAllHooks];
 }
 
 @end

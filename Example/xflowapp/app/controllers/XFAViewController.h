@@ -45,7 +45,8 @@
 
 - (IBAction)actionSlider:(id)sender;
 
--(IBAction)actionButton:(id)sender event:(UIEvent*)event;
+-(IBAction)actionButton2:(id)sender event:(UIEvent*)event;
+-(IBAction)actionButton:(id)sender;
 
 -(void)dislayText;
 

@@ -68,7 +68,7 @@
     NSError * errorAspectHook = nil;
     
     id<AspectToken> token = [obj aspect_hookSelector:method.selector withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo) {
-        MTVcMethodInvocation * mvcInvo = MTVcMethodInvocation.new;
+        MTVcMethodInvocation * mvcInvo = [MTVcMethodInvocation new];
         mvcInvo.invocationTarget = (UIViewController*)obj;
         mvcInvo.method = method;
         
@@ -107,12 +107,13 @@
 -(void)removeAllHooks{
     for (id<AspectToken>aspectToken in self.aspectTokens) {
         BOOL b = [aspectToken remove];
-        NSAssert(b, @"token not removed");
+//        NSAssert(b, @"token not removed");
     }
 }
 
 - (void)dealloc
 {
+    NSLog(@"[XFAInvocationAOP dealloc]");
     [self removeAllHooks];
 }
 

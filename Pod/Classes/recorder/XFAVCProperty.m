@@ -7,6 +7,10 @@
 //
 
 #import "XFAVCProperty.h"
+#import "XFAVCIBOutletViewProperty.h"
+#import "XFAVCScalarProperty.h"
+#import "XFAVCLabelProperty.h"
+#import "XFAVCScalarProperty.h"
 
 @implementation XFAVCProperty
 
@@ -31,19 +35,23 @@
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
     
     if ([JSONDictionary[@"objcType"] isEqualToString:@"UILabel *"]) {
-        return NSClassFromString(@"XFAVCLabelProperty");
+//        return NSClassFromString(@"XFAVCLabelProperty");
+        return [XFAVCLabelProperty class];
     }
     
     if ([JSONDictionary[@"objcType"] isEqualToString:@"UIView *"]) {
-        return NSClassFromString(@"XFAVCViewProperty");
+//        return NSClassFromString(@"XFAVCViewProperty");
+        return [XFAVCViewProperty class];
     }
 
     if ([JSONDictionary[@"objcType"] isEqualToString:@"IBOutlet"]) {
-        return NSClassFromString(@"XFAVCIBOutletViewProperty");
+//        return NSClassFromString(@"XFAVCIBOutletViewProperty");
+        return [XFAVCIBOutletViewProperty class];
     }
     
     if ([JSONDictionary[@"objcType"] isEqualToString:@"Scalar"]) {
-        return NSClassFromString(@"XFAVCScalarProperty");
+//        return NSClassFromString(@"XFAVCScalarProperty");
+        return [XFAVCScalarProperty class];
     }
     
     

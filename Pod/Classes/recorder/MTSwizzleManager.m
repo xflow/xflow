@@ -53,8 +53,8 @@ static MTSwizzleManager * globalSelf;
 {
     self = [super init];
     if (self) {
-        self.methodsNamesMap = NSMutableDictionary.new;
-        self.methodsMap = NSMutableDictionary.new;
+        self.methodsNamesMap = [NSMutableDictionary new];
+        self.methodsMap = [NSMutableDictionary new];
         globalSelf = self;
     }
     return self;
@@ -73,6 +73,7 @@ static MTSwizzleManager * globalSelf;
 }
 
 -(MTMethod*)methodForObject:(NSObject*)obj withName:(NSString*)name{
+    NSLog(@"self.methodsMap:%@",globalSelf.methodsMap);
     MTMethod * m = [self.methodsMap objectForKey:name];
     return m;
 }

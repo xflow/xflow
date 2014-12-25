@@ -18,10 +18,10 @@
 
 @property(nonatomic,strong) NSString * methodReturnType;
 @property(nonatomic,strong) NSString * methodTypeEncoding;
-@property(nonatomic,assign) BOOL isUserDefined;
+@property(nonatomic,strong) NSNumber * isUserDefined;
 @property(nonatomic,assign) BOOL isMonitored;
-@property(nonatomic,assign) BOOL isChildVcEntryPoint;
-@property(nonatomic,assign) NSInteger childVcArgumentIndex;
+@property(nonatomic,strong) NSNumber * isChildVcEntryPoint;
+@property(nonatomic,strong) NSNumber * childVcArgumentIndex;
 
 
 @property (nonatomic,readonly) BOOL isVoid;

@@ -40,8 +40,8 @@
     
     XCTAssertNil(err);
     XCTAssert(vc, @"Pass");
-    XCTAssertEqual(vc.methods.count, 2);
-    XCTAssertEqual(vc.properties.count, 10);
+    XCTAssertEqual(vc.methods.count, 4);
+    XCTAssertEqual(vc.properties.count, 19);
 }
 
 

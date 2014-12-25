@@ -63,9 +63,9 @@
 - (void)testBasicNotification
 {
     
-    MTSwizzleManager * swzlMgr = MTSwizzleManager.new;
+    MTSwizzleManager * swzlMgr = [MTSwizzleManager new];
     
-    TXTestObject * obj = TXTestObject.new;
+    TXTestObject * obj = [TXTestObject new];
   
     [swzlMgr swizzleAllMethodsOfObject:obj];
     
