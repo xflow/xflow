@@ -39,7 +39,7 @@ static NSMutableDictionary * classMethodNamesDic;
 -(NSString*)description{
     NSObject *obj = (NSObject*)self.classTypeInstance;
     NSString *className = NSStringFromClass(obj.class);
-    return [NSString stringWithFormat:@"name:%@, typeEncoding:%@, returnType:%@,class: %@, isMonitored:%d", self.methodName,self.methodTypeEncoding,self.methodReturnType, className , self.isMonitored ];
+    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@, isMonitored:%d", self.signature,self.methodTypeEncoding,self.methodReturnType, className , self.isMonitored ];
 }
 
 -(BOOL)isVoid{
@@ -258,7 +258,7 @@ static NSMutableDictionary * classMethodNamesDic;
 
 }
 
-
+/*
 +(MTMethod *)methodWithTypeEncoding:(NSString*)typeEncoding{
     MTMethod * method = MTMethod.new;
     method.methodTypeEncoding = typeEncoding;
@@ -266,7 +266,7 @@ static NSMutableDictionary * classMethodNamesDic;
     method.methodName = @"actionButton2:event:";
     
     return method;
-}
+}*/
 
 -(NSInteger)methodArgumentsCount{
     NSAssert(self.methodTypeEncoding, @"no methodTypeEncoding to generate methodArgumentsCount");
@@ -351,7 +351,8 @@ NSString * replacement(NSString* methodName)
 }
 
 -(SEL)selector{
-    return NSSelectorFromString(self.methodName);
+    NSAssert(self.signature, @"no signature found");
+    return NSSelectorFromString(self.signature);
 }
 
 

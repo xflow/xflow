@@ -143,44 +143,6 @@
 
 
 
-
-
-
-/*
--(void)testInvocationNotification{
-    
-    TXTestViewController * vc = TXTestViewController.new;
-    
-    [UIApplication sharedApplication].delegate.window.rootViewController = vc;
-    
-    MTMethod * m = [self methodButton2];
-    
-    [m monitorForObject:vc];
-    
-    id observerMock = [OCMockObject observerMock];
-    
-    [[NSNotificationCenter defaultCenter] addMockObserver:observerMock
-                                                     name:NOTIF_METHOD_INVOCATION
-                                                   object:nil];
-    
-    [[observerMock expect] notificationWithName:NOTIF_METHOD_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        XCTAssert([obj isMemberOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
-    }] userInfo:[OCMArg any] ];
-
-    vc.string1 = @"TEXT2";
-    
-    [vc.button2 sendActionsForControlEvents:UIControlEventTouchUpInside];
-
-    [[NSNotificationCenter defaultCenter] removeObserver:observerMock];
-    
-    [observerMock verify];
-    
-//    XCTAssertEqualObjects(vc.label.text, @"TEXT2", @"should be TEXT2");
-    
-}
-*/
-
-
 -(void)testPlay{
     
 //    id obj = [OCMockObject mockForClass:[TXTestObject class]];

@@ -19,6 +19,8 @@
 #import "TXAction.h"
 #import "MTMethod.h"
 
+#import "XFAInvocationAOP.h"
+
 typedef NS_ENUM(NSInteger, TXEngineMode) {
     TXEngineModeUnknown         = 0,
     TXEngineModeOff             = 1,
@@ -35,6 +37,7 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 @property (nonatomic, strong) XFAFeedService * feedService;
 @property (nonatomic, assign) TXEngineMode engineMode;
 @property (nonatomic, strong) NSString * apiToken;
+@property (nonatomic, strong) XFAInvocationAOP * aop;
 
 @end
 
@@ -114,6 +117,8 @@ NSString * const ENV_PLAN_K = @"XX";
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vcDetectedWithNotif:) name:NOTIF_VC object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(capturePreMethodByNotif:) name:NOTIF_METHOD_PRE_INVOCATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(capturePostMethodByNotif:) name:NOTIF_METHOD_POST_INVOCATION object:nil];
     
     if (self.engineMode == TXEngineModeCruiseControl)
     {
@@ -153,12 +158,12 @@ NSString * const ENV_PLAN_K = @"XX";
     
     NSAssert(vc, @"doVC no vc");
     
-    if ([MTMethod isVcClassProcessed:vc.class]) {
+    /*if ([MTMethod isVcClassProcessed:vc.class]) {
         NSLog(@"%@ allready processed",vc.class);
         return;
     } else {
         [MTMethod setVcClassAsProcessed:vc.class];
-    }
+    }*/
     
     [self.feedService feedVC:vc onSuccess:^(XFObjcVcClass * vcresp){
         
@@ -170,14 +175,14 @@ NSString * const ENV_PLAN_K = @"XX";
 //        NSAssert(methods.count > 0, @"doVC no methods %@",vc.class);
         
         for (MTMethod * method in methods) {
-            NSLog(@"doVc: %@, method:%@",[vc class],method);
             if (method.isMonitored) {
-//                [method monitorForObject:vc];
+                NSLog(@"doVc: %@, method:%@",[vc class],method.signature);
+                NSAssert([vc respondsToSelector:method.selector], @"%@ not found for %@",method.signature,vc);
+                [self monitorMethod:method forViewController:vc];
             }
         }
         
-        NSString * assertMsg = [NSString stringWithFormat:@"TXEngine doVC:%@ no vcresp.properties", [vc class]];
-        
+//        NSString * assertMsg = [NSString stringWithFormat:@"TXEngine doVC:%@ no vcresp.properties", [vc class]];
 //        NSAssert(vcresp.properties, assertMsg);
         
         vc.xfaProperties = NSMutableArray.new;
@@ -208,7 +213,19 @@ NSString * const ENV_PLAN_K = @"XX";
     
 }
 
+-(void)monitorMethod:(MTMethod*)method forViewController:(UIViewController*)vc{
+    [self.aop invoAopPre:vc method:method];
+    [self.aop invoAopPost:vc method:method];
+}
 
+
+-(void)capturePreMethodByNotif:(NSNotification*)notif{
+    
+}
+
+-(void)capturePostMethodByNotif:(NSNotification*)notif{
+    
+}
 
 -(UIWindow*)mainWindow{
     return [[UIApplication sharedApplication].windows objectAtIndex:0];

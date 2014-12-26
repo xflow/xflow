@@ -55,9 +55,10 @@
 
 -(void)applyTo:(NSObject*)obj;
 
-
 +(BOOL)isVcClassProcessed:(Class)vcClass;
 +(void)setVcClassAsProcessed:(Class)vcClass;
+
+
 
 //-(void)aopOn;
 //-(void)aopOff;
