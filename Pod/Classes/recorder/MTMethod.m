@@ -39,7 +39,7 @@ static NSMutableDictionary * classMethodNamesDic;
 -(NSString*)description{
     NSObject *obj = (NSObject*)self.classTypeInstance;
     NSString *className = NSStringFromClass(obj.class);
-    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@, isMonitored:%d", self.signature,self.methodTypeEncoding,self.methodReturnType, className , self.isMonitored ];
+    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@, isInterceptable:%d", self.signature,self.methodTypeEncoding,self.methodReturnType, className , self.isInterceptable ];
 }
 
 -(BOOL)isVoid{
@@ -345,10 +345,10 @@ NSString * replacement(NSString* methodName)
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:TXAssertion.class];
 }
 
-
+/*
 -(BOOL)isMonitored{
     return self.isInterceptable;
-}
+}*/
 
 -(SEL)selector{
     NSAssert(self.signature, @"no signature found");

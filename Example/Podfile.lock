@@ -65,7 +65,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   xflowparser:
-    :commit: b9492386e9197677731570b052cafe2ab86815a6
+    :commit: 585e9d42913268a3a5b48cef0e0e6e56910d382b
     :git: https://github.com/xflow/xflowparser.git
 
 SPEC CHECKSUMS:

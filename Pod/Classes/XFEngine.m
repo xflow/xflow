@@ -56,6 +56,15 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 
 NSString * const ENV_PLAN_K = @"XX";
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.aop = [XFAInvocationAOP new];
+    }
+    return self;
+}
+
 -(TXEngineMode)figureOutEngineMode{
     
     const char * K_ENV_PLAN = [ENV_PLAN_K cStringUsingEncoding:NSUTF8StringEncoding];
@@ -167,15 +176,16 @@ NSString * const ENV_PLAN_K = @"XX";
     
     [self.feedService feedVC:vc onSuccess:^(XFObjcVcClass * vcresp){
         
-        NSLog(@"vcresp:%@",vcresp);
+//        NSLog(@"vcresp:%@",vcresp);
         
         NSArray * methods = vcresp.methods;
+//        NSLog(@"methods:%@",methods);
         
 //        NSAssert(methods, @"doVC:'%@' no methods at all", vc.class);
 //        NSAssert(methods.count > 0, @"doVC no methods %@",vc.class);
         
         for (MTMethod * method in methods) {
-            if (method.isMonitored) {
+            if (method.isInterceptable) {
                 NSLog(@"doVc: %@, method:%@",[vc class],method.signature);
                 NSAssert([vc respondsToSelector:method.selector], @"%@ not found for %@",method.signature,vc);
                 [self monitorMethod:method forViewController:vc];
@@ -214,17 +224,21 @@ NSString * const ENV_PLAN_K = @"XX";
 }
 
 -(void)monitorMethod:(MTMethod*)method forViewController:(UIViewController*)vc{
+    NSAssert(self.aop, @"");
+    NSParameterAssert(method);
+    NSParameterAssert(vc);
     [self.aop invoAopPre:vc method:method];
     [self.aop invoAopPost:vc method:method];
 }
 
 
 -(void)capturePreMethodByNotif:(NSNotification*)notif{
+    MTMethod * mth = notif.object;
     
 }
 
 -(void)capturePostMethodByNotif:(NSNotification*)notif{
-    
+    MTMethod * mth = notif.object;
 }
 
 -(UIWindow*)mainWindow{

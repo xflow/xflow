@@ -19,7 +19,7 @@
 @property(nonatomic,strong) NSString * methodReturnType;
 @property(nonatomic,strong) NSString * methodTypeEncoding;
 @property(nonatomic,strong) NSNumber * isUserDefined;
-@property(nonatomic,assign) BOOL isMonitored;
+//@property(nonatomic,assign) BOOL isMonitored;
 @property(nonatomic,strong) NSNumber * isChildVcEntryPoint;
 @property(nonatomic,strong) NSNumber * childVcArgumentIndex;
 

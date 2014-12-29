@@ -34,6 +34,11 @@
 
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
     
+    if (JSONDictionary[@"isIBOutlet"] && [JSONDictionary[@"isIBOutlet"] isEqualToNumber:@1]) {
+        //        return NSClassFromString(@"XFAVCIBOutletViewProperty");
+        return [XFAVCIBOutletViewProperty class];
+    }
+    
     if ([JSONDictionary[@"objcType"] isEqualToString:@"UILabel *"]) {
 //        return NSClassFromString(@"XFAVCLabelProperty");
         return [XFAVCLabelProperty class];
@@ -44,10 +49,7 @@
         return [XFAVCViewProperty class];
     }
 
-    if ([JSONDictionary[@"objcType"] isEqualToString:@"IBOutlet"]) {
-//        return NSClassFromString(@"XFAVCIBOutletViewProperty");
-        return [XFAVCIBOutletViewProperty class];
-    }
+
     
     if ([JSONDictionary[@"objcType"] isEqualToString:@"Scalar"]) {
 //        return NSClassFromString(@"XFAVCScalarProperty");
