@@ -102,19 +102,21 @@ NSString * const ENV_PLAN_K = @"XX";
 //    self.engineMode = TXEngineModeCruiseControl;
     
     NSString * newSessionUrl = nil;
-    NSString * feedUrl = nil;
+//    NSString * feedUrl = nil;
     if (self.engineMode == TXEngineModeCapture)
     {
 //        feedUrl = [NSString stringWithFormat:@"%@/%@", feedServer , @"v"];
-        newSessionUrl = [NSString stringWithFormat:@"%@/%@", feedServer, @"v1/feed/xsessions"];
+        newSessionUrl = [NSString stringWithFormat:@"%@/%@/%@", feedServer, @"v1/pod/feed/xsessions/token",self.apiToken];
     }
+    
     else if (self.engineMode == TXEngineModeCruiseControl)
     {
-        feedUrl = [NSString stringWithFormat:@"%@/%@",playServer, @"v1/play/invocations"];
+//        feedUrl = [NSString stringWithFormat:@"%@/%@",playServer, @"v1/play/invocations"];
         newSessionUrl = [NSString stringWithFormat:@"%@/%@", playServer , @"v1/play/xsessions"];
     }
     
     self.feedService.feedServer = feedServer;
+    self.feedService.playServer = playServer;
     self.feedService.apiToken = apiToken;
     [self.feedService listenToMethodInvocations];
     
@@ -126,8 +128,6 @@ NSString * const ENV_PLAN_K = @"XX";
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vcDetectedWithNotif:) name:NOTIF_VC object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(capturePreMethodByNotif:) name:NOTIF_METHOD_PRE_INVOCATION object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(capturePostMethodByNotif:) name:NOTIF_METHOD_POST_INVOCATION object:nil];
     
     if (self.engineMode == TXEngineModeCruiseControl)
     {
@@ -174,7 +174,7 @@ NSString * const ENV_PLAN_K = @"XX";
         [MTMethod setVcClassAsProcessed:vc.class];
     }*/
     
-    [self.feedService feedVC:vc onSuccess:^(XFObjcVcClass * vcresp){
+    [self.feedService requestSetupForVC:vc onSuccess:^(XFObjcVcClass * vcresp){
         
 //        NSLog(@"vcresp:%@",vcresp);
         
@@ -232,14 +232,6 @@ NSString * const ENV_PLAN_K = @"XX";
 }
 
 
--(void)capturePreMethodByNotif:(NSNotification*)notif{
-    MTMethod * mth = notif.object;
-    
-}
-
--(void)capturePostMethodByNotif:(NSNotification*)notif{
-    MTMethod * mth = notif.object;
-}
 
 -(UIWindow*)mainWindow{
     return [[UIApplication sharedApplication].windows objectAtIndex:0];

@@ -39,17 +39,18 @@
 
 -(void)listenToMethodInvocations
 {
-    
-    // just to make sure
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIF_METHOD_INVOCATION object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(feedInvocationToStudioByNotif:)
-                                                 name:NOTIF_METHOD_INVOCATION
-                                               object:nil];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(waitForNewVCsByNotif:)
-                                                 name:NOTIF_METHOD_INVOCATION
+                                                 name:NOTIF_METHOD_POST_INVOCATION
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(capturePreMethodByNotif:)
+                                                 name:NOTIF_METHOD_PRE_INVOCATION
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(capturePostMethodByNotif:)
+                                                 name:NOTIF_METHOD_POST_INVOCATION
                                                object:nil];
 }
 
@@ -82,7 +83,9 @@
         
         NSLog(@"operation.responseString: %@", operation.responseString);
         NSLog(@"Error: %@", error);
-        
+
+        UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
+        [av show];
         failure(error);
     }];
     
@@ -98,34 +101,35 @@
     
     if ( invoc.method.isChildVcEntryPoint)
     {
-        MTMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex];
+        MTMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex.integerValue];
         NSAssert([arg.argumentValue isKindOfClass:[UIViewController class]], @"argument is not a UIViewContoller");
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VC object:arg.argumentValue userInfo:nil];
     }
 
 }
 
--(void)feedInvocationToStudioByNotif:(NSNotification*)notif{
 
-//    NSLog(@"feedInvocationToStudioByNotif,notif:%@",notif.object);
+-(void)capturePreMethodByNotif:(NSNotification*)notif{
+    MTVcMethodInvocation * mthInvo = notif.object;
+}
 
-    MTVcMethodInvocation * invoc = (MTVcMethodInvocation *) notif.object;
-    
-    /*
-    [self feedAction:invoc toURL:self.feedUrl onSuccess:^{
-        NSLog(@"feedInvocationToStudio %@",invoc.method);
+-(void)capturePostMethodByNotif:(NSNotification*)notif{
+    MTVcMethodInvocation * mthInvo = notif.object;
+    return;
+    [self feedAction:mthInvo onSuccess:^{
+        
     } onFailure:^(NSError *error) {
         NSLog(@"feedInvocationToStudio %@",error.localizedDescription);
+        UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
+        [av show];
     }];
-    */
 }
 
 -(void)unlisten{
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:NOTIF_METHOD_INVOCATION
-                                                  object:nil];
-    
+    NSArray * notifNames = @[NOTIF_METHOD_PRE_INVOCATION, NOTIF_METHOD_POST_INVOCATION];
+    for (NSString * notifName in notifNames) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:notifName object:nil];
+    };
 }
 
 
@@ -183,9 +187,8 @@
 
 
 -(AFHTTPRequestOperation *)feedAction:(MTVcMethodInvocation *)invocation
-                               toURL:(NSString*)urlString
-                              onSuccess:(void (^)(void))success
-                              onFailure:(void(^)(NSError * error))failure{
+                            onSuccess:(void (^)(void))success
+                            onFailure:(void(^)(NSError * error))failure{
     
 
     NSDictionary *invocationJSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:invocation];
@@ -197,6 +200,9 @@
                                   @"vcStatePost": invocation.vcStateAfter
                                   };
     
+    
+    NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xsessions/token/%@", self.apiToken];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServer , path];
     
     NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
     
@@ -231,15 +237,14 @@
 }
 
 
--(AFHTTPRequestOperation *)feedVC:(UIViewController*)vc
+-(AFHTTPRequestOperation *)requestSetupForVC:(UIViewController*)vc
                               onSuccess:(void(^)(XFObjcVcClass * vcClass))success
                               onFailure:(void(^)(NSError * error))failure{
     
     NSString * path = [NSString stringWithFormat:@"v1/pod/vcs/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@",
-                            self.feedServer , path];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.feedServer , path];
     
-    NSLog(@"requestForVC %@ urlString:%@",vc.class,urlString);
+//    NSLog(@"requestSetupForVC %@ urlString:%@",vc.class,urlString);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     manager.requestSerializer = [AFJSONRequestSerializer serializer];

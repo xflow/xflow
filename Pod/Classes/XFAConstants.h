@@ -10,7 +10,7 @@
 
 
 extern NSString * const NOTIF_METHOD;
-extern NSString * const NOTIF_METHOD_INVOCATION;
+//extern NSString * const NOTIF_METHOD_INVOCATION;
 extern NSString * const NOTIF_METHOD_NAME_K;
 extern NSString * const NOTIF_VC;
 extern NSString * const NOTIF_METHOD_ASSERTION_FAILURE;

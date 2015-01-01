@@ -17,10 +17,11 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
-             @"propertyName"            : @"name",
+           /*  @"propertyName"            : @"name",
              @"propertyObjcType"        : @"objc_type",
              @"propertyObjcClassName"   : @"objc_class_name",
              @"propertyIsNil"           : @"is_nil"
+            */
              };
 }
 

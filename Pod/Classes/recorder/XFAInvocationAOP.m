@@ -71,6 +71,8 @@
         MTVcMethodInvocation * mvcInvo = [MTVcMethodInvocation new];
         mvcInvo.invocationTarget = (UIViewController*)obj;
         mvcInvo.method = method;
+        mvcInvo.status = MTVcMethodInvocationStatusPre;
+        [mvcInvo saveVcStateBefore];
         
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
         NSAssert(k, @"can't generate key for selector");
@@ -91,7 +93,9 @@
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
         NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
         MTVcMethodInvocation * mvcInvo = [arr firstObject];
-        
+        mvcInvo.method = method;
+        mvcInvo.status = MTVcMethodInvocationStatusPost;
+        [mvcInvo saveVcStateAfter];
         NSAssert(mvcInvo, @"invocation not found %@",k);
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:mvcInvo userInfo:nil];

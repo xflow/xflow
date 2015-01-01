@@ -10,13 +10,13 @@
 #import <xflowparser/XFPObjcProperty.h>
 @interface XFAVCProperty : XFPObjcProperty
 
-@property(nonatomic,strong) NSString * propertyName;
+//@property(nonatomic,strong) NSString * propertyName;
 
-@property(nonatomic,strong) NSString * propertyObjcType;
+//@property(nonatomic,strong) NSString * propertyObjcType;
 
-@property(nonatomic,strong) NSString * propertyObjcClassName;
+//@property(nonatomic,strong) NSString * propertyObjcClassName;
 
-@property(nonatomic,assign) BOOL propertyIsNil;
+//@property(nonatomic,assign) BOOL propertyIsNil;
 
 -(NSDictionary *)loadValuesFromVC:(UIViewController*)vc;
 

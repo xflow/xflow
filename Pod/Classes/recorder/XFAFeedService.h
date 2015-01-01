@@ -16,13 +16,14 @@
 -(void)listenToMethodInvocations;
 
 @property (nonatomic, strong) NSString * feedServer;
+@property (nonatomic, strong) NSString * playServer;
 @property (nonatomic, strong) NSString * apiToken;
 
 -(AFHTTPRequestOperation *)startFreshStudioXSessionToUrl:(NSString*)urlString
                                              withSuccess:(void (^)(void))success
                                              withFailure:(void(^)(NSError * error))failure;
     
--(AFHTTPRequestOperation *)feedVC:(UIViewController*)vc
+-(AFHTTPRequestOperation *)requestSetupForVC:(UIViewController*)vc
                         onSuccess:(void(^)(XFObjcVcClass * resp))success
                         onFailure:(void(^)(NSError * error))failure;
 
