@@ -84,8 +84,7 @@
         NSLog(@"operation.responseString: %@", operation.responseString);
         NSLog(@"Error: %@", error);
 
-        UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
-        [av show];
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
         failure(error);
     }];
     
@@ -115,13 +114,12 @@
 
 -(void)capturePostMethodByNotif:(NSNotification*)notif{
     MTVcMethodInvocation * mthInvo = notif.object;
-    return;
+
     [self feedAction:mthInvo onSuccess:^{
         
     } onFailure:^(NSError *error) {
         NSLog(@"feedInvocationToStudio %@",error.localizedDescription);
-        UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
-        [av show];
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
     }];
 }
 
@@ -170,7 +168,7 @@
         success(outputArray);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
         NSLog(@"Error: operation.responseString: %@", operation.responseString);
         NSLog(@"Error: %@", error);
         
@@ -201,7 +199,7 @@
                                   };
     
     
-    NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xsessions/token/%@", self.apiToken];
+    NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xinvocations/token/%@", self.apiToken];
     NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServer , path];
     
     NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
@@ -226,7 +224,7 @@
         
         NSLog(@"error: %@", operation.responseString);
         NSLog(@"Error: %@", error);
-        
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
         failure(error);
     }];
  
@@ -261,7 +259,7 @@
         
         success(vcResp);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
         NSLog(@"requestForVC %@, Failure:%@",urlString,operation.responseString);
         NSLog(@"Error: %@", error);
         failure(error);

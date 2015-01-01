@@ -39,9 +39,9 @@
     NSDictionary * dicFromSuper = [super loadValuesFromVC:vc];
     
     NSMutableDictionary * dic = @{
-             @"is_nil"  : @(isNil),
-             @"name"    : self.propertyName,
-             @"hidden"  : @(view.hidden),
+             @"isNil"  : @(isNil),
+             @"propertyName"    : self.propertyName,
+             @"isHidden"  : @(view.hidden),
              @"frame"   : [XFAVCViewProperty frameForView:view]
              }.mutableCopy;
     
