@@ -367,8 +367,8 @@
             return NO;
         }
         invo2 = invo;
-        XCTAssertNotEqual(invo, invo1, @"should not be equal")
-        ;        XCTAssertFalse(invo2.isFirstInVirtualStack, @"should be first");
+        XCTAssertNotEqual(invo, invo1, @"should not be equal");
+        XCTAssertFalse(invo2.isFirstInVirtualStack, @"should be first");
         return YES;
     }] userInfo:[OCMArg any]];
     

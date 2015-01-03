@@ -208,15 +208,12 @@
    
     [operation  setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
 
-        NSString * reqBody = [[NSString alloc] initWithData:operation.request.HTTPBody encoding:NSUTF8StringEncoding];
-        NSLog(@"reqBody: %@",reqBody );
-        NSLog(@"success: %@", operation.responseString);
-        
-        NSError * error = nil;
-        
+//        NSString * reqBody = [[NSString alloc] initWithData:operation.request.HTTPBody encoding:NSUTF8StringEncoding];
+//        NSLog(@"reqBody: %@",reqBody );
+//        NSLog(@"success: %@", operation.responseString);
+//        NSError * error = nil;
 //        NSLog(@"JSON: %@, error:%@", responseObject,error);
-        
-        NSAssert(!error, @"MTLJSONAdapter error");
+//        NSAssert(!error, @"MTLJSONAdapter error");
         
         success();
         
