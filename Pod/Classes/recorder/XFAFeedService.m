@@ -191,13 +191,9 @@
 
     NSDictionary *invocationJSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:invocation];
 //    NSLog(@"invocationJSONDictionary:%@",invocationJSONDictionary);
- 
-    NSDictionary * parameters = @{
-                                  @"invocation": invocationJSONDictionary,
-                                  @"vcStatePre":  invocation.vcStateBefore ,
-                                  @"vcStatePost": invocation.vcStateAfter
-                                  };
-    
+
+    NSDictionary * parameters = @{ @"invocation": invocationJSONDictionary };
+
     
     NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xinvocations/token/%@", self.apiToken];
     NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServer , path];

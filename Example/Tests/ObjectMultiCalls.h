@@ -7,9 +7,9 @@
 //
 
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIViewController.h>
 
-@interface ObjectMultiCalls : NSObject
+@interface ObjectMultiCalls : UIViewController
 
 -(void)call0; // calls call1
 

@@ -22,7 +22,7 @@
 -(NSDictionary *)loadValuesFromVC:(UIViewController*)vc
 {
     NSObject * obj = [self objectFromVC:vc];
-    return @{@"obj_hash": @(obj.hash)};
+    return @{@"objHash": @(obj.hash)};
 }
 
 @end

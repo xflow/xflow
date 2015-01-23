@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIViewController.h>
 
-@interface ObjectRecursiveCalls : NSObject
+@interface ObjectRecursiveCalls : UIViewController
 
 -(void)callfirst;
 -(void)calledTwoTimes;

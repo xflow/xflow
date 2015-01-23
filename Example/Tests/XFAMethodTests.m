@@ -159,7 +159,7 @@
 {
     
     ObjectMultiCalls * objTestSubject = [ObjectMultiCalls new];
-    
+    objTestSubject.xfaProperties = @{}.mutableCopy;
     MTMethod * method0 = [self methodCall:objTestSubject selector:@selector(call0)];
     id<AspectToken>tok00 = [aop invoAopPre:objTestSubject method:method0];
     id<AspectToken>tok01 = [aop invoAopPost:objTestSubject method:method0];
@@ -308,8 +308,8 @@
 
 -(void)test_twice_Recursive_Calls{
     
-    ObjectRecursiveCalls * objcTestSubject = ObjectRecursiveCalls.new;
-    
+    ObjectRecursiveCalls * objcTestSubject = [ObjectRecursiveCalls new];
+    objcTestSubject.xfaProperties = @{}.mutableCopy;
     MTMethod * method0 = [self methodCall:objcTestSubject selector:@selector(callfirst)];
 
     [aop invoAopPre:objcTestSubject method:method0];

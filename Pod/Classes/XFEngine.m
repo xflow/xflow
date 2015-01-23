@@ -106,13 +106,13 @@ NSString * const ENV_PLAN_K = @"XX";
     if (self.engineMode == TXEngineModeCapture)
     {
 //        feedUrl = [NSString stringWithFormat:@"%@/%@", feedServer , @"v"];
-        newSessionUrl = [NSString stringWithFormat:@"%@/%@/%@", feedServer, @"v1/pod/feed/xsessions/token",self.apiToken];
+        newSessionUrl = [NSString stringWithFormat:@"%@/%@/%@", feedServer, @"v1/pod/xplans/token",self.apiToken];
     }
     
     else if (self.engineMode == TXEngineModeCruiseControl)
     {
 //        feedUrl = [NSString stringWithFormat:@"%@/%@",playServer, @"v1/play/invocations"];
-        newSessionUrl = [NSString stringWithFormat:@"%@/%@", playServer , @"v1/play/xsessions"];
+//        newSessionUrl = [NSString stringWithFormat:@"%@/%@", playServer , @"/v1/pod/xplans/token/"];
     }
     
     self.feedService.feedServer = feedServer;
@@ -124,7 +124,7 @@ NSString * const ENV_PLAN_K = @"XX";
         [self doVC:vc];
     } withFailure:^(NSError *error) {
         
-        NSAssert(FALSE, @"%s can't start new studio x session %@",__FUNCTION__,error);
+//        NSAssert(FALSE, @"%s can't start new studio x session %@",__FUNCTION__,error);
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vcDetectedWithNotif:) name:NOTIF_VC object:nil];
@@ -149,7 +149,7 @@ NSString * const ENV_PLAN_K = @"XX";
         } onFailure:^(NSError *error) {
             UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [av show];
-            NSAssert(FALSE, @"no xactions there");
+//            NSAssert(FALSE, @"no xactions there");
         }];
         
     }

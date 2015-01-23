@@ -49,5 +49,7 @@
 -(IBAction)actionButton:(id)sender;
 
 -(void)displayText;
+-(void)displayText2;
+-(void)displayText3;
 
 @end

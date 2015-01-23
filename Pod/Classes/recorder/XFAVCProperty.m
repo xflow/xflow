@@ -58,7 +58,7 @@
     }
     
     
-    NSAssert(NO, @"%s No matching class for: '%@'.",__PRETTY_FUNCTION__, JSONDictionary[@"objc_type"]);
+//    NSAssert(NO, @"%s No matching class for: '%@'.",__PRETTY_FUNCTION__, JSONDictionary[@"objc_type"]);
     return self;
 }
 
