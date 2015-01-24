@@ -84,7 +84,7 @@ NSString * const ENV_PLAN_K = @"XX";
     }
     return mode;
 }*/
-
+/*
 -(NSString*)feedUrl{
     
     const char * K_ENV_PLAN = [ENV_PLAN_K cStringUsingEncoding:NSUTF8StringEncoding];
@@ -96,7 +96,7 @@ NSString * const ENV_PLAN_K = @"XX";
     }
     return p;
 }
-
+*/
 -(BFTask*)getRunModeTask{
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     NSString * urlString = [NSString stringWithFormat:@"%@/%@/%@" ,self.feedServerUrl , @"v1/pod/runMode/token",self.apiToken];
