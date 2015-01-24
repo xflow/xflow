@@ -12,14 +12,17 @@
 #import "XFACrawler.h"
 #import "XFAFeedService.h"
 #import "XFObjcVcClass.h"
+#import "MTVcMethodInvocation.h"
+#import "MTMethodArgument.h"
 #import "MTMethod.h"
 #import "XFAVCProperty.h"
 #import "UIViewController+XFAProperties.h"
 #import "XFAConstants.h"
 #import "TXAction.h"
 #import "MTMethod.h"
-
 #import "XFAInvocationAOP.h"
+#import "XFARun.h"
+#import <Bolts/Bolts.h>
 
 typedef NS_ENUM(NSInteger, TXEngineMode) {
     TXEngineModeUnknown         = 0,
@@ -34,10 +37,13 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 }
 
 @property (nonatomic, strong) UIWindow      * mainWindow;
-@property (nonatomic, strong) XFAFeedService * feedService;
-@property (nonatomic, assign) TXEngineMode engineMode;
-@property (nonatomic, strong) NSString * apiToken;
+//@property (nonatomic, assign) TXEngineMode engineMode;
 @property (nonatomic, strong) XFAInvocationAOP * aop;
+
+@property (nonatomic, strong) NSString * feedServerUrl;
+@property (nonatomic, strong) NSString * playServerUrl;
+@property (nonatomic, strong) NSString * apiToken;
+@property (nonatomic, strong) XFAFeedService * feedService;
 
 @end
 
@@ -61,10 +67,11 @@ NSString * const ENV_PLAN_K = @"XX";
     self = [super init];
     if (self) {
         self.aop = [XFAInvocationAOP new];
+        self.feedService = [XFAFeedService new];
     }
     return self;
 }
-
+/*
 -(TXEngineMode)figureOutEngineMode{
     
     const char * K_ENV_PLAN = [ENV_PLAN_K cStringUsingEncoding:NSUTF8StringEncoding];
@@ -76,7 +83,7 @@ NSString * const ENV_PLAN_K = @"XX";
         mode = TXEngineModeCapture;
     }
     return mode;
-}
+}*/
 
 -(NSString*)feedUrl{
     
@@ -90,82 +97,177 @@ NSString * const ENV_PLAN_K = @"XX";
     return p;
 }
 
-
--(void)startWithFeedServer:(NSString*)feedServer withPlayServer:(NSString*)playServer withApiToken:(NSString*)apiToken{
-    NSLog(@"TXEngine on");
-    self.apiToken = apiToken;
-    UIViewController * vc = self.mainWindow.rootViewController;
-    self.feedService = [XFAFeedService new];
-
-    self.engineMode = [self figureOutEngineMode];
-        
-//    self.engineMode = TXEngineModeCruiseControl;
-    
-    NSString * newSessionUrl = nil;
-//    NSString * feedUrl = nil;
-    if (self.engineMode == TXEngineModeCapture)
-    {
-//        feedUrl = [NSString stringWithFormat:@"%@/%@", feedServer , @"v"];
-        newSessionUrl = [NSString stringWithFormat:@"%@/%@/%@", feedServer, @"v1/pod/xplans/token",self.apiToken];
-    }
-    
-    else if (self.engineMode == TXEngineModeCruiseControl)
-    {
-//        feedUrl = [NSString stringWithFormat:@"%@/%@",playServer, @"v1/play/invocations"];
-//        newSessionUrl = [NSString stringWithFormat:@"%@/%@", playServer , @"/v1/pod/xplans/token/"];
-    }
-    
-    self.feedService.feedServer = feedServer;
-    self.feedService.playServer = playServer;
-    self.feedService.apiToken = apiToken;
-    [self.feedService listenToMethodInvocations];
-    
-    [self.feedService startFreshStudioXSessionToUrl:newSessionUrl withSuccess:^{
-        [self doVC:vc];
-    } withFailure:^(NSError *error) {
-        
-//        NSAssert(FALSE, @"%s can't start new studio x session %@",__FUNCTION__,error);
+-(BFTask*)getRunModeTask{
+    BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@/%@" ,self.feedServerUrl , @"v1/pod/runMode/token",self.apiToken];
+    XFAFeedService * feedService = [XFAFeedService new];
+    [feedService getRunModeWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, XFARun *obj) {
+        [tcs setResult:obj];
+    } withFailure:^(AFHTTPRequestOperation *op, NSError *error) {
+        [tcs setError:error];
     }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vcDetectedWithNotif:) name:NOTIF_VC object:nil];
-    
-    if (self.engineMode == TXEngineModeCruiseControl)
-    {
+    return tcs.task;
+}
 
-//        http://localhost:3000/v1/plans/534e3b81019fad09d740bc24
-        NSString * planUrl = @"http://localhost:3000/v1/plans/534e3b81019fad09d740bc24/xactions";
-        [self.feedService requestXActionsWithURL:planUrl onSuccess:^(NSArray *xactions) {
-            
-            for (TXAction * xaction in xactions) {
-                NSLog(@"xactions:%@",xaction);
-                UIWindow * window = [UIApplication sharedApplication].windows.firstObject;
-                UIViewController * rootVC = window.rootViewController;
-                NSAssert(rootVC, @"no root vc found");
-                NSAssert([xaction.invocationMethod isMemberOfClass:[MTMethod class]], @"");
-                MTMethod * method = xaction.invocationMethod;
-                [method applyTo:rootVC];
-                break;
-            }
-        } onFailure:^(NSError *error) {
-            UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [av show];
-//            NSAssert(FALSE, @"no xactions there");
-        }];
-        
+
+-(BFTask*)startCaptureTask{
+    return [[self startFreshRunOnServer] continueWithBlock:^id(BFTask *task) {
+        [self listenToMethodInvocations];
+        return nil;
+    }];
+}
+
+
+-(void)listenToMethodInvocations
+{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(waitForNewVCsByNotif:)
+                                                 name:NOTIF_METHOD_POST_INVOCATION
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(capturePreMethodByNotif:)
+                                                 name:NOTIF_METHOD_PRE_INVOCATION
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(capturePostMethodByNotif:)
+                                                 name:NOTIF_METHOD_POST_INVOCATION
+                                               object:nil];
+}
+
+
+-(void)waitForNewVCsByNotif:(NSNotification*)notif
+{
+    MTVcMethodInvocation * invoc = (MTVcMethodInvocation *) notif.object;
+    
+    if ( invoc.method.isChildVcEntryPoint)
+    {
+        MTMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex.integerValue];
+        NSAssert([arg.argumentValue isKindOfClass:[UIViewController class]], @"argument is not a UIViewContoller");
+//        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VC object:arg.argumentValue userInfo:nil];
+        [self doVC:arg.argumentValue];
     }
     
 }
 
+
+-(void)capturePreMethodByNotif:(NSNotification*)notif{
+    MTVcMethodInvocation * mthInvo = notif.object;
+}
+
+-(void)capturePostMethodByNotif:(NSNotification*)notif{
+    MTVcMethodInvocation * mthInvo = notif.object;
+    
+    NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xinvocations/token/%@", self.apiToken];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServerUrl , path];
+    
+    XFAFeedService * ser = [XFAFeedService new];
+    [ser feedInvocation:mthInvo withUrl:urlString onSuccess:^(AFHTTPRequestOperation *op, id obj) {
+        
+    } onFailure:^(AFHTTPRequestOperation *op, NSError *error) {
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
+    }];
+    
+}
+
+
+
+-(BFTask*)startFreshRunOnServer
+{
+    BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
+    NSString * urlString = [NSString stringWithFormat:@"%@/v1/pod/runs/token/%@" ,self.feedServerUrl ,self.apiToken];
+    XFAFeedService * feedService = [XFAFeedService new];
+    [feedService startRunWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, NSDictionary *obj) {
+        [tcs setResult:obj];
+    } withFailure:^(AFHTTPRequestOperation *op, NSError *error) {
+        [tcs setError:error];
+    }];
+    return tcs.task;
+}
+
+-(BFTask*)getFromServerRunWithId:(NSString*)runId
+{
+    BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
+    NSString * urlString = [NSString stringWithFormat:@"%@/v1/pod/runs/%@/token/%@" ,self.playServerUrl ,runId,self.apiToken];
+    XFAFeedService * feedService = [XFAFeedService new];
+    [feedService getRunModeWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, XFARun *obj) {
+        [tcs setResult:obj];
+    } withFailure:^(AFHTTPRequestOperation *op, NSError *error) {
+        [tcs setError:error];
+    }];
+    return tcs.task;
+}
+
+-(BFTask*)cruiseControlRunWithId:(NSString*)runId
+{
+    BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
+    
+    return [[self getFromServerRunWithId:runId] continueWithBlock:^id(BFTask *task) {
+//       XFARun * r = task.result;
+//        [r run]
+        return task;
+    }];
+    
+    return tcs.task;
+    
+}
+
+-(void)startWithFeedServer:(NSString*)feedServer withPlayServer:(NSString*)playServer withApiToken:(NSString*)apiToken {
+    NSLog(@"TXEngine on");
+    self.apiToken = apiToken;
+    self.feedServerUrl = feedServer;
+    self.playServerUrl = playServer;
+    
+    [[self getRunModeTask] continueWithBlock:^id(BFTask *task) {
+        
+        if (task.error) {
+            UIAlertView * av = [[UIAlertView alloc] initWithTitle:task.error.domain message:task.error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
+            [av show];
+            return nil;
+        }
+        
+        XFARun * r = task.result;
+        
+        switch (r.runMode) {
+            case XFARunModeUnknown:{
+                NSString * title = @"xflow not running";
+                NSString * message = @"MAKE_SURE_YOU_SET_RUN_MODE";
+                UIAlertView * av = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil, nil];
+                [av show];
+                return nil;
+                break;
+            }
+            case XFARunModeCapture:{
+                return [self startCaptureTask];
+                break;
+            }
+            case XFARunModeCruiseControl:{
+                return [self cruiseControlRunWithId:r.runId];
+                break;
+            }
+            default:
+                break;
+        }
+        return task;
+    }];
+    
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(vcDetectedWithNotif:) name:NOTIF_VC object:nil];
+    
+}
+
+/*
 -(void)vcDetectedWithNotif:(NSNotification*)notif{
     id obj = notif.object;
     NSAssert([obj isKindOfClass:[UIViewController class]], @"we don't have a vc");
     UIViewController * vc = (UIViewController*)obj;
     [self doVC:vc];
 }
+*/
 
 -(void)doVC:(UIViewController*)vc{
-    
-    NSAssert(vc, @"doVC no vc");
+    NSAssert([vc isKindOfClass:[UIViewController class]], @"we don't have a vc");
+    NSParameterAssert(vc);
     
     /*if ([MTMethod isVcClassProcessed:vc.class]) {
         NSLog(@"%@ allready processed",vc.class);
@@ -174,7 +276,11 @@ NSString * const ENV_PLAN_K = @"XX";
         [MTMethod setVcClassAsProcessed:vc.class];
     }*/
     
-    [self.feedService requestSetupForVC:vc onSuccess:^(XFObjcVcClass * vcresp){
+    NSString * path = [NSString stringWithFormat:@"v1/pod/vcs/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServerUrl , path];
+    
+    XFAFeedService * service = [XFAFeedService new];
+    [service requestSetupForVC:vc withUrl:urlString onSuccess:^(AFHTTPRequestOperation * op, XFObjcVcClass * vcresp){
         
 //        NSLog(@"vcresp:%@",vcresp);
         
@@ -213,7 +319,7 @@ NSString * const ENV_PLAN_K = @"XX";
         }
 //        if (childVCs.count == 0) {}
         
-    } onFailure:^(NSError *error) {
+    } onFailure:^(AFHTTPRequestOperation * op,NSError *error) {
         
         UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"xflow launch failed" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [av show];

@@ -36,10 +36,11 @@ Pod::Spec.new do |s|
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit'
 
-  s.dependency 'AFNetworking', '~> 2.4.1'
-  s.dependency 'Mantle', '~> 1.5.1'
+  s.dependency 'AFNetworking', '~> 2.5.0'
+  s.dependency 'Mantle', '~> 1.5.4'
   s.dependency 'OHHTTPStubs', '~> 3.1.2'
   s.dependency 'Aspects', '~> 1.4.1'
+  s.dependency 'Bolts', '~> 1.1.3'
   #s.dependency 'xflowparser', '0.1.0'
   #s.dependency 'xflowparser'
 

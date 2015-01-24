@@ -10,22 +10,31 @@
 
 @class XFObjcVcClass;
 @class AFHTTPRequestOperation;
+@class XFARun;
+@class MTVcMethodInvocation;
 
 @interface XFAFeedService : NSObject
 
--(void)listenToMethodInvocations;
 
-@property (nonatomic, strong) NSString * feedServer;
-@property (nonatomic, strong) NSString * playServer;
-@property (nonatomic, strong) NSString * apiToken;
 
--(AFHTTPRequestOperation *)startFreshStudioXSessionToUrl:(NSString*)urlString
-                                             withSuccess:(void (^)(void))success
-                                             withFailure:(void(^)(NSError * error))failure;
+-(AFHTTPRequestOperation *)getRunModeWithURL:(NSString*)urlString
+                                 withSuccess:(void (^)(AFHTTPRequestOperation *,XFARun * obj))success
+                                 withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure;
+
+
+-(AFHTTPRequestOperation *)startRunWithURL:(NSString*)urlString
+                               withSuccess:(void (^)(AFHTTPRequestOperation *, id obj))success
+                               withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure;
     
 -(AFHTTPRequestOperation *)requestSetupForVC:(UIViewController*)vc
-                        onSuccess:(void(^)(XFObjcVcClass * resp))success
-                        onFailure:(void(^)(NSError * error))failure;
+                                     withUrl:(NSString*)urlString
+                        onSuccess:(void(^)(AFHTTPRequestOperation * op,XFObjcVcClass * resp))success
+                        onFailure:(void(^)(AFHTTPRequestOperation * op,NSError * error))failure;
+
+-(AFHTTPRequestOperation *)feedInvocation:(MTVcMethodInvocation *)invocation
+                                  withUrl:(NSString*)urlString
+                                onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
+                                onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure;
 
 
 

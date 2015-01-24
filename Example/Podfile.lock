@@ -1,43 +1,45 @@
 PODS:
-  - AFNetworking (2.4.1):
-    - AFNetworking/NSURLConnection (= 2.4.1)
-    - AFNetworking/NSURLSession (= 2.4.1)
-    - AFNetworking/Reachability (= 2.4.1)
-    - AFNetworking/Security (= 2.4.1)
-    - AFNetworking/Serialization (= 2.4.1)
-    - AFNetworking/UIKit (= 2.4.1)
-  - AFNetworking/NSURLConnection (2.4.1):
+  - AFNetworking (2.5.0):
+    - AFNetworking/NSURLConnection (= 2.5.0)
+    - AFNetworking/NSURLSession (= 2.5.0)
+    - AFNetworking/Reachability (= 2.5.0)
+    - AFNetworking/Security (= 2.5.0)
+    - AFNetworking/Serialization (= 2.5.0)
+    - AFNetworking/UIKit (= 2.5.0)
+  - AFNetworking/NSURLConnection (2.5.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.4.1):
+  - AFNetworking/NSURLSession (2.5.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.4.1)
-  - AFNetworking/Security (2.4.1)
-  - AFNetworking/Serialization (2.4.1)
-  - AFNetworking/UIKit (2.4.1):
+  - AFNetworking/Reachability (2.5.0)
+  - AFNetworking/Security (2.5.0)
+  - AFNetworking/Serialization (2.5.0)
+  - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - Aspects (1.4.1)
+  - Bolts (1.1.3)
   - CocoaLumberjack (1.9.2):
     - CocoaLumberjack/Extensions (= 1.9.2)
   - CocoaLumberjack/Core (1.9.2)
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
-  - Mantle (1.5.1):
-    - Mantle/extobjc (= 1.5.1)
-  - Mantle/extobjc (1.5.1)
+  - Mantle (1.5.4):
+    - Mantle/extobjc (= 1.5.4)
+  - Mantle/extobjc (1.5.4)
   - OCMock (2.2.4)
   - OHHTTPStubs (3.1.10):
     - OHHTTPStubs/Core (= 3.1.10)
   - OHHTTPStubs/Core (3.1.10)
   - RegExCategories (1.0)
   - xflowapp (0.1.0):
-    - AFNetworking (~> 2.4.1)
+    - AFNetworking (~> 2.5.0)
     - Aspects (~> 1.4.1)
-    - Mantle (~> 1.5.1)
+    - Bolts (~> 1.1.3)
+    - Mantle (~> 1.5.4)
     - OHHTTPStubs (~> 3.1.2)
   - xflowparser (0.1.0):
     - Mantle (~> 1.5.1)
@@ -65,18 +67,19 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   xflowparser:
-    :commit: 585e9d42913268a3a5b48cef0e0e6e56910d382b
+    :commit: 07d1c5f218a0c64c889af5cc51db1e0eac967f1b
     :git: https://github.com/xflow/xflowparser.git
 
 SPEC CHECKSUMS:
-  AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
+  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   Aspects: a6368eba05295b24ffe0e9acfb9080cc3b0f4b5f
+  Bolts: 3db0a875235e0c9042b013af13af0f00f79b102c
   CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
-  Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
+  Mantle: d5fbaf30fbc58031223af13812c060e15934a1fe
   OCMock: 6db79185520e24f9f299548f2b8b07e41d881bd5
   OHHTTPStubs: 2038e929b6abb94881000524c1cb4aba0a1bb4a2
   RegExCategories: a6410301023ff81bd047c05fd8691d24ca5c7ea9
-  xflowapp: 80c56efb1ce186b31f0c6a05751a9850f652451b
+  xflowapp: 720c80a3af6125258ffacd8a3fb0657f5055c0d6
   xflowparser: 58c223faa60216dd4f56915955447cd4cc166433
 
 COCOAPODS: 0.35.0

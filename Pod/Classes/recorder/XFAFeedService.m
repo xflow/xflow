@@ -9,14 +9,15 @@
 #import "XFAFeedService.h"
 #import "XFAConstants.h"
 #import <AFNetworking/AFNetworking.h>
-#import <Mantle.h>
+#import <Mantle/Mantle.h>
 #import "XFObjcVcClass.h"
 #import "MTVcMethodInvocation.h"
 
 #import "UIViewController+XFAProperties.h"
-#import "MTMethod.h"
-#import "MTMethodArgument.h"
+//#import "MTMethod.h"
+//#import "MTMethodArgument.h"
 #import "TXAction.h"
+#import "XFARun.h"
 
 @interface XFAFeedService (){
     
@@ -37,27 +38,44 @@
 }
 
 
--(void)listenToMethodInvocations
-{
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(waitForNewVCsByNotif:)
-                                                 name:NOTIF_METHOD_POST_INVOCATION
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(capturePreMethodByNotif:)
-                                                 name:NOTIF_METHOD_PRE_INVOCATION
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(capturePostMethodByNotif:)
-                                                 name:NOTIF_METHOD_POST_INVOCATION
-                                               object:nil];
+
+-(AFHTTPRequestOperation *)getRunModeWithURL:(NSString*)urlString
+                          withSuccess:(void (^)(AFHTTPRequestOperation *,XFARun * obj))success
+                          withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure{
+    
+    
+    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:urlString parameters:@{} error:nil];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
+    
+    operation.responseSerializer = [AFJSONResponseSerializer new];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSDictionary * dic) {
+        
+        NSLog(@"success: %@", operation.responseString);
+        
+        NSError * error = nil;
+        
+//        NSLog(@"JSON: %@, error:%@", responseObject,error);
+        
+        XFARun * run = [MTLJSONAdapter modelOfClass:[XFARun class] fromJSONDictionary:dic error:&error];
+        NSAssert(!error, @"MTLJSONAdapter error");
+        
+        success(operation,run);
+        
+    } failure:failure];
+    
+    [[NSOperationQueue mainQueue] addOperation:operation];
+    
+    return operation;
+    
+    
 }
 
-
--(AFHTTPRequestOperation *)startFreshStudioXSessionToUrl:(NSString*)urlString
-                                               withSuccess:(void (^)(void))success
-                               withFailure:(void(^)(NSError * error))failure{
+-(AFHTTPRequestOperation *)startRunWithURL:(NSString*)urlString
+                               withSuccess:(void (^)(AFHTTPRequestOperation *, id obj))success
+                               withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure{
     
     NSDictionary * parameters = @{};
     
@@ -77,7 +95,7 @@
         
         NSAssert(!error, @"MTLJSONAdapter error");
         
-        success();
+        success(operation,responseObject);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
@@ -85,7 +103,7 @@
         NSLog(@"Error: %@", error);
 
         [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
-        failure(error);
+        failure(operation,error);
     }];
     
     [[NSOperationQueue mainQueue] addOperation:operation];
@@ -94,34 +112,6 @@
     
 }
 
--(void)waitForNewVCsByNotif:(NSNotification*)notif{
-   
-    MTVcMethodInvocation * invoc = (MTVcMethodInvocation *) notif.object;
-    
-    if ( invoc.method.isChildVcEntryPoint)
-    {
-        MTMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex.integerValue];
-        NSAssert([arg.argumentValue isKindOfClass:[UIViewController class]], @"argument is not a UIViewContoller");
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VC object:arg.argumentValue userInfo:nil];
-    }
-
-}
-
-
--(void)capturePreMethodByNotif:(NSNotification*)notif{
-    MTVcMethodInvocation * mthInvo = notif.object;
-}
-
--(void)capturePostMethodByNotif:(NSNotification*)notif{
-    MTVcMethodInvocation * mthInvo = notif.object;
-
-    [self feedAction:mthInvo onSuccess:^{
-        
-    } onFailure:^(NSError *error) {
-        NSLog(@"feedInvocationToStudio %@",error.localizedDescription);
-        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
-    }];
-}
 
 -(void)unlisten{
     NSArray * notifNames = @[NOTIF_METHOD_PRE_INVOCATION, NOTIF_METHOD_POST_INVOCATION];
@@ -184,9 +174,10 @@
 
 
 
--(AFHTTPRequestOperation *)feedAction:(MTVcMethodInvocation *)invocation
-                            onSuccess:(void (^)(void))success
-                            onFailure:(void(^)(NSError * error))failure{
+-(AFHTTPRequestOperation *)feedInvocation:(MTVcMethodInvocation *)invocation
+                                  withUrl:(NSString*)urlString
+                                onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
+                                onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure{
     
 
     NSDictionary *invocationJSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:invocation];
@@ -194,15 +185,11 @@
 
     NSDictionary * parameters = @{ @"invocation": invocationJSONDictionary };
 
-    
-    NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xinvocations/token/%@", self.apiToken];
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServer , path];
-    
     NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
    
-    [operation  setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [operation  setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *op, id responseObject) {
 
 //        NSString * reqBody = [[NSString alloc] initWithData:operation.request.HTTPBody encoding:NSUTF8StringEncoding];
 //        NSLog(@"reqBody: %@",reqBody );
@@ -211,14 +198,14 @@
 //        NSLog(@"JSON: %@, error:%@", responseObject,error);
 //        NSAssert(!error, @"MTLJSONAdapter error");
         
-        success();
+        success(op,responseObject);
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(AFHTTPRequestOperation *op, NSError *error) {
         
         NSLog(@"error: %@", operation.responseString);
         NSLog(@"Error: %@", error);
         [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
-        failure(error);
+        failure(op,error);
     }];
  
     [[NSOperationQueue mainQueue] addOperation:operation];
@@ -229,11 +216,11 @@
 
 
 -(AFHTTPRequestOperation *)requestSetupForVC:(UIViewController*)vc
-                              onSuccess:(void(^)(XFObjcVcClass * vcClass))success
-                              onFailure:(void(^)(NSError * error))failure{
+                                     withUrl:(NSString*)urlString
+                                   onSuccess:(void(^)(AFHTTPRequestOperation * op,XFObjcVcClass * vcClass))success
+                                   onFailure:(void(^)(AFHTTPRequestOperation * op, NSError * error))failure{
     
-    NSString * path = [NSString stringWithFormat:@"v1/pod/vcs/%@/token/%@",NSStringFromClass(vc.class), self.apiToken];
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.feedServer , path];
+
     
 //    NSLog(@"requestSetupForVC %@ urlString:%@",vc.class,urlString);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -250,12 +237,12 @@
         
         NSAssert(!error, @"MTLJSONAdapter error");
         
-        success(vcResp);
+        success(op,vcResp);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
         NSLog(@"requestForVC %@, Failure:%@",urlString,operation.responseString);
         NSLog(@"Error: %@", error);
-        failure(error);
+        failure(op,error);
         
     }];
     
