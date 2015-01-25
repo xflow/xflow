@@ -54,6 +54,7 @@ PODS:
     - RegExCategories (~> 1.0)
 
 DEPENDENCIES:
+  - Bolts (~> 1.1.3)
   - CocoaLumberjack (~> 1.9.2)
   - OCMock (~> 2.2.4)
   - xflowapp (from `../`)

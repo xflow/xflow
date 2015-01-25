@@ -237,12 +237,12 @@
         
         NSAssert(!error, @"MTLJSONAdapter error");
         
-        success(op,vcResp);
+        success(operation,vcResp);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
         NSLog(@"requestForVC %@, Failure:%@",urlString,operation.responseString);
         NSLog(@"Error: %@", error);
-        failure(op,error);
+        failure(operation,error);
         
     }];
     

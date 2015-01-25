@@ -24,6 +24,7 @@
 #import "XFARun.h"
 #import <Bolts/Bolts.h>
 
+
 typedef NS_ENUM(NSInteger, TXEngineMode) {
     TXEngineModeUnknown         = 0,
     TXEngineModeOff             = 1,
@@ -44,6 +45,7 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 @property (nonatomic, strong) NSString * playServerUrl;
 @property (nonatomic, strong) NSString * apiToken;
 @property (nonatomic, strong) XFAFeedService * feedService;
+@property (nonatomic, strong) NSString * captureRunId;
 
 @end
 
@@ -112,6 +114,10 @@ NSString * const ENV_PLAN_K = @"XX";
 
 -(BFTask*)startCaptureTask{
     return [[self startFreshRunOnServer] continueWithBlock:^id(BFTask *task) {
+        NSDictionary * runDic = task.result;
+        NSString * newRunId = [runDic objectForKey:@"id"];
+        self.captureRunId = newRunId;
+        [self doVC:self.mainWindow.rootViewController];
         [self listenToMethodInvocations];
         return nil;
     }];
@@ -237,6 +243,14 @@ NSString * const ENV_PLAN_K = @"XX";
                 return nil;
                 break;
             }
+                
+            case XFARunModeOff:{
+                NSLog(@"***** XFLOW *****");
+                NSLog(@"***** is of for this project *****");
+                NSLog(@"****************");
+                return nil;
+                break;
+            }
             case XFARunModeCapture:{
                 return [self startCaptureTask];
                 break;
@@ -266,6 +280,7 @@ NSString * const ENV_PLAN_K = @"XX";
 */
 
 -(void)doVC:(UIViewController*)vc{
+    NSLog(@"%@",vc);
     NSAssert([vc isKindOfClass:[UIViewController class]], @"we don't have a vc");
     NSParameterAssert(vc);
     
