@@ -11,8 +11,6 @@
 @implementation XFAVCLabelProperty
 
 
-
-
 -(NSDictionary *)loadValuesFromVC:(UIViewController*)vc
 {
     UIView * view = (UIView *)[self objectFromVC:vc];

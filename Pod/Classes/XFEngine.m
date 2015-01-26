@@ -139,6 +139,22 @@ NSString * const ENV_PLAN_K = @"XX";
                                              selector:@selector(capturePostMethodByNotif:)
                                                  name:NOTIF_METHOD_POST_INVOCATION
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sequenceStartedByNotif:)
+                                                 name:NOTIF_SEQUENCE_STARTED
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sequenceEndedByNotif:)
+                                                 name:NOTIF_SEQUENCE_ENDED
+                                               object:nil];
+}
+
+
+-(void)unlisten{
+    NSArray * notifNames = @[NOTIF_METHOD_PRE_INVOCATION, NOTIF_METHOD_POST_INVOCATION,NOTIF_SEQUENCE_STARTED,NOTIF_SEQUENCE_ENDED];
+    for (NSString * notifName in notifNames) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:notifName object:nil];
+    };
 }
 
 
@@ -151,24 +167,37 @@ NSString * const ENV_PLAN_K = @"XX";
         MTMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex.integerValue];
         NSAssert([arg.argumentValue isKindOfClass:[UIViewController class]], @"argument is not a UIViewContoller");
 //        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VC object:arg.argumentValue userInfo:nil];
-        [self doVC:arg.argumentValue];
+        [self doVC:(UIViewController*)arg.argumentValue];
     }
     
 }
 
 
 -(void)capturePreMethodByNotif:(NSNotification*)notif{
-    MTVcMethodInvocation * mthInvo = notif.object;
+//    MTVcMethodInvocation * mthInvo = notif.object;
 }
 
 -(void)capturePostMethodByNotif:(NSNotification*)notif{
-    MTVcMethodInvocation * mthInvo = notif.object;
-    
-    NSString * path = [NSString stringWithFormat:@"v1/pod/feed/xinvocations/token/%@", self.apiToken];
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.playServerUrl , path];
+//    MTVcMethodInvocation * mthInvo = notif.object;
+}
+
+
+-(void)sequenceStartedByNotif:(NSNotification*)note{
+
+}
+
+-(void)sequenceEndedByNotif:(NSNotification*)note{
+    NSArray * sequence = note.object;
+    [self feedSequence:sequence];
+}
+
+-(void)feedSequence:(NSArray*)seq{
+    NSString * path = [NSString stringWithFormat:@"v1/pod/runs/%@/steps/token/%@",self.captureRunId ,self.apiToken];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.feedServerUrl , path];
     
     XFAFeedService * ser = [XFAFeedService new];
-    [ser feedInvocation:mthInvo withUrl:urlString onSuccess:^(AFHTTPRequestOperation *op, id obj) {
+    
+    [ser feedStepSequence:seq withUrl:urlString onSuccess:^(AFHTTPRequestOperation *op, id obj) {
         
     } onFailure:^(AFHTTPRequestOperation *op, NSError *error) {
         [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];

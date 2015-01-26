@@ -17,6 +17,7 @@
 }
 
 @property(nonatomic,strong) NSMutableArray * stackArray;
+@property(nonatomic,strong) NSMutableArray * sequenceArray;
 @property(nonatomic,strong) NSMutableDictionary * stackInvocationsDictionary;
 @property(nonatomic,strong) NSMutableArray * aspectTokens;
 
@@ -31,15 +32,18 @@
         _stackInvocationsDictionary = NSMutableDictionary.new;
         _stackArray = NSMutableArray.new;
         _aspectTokens = NSMutableArray.new;
+        _sequenceArray = NSMutableArray.new;
     }
     return self;
 }
 
 
 -(void)pushIntoStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
+    if (self.stackArray.count == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_SEQUENCE_STARTED object:nil userInfo:nil];
+    }
     invo.invocationIndexWithStack = self.stackArray.count;
     [self.stackArray addObject:invo];
-    
     if (! [self.stackInvocationsDictionary objectForKey:k] ) {
         [self.stackInvocationsDictionary setObject:[NSMutableArray array] forKey:k];
     }
@@ -54,12 +58,11 @@
     NSAssert(arr, @"does not exist");
     NSAssert([arr indexOfObject:invo] != NSNotFound, @"invo not found");
     [arr removeObject:invo];
-    /*if (stackArray.count == 0) {
-        [[XFAInvocationAOP stack] removeAllObjects];
-        stackArray = nil;
-        [[XFAInvocationAOP stackInvocations]removeAllObjects];
-        stackInvocationsDictionary = nil;
-    }*/
+    [self.sequenceArray addObject:invo];
+    if (self.stackArray.count == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_SEQUENCE_ENDED object:self.sequenceArray userInfo:nil];
+        [self.sequenceArray removeAllObjects];
+    }
 }
 
 

@@ -31,16 +31,23 @@
                         onSuccess:(void(^)(AFHTTPRequestOperation * op,XFObjcVcClass * resp))success
                         onFailure:(void(^)(AFHTTPRequestOperation * op,NSError * error))failure;
 
+/*
 -(AFHTTPRequestOperation *)feedInvocation:(MTVcMethodInvocation *)invocation
                                   withUrl:(NSString*)urlString
                                 onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
                                 onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure;
 
+*/
 
-
+/*
 -(AFHTTPRequestOperation *)requestXActionsWithURL:(NSString *)urlString
                                        onSuccess:(void (^)(NSArray * xactions))success
                                        onFailure:(void (^)(NSError * error))failure;
+*/
 
+-(AFHTTPRequestOperation*)feedStepSequence:(NSArray*)arr
+                           withUrl:(NSString*)url
+                         onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
+                         onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure;
 
 @end

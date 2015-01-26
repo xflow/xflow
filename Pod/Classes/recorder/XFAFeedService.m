@@ -113,14 +113,33 @@
 }
 
 
--(void)unlisten{
-    NSArray * notifNames = @[NOTIF_METHOD_PRE_INVOCATION, NOTIF_METHOD_POST_INVOCATION];
-    for (NSString * notifName in notifNames) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:notifName object:nil];
-    };
+-(AFHTTPRequestOperation*)feedStepSequence:(NSArray*)arr
+                                    withUrl:(NSString*)urlString
+                                  onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
+                                  onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure{
+    
+    NSError * reqError = nil;
+    
+    NSArray * jsonArr = [MTLJSONAdapter JSONArrayFromModels:arr];
+    
+    NSDictionary * stepDic = @{@"sequence":jsonArr};
+    
+    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:stepDic error:&reqError];
+    NSAssert(!reqError, @"%@",reqError);
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
+    
+    operation.responseSerializer = [AFJSONResponseSerializer new];
+    
+    [operation setCompletionBlockWithSuccess:success failure:failure];
+    
+    [[NSOperationQueue mainQueue] addOperation:operation];
+    
+    return operation;
+    
 }
 
-
+/*
 -(AFHTTPRequestOperation *)requestXActionsWithURL:(NSString *)urlString
                                        onSuccess:(void (^)(NSArray * xactions))success
                                        onFailure:(void (^)(NSError * error))failure
@@ -171,9 +190,9 @@
     
 
 }
+*/
 
-
-
+/*
 -(AFHTTPRequestOperation *)feedInvocation:(MTVcMethodInvocation *)invocation
                                   withUrl:(NSString*)urlString
                                 onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
@@ -213,6 +232,8 @@
     return operation;
     
 }
+
+*/
 
 
 -(AFHTTPRequestOperation *)requestSetupForVC:(UIViewController*)vc

@@ -18,6 +18,8 @@ extern NSString * const NOTIF_METHOD_ASSERTION_FAILURE;
 extern NSString * const NOTIF_METHOD_PRE_INVOCATION;
 extern NSString * const NOTIF_METHOD_POST_INVOCATION;
 
+extern NSString * const NOTIF_SEQUENCE_STARTED;
+extern NSString * const NOTIF_SEQUENCE_ENDED;
 
 @interface XFAConstants : NSObject
 
