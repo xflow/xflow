@@ -7,7 +7,7 @@
 //
 
 #import "MTMethodInvocation.h"
-#import "MTMethod.h"
+#import "XFAMethod.h"
 
 
 @implementation MTMethodInvocation
@@ -59,7 +59,7 @@
 
 + (NSValueTransformer *)JSONTransformerForKey:(NSString *)key {
     if ([key isEqualToString:@"method"]) {
-        return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass: MTMethod.class];
+        return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass: XFAMethod.class];
     }    
     return nil;
 

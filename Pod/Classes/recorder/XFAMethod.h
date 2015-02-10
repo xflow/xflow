@@ -13,7 +13,7 @@
 #import <xflowparser/XFPObjcMethod.h>
 
 
-@interface MTMethod : XFPObjcMethod
+@interface XFAMethod : XFPObjcMethod
 
 
 @property(nonatomic,strong) NSString * methodReturnType;

@@ -8,7 +8,7 @@
 
 #import "XFAInvocationAOP.h"
 #import <Aspects/Aspects.h>
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "MTVcMethodInvocation.h"
 #import "XFAConstants.h"
 #import "XFAVCProperty.h"
@@ -70,7 +70,7 @@
 }
 
 
--(id<AspectToken>)invoAopPre:(NSObject *)obj method:(MTMethod*)method{
+-(id<AspectToken>)invoAopPre:(NSObject *)obj method:(XFAMethod*)method{
     
     NSError * errorAspectHook = nil;
     
@@ -93,7 +93,7 @@
     return token;
 }
 
--(id<AspectToken>)invoAopPost:(NSObject *)obj method:(MTMethod*)method{
+-(id<AspectToken>)invoAopPost:(NSObject *)obj method:(XFAMethod*)method{
     NSError * errorAspectHook = nil;
     id<AspectToken> token = [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
         
@@ -151,8 +151,8 @@
             
             if (dic[@"notificationIsPrior"]) {
                 invo  = [MTVcSetterMethodInvocation new];
-                MTMethod
-                invo.method
+//                XFAMethod
+//                invo.method
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:invo userInfo:nil];
             } else {
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:invo userInfo:nil];

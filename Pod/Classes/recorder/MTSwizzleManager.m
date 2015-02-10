@@ -8,7 +8,7 @@
 
 #import "MTSwizzleManager.h"
 #import "MTMethodsList.h"
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "Swizzle.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -72,9 +72,9 @@ static MTSwizzleManager * globalSelf;
     
 }
 
--(MTMethod*)methodForObject:(NSObject*)obj withName:(NSString*)name{
+-(XFAMethod*)methodForObject:(NSObject*)obj withName:(NSString*)name{
     NSLog(@"self.methodsMap:%@",globalSelf.methodsMap);
-    MTMethod * m = [self.methodsMap objectForKey:name];
+    XFAMethod * m = [self.methodsMap objectForKey:name];
     return m;
 }
 
@@ -85,7 +85,7 @@ static MTSwizzleManager * globalSelf;
     NSArray * arr = [ml methods:obj];
     NSLog(@"all methods:%@",arr);
     
-    for (MTMethod *m in arr) {
+    for (XFAMethod *m in arr) {
         if( m.isVoidWithTwoObjects  ||
            m.isVoidWithOneObject    ||
            m.isVoidAndNoArguments   ||
@@ -123,7 +123,7 @@ static MTSwizzleManager * globalSelf;
     NSArray * arr = [ml methods:obj];
     NSLog(@"all methods:%@",arr);
     
-    for (MTMethod *m in arr) {
+    for (XFAMethod *m in arr) {
         if (m.isVoidWithScalars) {
             NSLog(@"    isVoidWithScalars: %@",m);
 //            NSString *newMethodName = [NSString stringWithFormat:@"replacement%@",m.methodName];
@@ -152,7 +152,7 @@ static MTSwizzleManager * globalSelf;
 id voidMethodWithInvoker(id objId, SEL _cmd, ...)
 {
     
-    MTMethod *method =  methodForSelector(_cmd);
+    XFAMethod *method =  methodForSelector(_cmd);
     
     NSString *r = replacementMethod(method.methodName);
     
@@ -217,7 +217,7 @@ NSString* replacementMethod(NSString* methodName)
     NSArray * arr = [ml methods:obj];
     NSLog(@"all methods:%@",arr);
     
-    for (MTMethod *m in arr) {
+    for (XFAMethod *m in arr) {
         if ( m.isScalarWithScalars ||
             m.isObjectWithAnything
             ) {
@@ -247,7 +247,7 @@ NSString* replacementMethod(NSString* methodName)
 void * scalarMethodWithInvoker(id objId, SEL _cmd, ...)
 {
     
-    MTMethod *method =  methodForSelector(_cmd);
+    XFAMethod *method =  methodForSelector(_cmd);
     
     NSString *r = replacementMethod(method.methodName);
     
@@ -350,7 +350,7 @@ id newMethodWithVarArgs(id firstArg, SEL _cmd, ...)
 //    MTMethod *method = [Sm.methodsMap valueForKey:s];
 //    MTMethod *method = [[MTSwizzleManager sharedInstance].methodsMap valueForKey:s];
     
-    MTMethod * method = [globalSelf.methodsMap valueForKey:s];
+    XFAMethod * method = [globalSelf.methodsMap valueForKey:s];
     assert(method != nil);
     NSLog(@" • newMethodWithVarArgs %@ \n %@" ,NSStringFromSelector(_cmd) , method );
     
@@ -410,12 +410,12 @@ id newMethodWithVarArgs(id firstArg, SEL _cmd, ...)
 
 
 
-MTMethod* methodForSelector(SEL sel)
+XFAMethod* methodForSelector(SEL sel)
 {
     
     NSString *s =  NSStringFromSelector(sel);
     
-    MTMethod *method = [globalSelf.methodsMap valueForKey:s];
+    XFAMethod *method = [globalSelf.methodsMap valueForKey:s];
     
     return method;
 }

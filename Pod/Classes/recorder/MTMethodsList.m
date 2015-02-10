@@ -8,7 +8,7 @@
 
 #import "MTMethodsList.h"
 #import <objc/runtime.h>
-#import "MTMethod.h"
+#import "XFAMethod.h"
 
 
 @implementation MTMethodsList
@@ -45,7 +45,7 @@
 //    list = malloc(mc * sizeof(char*));
     for(i=0;i<mc;i++){
         
-        MTMethod * method = [[MTMethod alloc] init];
+        XFAMethod * method = [[XFAMethod alloc] init];
         method.classTypeInstance = obj;
         
         const char * const type = method_copyReturnType(mlist[i]);

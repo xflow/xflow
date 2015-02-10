@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "TXTestViewController.h"
 #import "MTMethodInvocation.h"
 #import "MTMethodArgument.h"
@@ -44,8 +44,8 @@
 
 
 
--(MTMethod*)methodButton1:(TXTestViewController*)vc{
-    MTMethod * method = [MTMethod new];
+-(XFAMethod*)methodButton1:(TXTestViewController*)vc{
+    XFAMethod * method = [XFAMethod new];
     method.methodName = @"actionButton1:";
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v12@0:4@8";
@@ -60,8 +60,8 @@
     return method;
 }
 
--(MTMethod*)methodButton2:(TXTestViewController*)vc{
-    MTMethod * method = MTMethod.new;
+-(XFAMethod*)methodButton2:(TXTestViewController*)vc{
+    XFAMethod * method = [XFAMethod new];
     method.methodName = @"actionButton2:event:";
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v16@0:4@8@12";
@@ -87,7 +87,7 @@
     [UIApplication sharedApplication].delegate.window.rootViewController = vc;
     vc.string1 = @"TEXT2";
     
-    MTMethod * method = [self methodButton1:vc];
+    XFAMethod * method = [self methodButton1:vc];
     [method applyTo:vc];
     
     XCTAssertEqual(vc.string2, @"TEXT2", @"should be TEXT2");
@@ -104,7 +104,7 @@
     vc.xfaProperties = @{}.mutableCopy;
     
     NSError * errorAspectHook = nil;
-    MTMethod * method = [self methodButton1:vc];
+    XFAMethod * method = [self methodButton1:vc];
 
     [aop invoAopPre:vc method:method];
     
@@ -146,8 +146,8 @@
 
 
 
--(MTMethod*)methodCall:(NSObject *)vc selector:(SEL)selector{
-    MTMethod * method = [MTMethod new];
+-(XFAMethod*)methodCall:(NSObject *)vc selector:(SEL)selector{
+    XFAMethod * method = [XFAMethod new];
     method.methodName = NSStringFromSelector(selector);
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v16@0:8";
@@ -160,26 +160,26 @@
     
     ObjectMultiCalls * objTestSubject = [ObjectMultiCalls new];
     objTestSubject.xfaProperties = @{}.mutableCopy;
-    MTMethod * method0 = [self methodCall:objTestSubject selector:@selector(call0)];
+    XFAMethod * method0 = [self methodCall:objTestSubject selector:@selector(call0)];
     id<AspectToken>tok00 = [aop invoAopPre:objTestSubject method:method0];
     id<AspectToken>tok01 = [aop invoAopPost:objTestSubject method:method0];
     XCTAssert(tok00);
     XCTAssert(tok01);
     __block MTMethodInvocation * invo0 = nil;
     
-    MTMethod * method1 = [self methodCall:objTestSubject selector:@selector(call1)];
+    XFAMethod * method1 = [self methodCall:objTestSubject selector:@selector(call1)];
     [aop invoAopPre:objTestSubject method:method1];
     [aop invoAopPost:objTestSubject method:method1];
 
     __block MTMethodInvocation * invo1 = nil;
     
-    MTMethod * method2 = [self methodCall:objTestSubject selector:@selector(call2)];
+    XFAMethod * method2 = [self methodCall:objTestSubject selector:@selector(call2)];
     [aop invoAopPre:objTestSubject method:method2];
     [aop invoAopPost:objTestSubject method:method2];
 
     __block MTMethodInvocation * invo2 = nil;
     
-    MTMethod * method3 = [self methodCall:objTestSubject selector:@selector(call3)];
+    XFAMethod * method3 = [self methodCall:objTestSubject selector:@selector(call3)];
     
     [aop invoAopPre:objTestSubject method:method3];
     [aop invoAopPost:objTestSubject method:method3];
@@ -310,14 +310,14 @@
     
     ObjectRecursiveCalls * objcTestSubject = [ObjectRecursiveCalls new];
     objcTestSubject.xfaProperties = @{}.mutableCopy;
-    MTMethod * method0 = [self methodCall:objcTestSubject selector:@selector(callfirst)];
+    XFAMethod * method0 = [self methodCall:objcTestSubject selector:@selector(callfirst)];
 
     [aop invoAopPre:objcTestSubject method:method0];
     [aop invoAopPost:objcTestSubject method:method0];
     
     __block MTMethodInvocation * invo0 = nil;
     
-    MTMethod * method1 = [self methodCall:objcTestSubject selector:@selector(calledTwoTimes)];
+    XFAMethod * method1 = [self methodCall:objcTestSubject selector:@selector(calledTwoTimes)];
 
     [aop invoAopPre:objcTestSubject method:method1];
     [aop invoAopPost:objcTestSubject method:method1];

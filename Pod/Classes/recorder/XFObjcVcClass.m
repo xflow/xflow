@@ -7,7 +7,7 @@
 //
 
 #import "XFObjcVcClass.h"
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "XFAVCProperty.h"
 
 
@@ -40,7 +40,7 @@
 }
 
 + (NSValueTransformer *)methodsJSONTransformer{
-    Class klass = [MTMethod class];
+    Class klass = [XFAMethod class];
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:klass];
 }
 

@@ -18,7 +18,7 @@
  };
  */
 
-@class MTMethod;
+@class XFAMethod;
 
 @interface TXAction : MTLModel <MTLJSONSerializing>
 
@@ -28,7 +28,7 @@
 
 // propertyStates: [propertyStateSchme],
 
-@property (nonatomic, strong) MTMethod * invocationMethod;
+@property (nonatomic, strong) XFAMethod * invocationMethod;
 
 
 @end

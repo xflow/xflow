@@ -14,12 +14,12 @@
 #import "XFObjcVcClass.h"
 #import "MTVcMethodInvocation.h"
 #import "MTMethodArgument.h"
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "XFAVCProperty.h"
 #import "UIViewController+XFAProperties.h"
 #import "XFAConstants.h"
 #import "TXAction.h"
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "XFAInvocationAOP.h"
 #import "XFARun.h"
 #import <Bolts/Bolts.h>
@@ -334,7 +334,7 @@ NSString * const ENV_PLAN_K = @"XX";
 //        NSAssert(methods, @"doVC:'%@' no methods at all", vc.class);
 //        NSAssert(methods.count > 0, @"doVC no methods %@",vc.class);
         
-        for (MTMethod * method in methods) {
+        for (XFAMethod * method in methods) {
 //            if (method.isInterceptable) {
                 NSLog(@"doVc: %@, method:%@",[vc class],method.signature);
                 if (! [vc respondsToSelector:method.selector]) {
@@ -387,7 +387,7 @@ NSString * const ENV_PLAN_K = @"XX";
     [self.aop observeVC:vc property:property];
 }
 
--(void)monitorMethod:(MTMethod*)method forViewController:(UIViewController*)vc{
+-(void)monitorMethod:(XFAMethod*)method forViewController:(UIViewController*)vc{
     NSAssert(self.aop, @"");
     NSParameterAssert(method);
     NSParameterAssert(vc);

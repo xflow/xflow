@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class MTMethod;
+@class XFAMethod;
 
 @interface MTSwizzleManager : NSObject
 
@@ -15,7 +15,7 @@
 
 -(void)swizzleAllMethodsOfObject:(NSObject*)obj;
 
--(MTMethod*)methodForObject:(NSObject*)obj withName:(NSString*)name;
+-(XFAMethod*)methodForObject:(NSObject*)obj withName:(NSString*)name;
 
 
 @end

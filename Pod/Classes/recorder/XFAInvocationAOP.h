@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @protocol AspectToken;
-@class MTMethod;
+@class XFAMethod;
 @class XFAVCProperty;
 
 @interface XFAInvocationAOP : NSObject
 
--(id<AspectToken>)invoAopPre:(NSObject *)obj method:(MTMethod*)method;
--(id<AspectToken>)invoAopPost:(NSObject *)obj method:(MTMethod*)method;
+-(id<AspectToken>)invoAopPre:(NSObject *)obj method:(XFAMethod*)method;
+-(id<AspectToken>)invoAopPost:(NSObject *)obj method:(XFAMethod*)method;
 -(void)removeAllHooks;
 -(void)observeVC:(UIViewController *)vc property:(XFAVCProperty*)property;
 

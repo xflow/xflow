@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <Mantle/Mantle.h>
 
-@class MTMethod;
+@class XFAMethod;
 
 @interface MTMethodInvocation : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic,strong) MTMethod * method;
+@property (nonatomic,strong) XFAMethod * method;
 @property (nonatomic,strong) UIViewController * invocationTarget;
 
 @property (nonatomic,readonly) BOOL isFirstInVirtualStack;

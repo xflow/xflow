@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Mohammed Tillawy. All rights reserved.
 //
 
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "MTMethodArgument.h"
 #import <objc/runtime.h>
 #import "Swizzle.h"
@@ -20,13 +20,13 @@ static NSMutableDictionary * methodsMap;
 static NSMutableDictionary * classMethodNamesDic;
 
 
-@interface MTMethod () {
+@interface XFAMethod () {
 
 }
 
 @end
 
-@implementation MTMethod
+@implementation XFAMethod
 - (id)init
 {
     self = [super init];
@@ -181,23 +181,23 @@ static NSMutableDictionary * classMethodNamesDic;
 
 
 -(void)applyTo:(NSObject*)obj{
-    [MTMethod applyMethod:self toObject:obj];
+    [XFAMethod applyMethod:self toObject:obj];
 }
 
 
 +(void)setVcClassAsProcessed:(Class)vcClass{
-    if (! [[MTMethod classMethodNamesDic] valueForKey:NSStringFromClass(vcClass)] ) {
-        [[MTMethod classMethodNamesDic]setValue:[NSMutableArray array] forKey:NSStringFromClass(vcClass)];
+    if (! [[XFAMethod classMethodNamesDic] valueForKey:NSStringFromClass(vcClass)] ) {
+        [[XFAMethod classMethodNamesDic]setValue:[NSMutableArray array] forKey:NSStringFromClass(vcClass)];
     }
 }
 
 +(void)addMethodName:(NSString *)method forClassName:(NSString*)className {
     
-    if (! [[MTMethod classMethodNamesDic] valueForKey:className] ) {
-        [[MTMethod classMethodNamesDic]setValue:[NSMutableArray array] forKey:className];
+    if (! [[XFAMethod classMethodNamesDic] valueForKey:className] ) {
+        [[XFAMethod classMethodNamesDic]setValue:[NSMutableArray array] forKey:className];
     }
     
-    NSMutableArray * array = [[MTMethod classMethodNamesDic]valueForKey:className];
+    NSMutableArray * array = [[XFAMethod classMethodNamesDic]valueForKey:className];
     
     [array addObject:method];
 
@@ -205,18 +205,18 @@ static NSMutableDictionary * classMethodNamesDic;
 
 +(BOOL)isVcClassProcessed:(Class)vcClass{
     
-    NSLog(@"%@: %@",vcClass  ,[[MTMethod classMethodNamesDic] objectForKey:NSStringFromClass(vcClass)]);
-    return [[MTMethod classMethodNamesDic] objectForKey:NSStringFromClass(vcClass)] != nil;
+    NSLog(@"%@: %@",vcClass  ,[[XFAMethod classMethodNamesDic] objectForKey:NSStringFromClass(vcClass)]);
+    return [[XFAMethod classMethodNamesDic] objectForKey:NSStringFromClass(vcClass)] != nil;
 
 }
 
 
-+(void)swizzleMethod:(MTMethod*)method ofObject:(NSObject*)obj{
++(void)swizzleMethod:(XFAMethod*)method ofObject:(NSObject*)obj{
     NSAssert(FALSE, @"calling old mehtod");
 }
 
 
-+(void*)applyMethod:(MTMethod*)method toObject:(NSObject*)obj{
++(void*)applyMethod:(XFAMethod*)method toObject:(NSObject*)obj{
     
     SEL sel = NSSelectorFromString(method.methodName);
     BOOL respondsToSelector = [obj respondsToSelector:sel];

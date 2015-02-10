@@ -18,7 +18,7 @@
 #import "XFAConstants.h"
 
 //#import "XFAFeedService.h"
-#import "MTMethod.h"
+#import "XFAMethod.h"
 #import "MTMethodArgument.h"
 #import "TXTestViewController.h"
 #import "MTMethodInvocation.h"
@@ -69,7 +69,7 @@
   
     [swzlMgr swizzleAllMethodsOfObject:obj];
     
-    MTMethod * method = [swzlMgr methodForObject:obj
+    XFAMethod * method = [swzlMgr methodForObject:obj
                                         withName:@"publicVoidMethod"];
     
     XCTAssertNotNil(method, @"no method");
@@ -115,7 +115,7 @@
     XCTAssertNotEqualObjects(vc.string1, SOME_STRING,@"should not be %@",SOME_STRING);
     vc.string1 = SOME_STRING;
     
-    MTMethod * method = [MTMethod new];
+    XFAMethod * method = [XFAMethod new];
     method.methodName = @"actionButton2:event:";
     method.methodReturnType = @"v";
     method.methodTypeEncoding = @"v16@0:4@8@12";
