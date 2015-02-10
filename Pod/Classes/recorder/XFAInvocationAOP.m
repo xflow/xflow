@@ -11,6 +11,10 @@
 #import "MTMethod.h"
 #import "MTVcMethodInvocation.h"
 #import "XFAConstants.h"
+#import "XFAVCProperty.h"
+#import <ReactiveCocoa/ReactiveCocoa.h>
+#import "MTVcMethodInvocation.h"
+#import "MTVcSetterMethodInvocation.h"
 
 @interface XFAInvocationAOP(){
 
@@ -116,6 +120,48 @@
         BOOL b = [aspectToken remove];
 //        NSAssert(b, @"token not removed");
     }
+}
+
+-(void)observeVC:(UIViewController *)vc property:(XFAVCProperty*)property
+{
+    
+    __weak id target_ = (vc);
+    RACSignal *mySignal = [target_ rac_valuesAndChangesForKeyPath:property.propertyName
+                                                          options:NSKeyValueObservingOptionPrior
+                                                         observer:self];
+    [mySignal subscribeNext:^(RACTuple * x){
+        NSLog(@"x: %@",x);
+        NSLog(@"x: %@",x.first);
+        NSDictionary * dic = x.second;
+        NSLog(@"kind: %@",dic[@"kind"]);
+        NSLog(@"notificationIsPrior: %@",dic[@"notificationIsPrior"]);
+//        NSLog(@"x: %@",x.third);
+//        NSLog(@"x: %@",x[@"kind"]);
+        if ([x.first isKindOfClass:[UIViewController class]]) {
+
+            UITabBarController * tvc = target_;
+            NSLog(@"selectedViewController: %@",tvc.selectedViewController);
+        
+            UIViewController * aVC = x.first;
+            NSDictionary * dicState = [MTVcMethodInvocation dicStateOfViewController:aVC];
+            
+            
+            MTVcSetterMethodInvocation * invo = nil;
+
+            
+            if (dic[@"notificationIsPrior"]) {
+                invo  = [MTVcSetterMethodInvocation new];
+                MTMethod
+                invo.method
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:invo userInfo:nil];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:invo userInfo:nil];
+            }
+        }
+        NSLog(@"%@",x);
+        NSLog(@"changed .....");
+    }];
+    
 }
 
 - (void)dealloc

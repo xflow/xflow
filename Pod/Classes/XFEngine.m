@@ -326,7 +326,7 @@ NSString * const ENV_PLAN_K = @"XX";
     XFAFeedService * service = [XFAFeedService new];
     [service requestSetupForVC:vc withUrl:urlString onSuccess:^(AFHTTPRequestOperation * op, XFObjcVcClass * vcresp){
         
-//        NSLog(@"vcresp:%@",vcresp);
+        NSLog(@"vcresp:%@",vcresp);
         
         NSArray * methods = vcresp.methods;
 //        NSLog(@"methods:%@",methods);
@@ -335,11 +335,20 @@ NSString * const ENV_PLAN_K = @"XX";
 //        NSAssert(methods.count > 0, @"doVC no methods %@",vc.class);
         
         for (MTMethod * method in methods) {
-            if (method.isInterceptable) {
+//            if (method.isInterceptable) {
                 NSLog(@"doVc: %@, method:%@",[vc class],method.signature);
-                NSAssert([vc respondsToSelector:method.selector], @"%@ not found for %@",method.signature,vc);
+                if (! [vc respondsToSelector:method.selector]) {
+                    NSAssert([vc respondsToSelector:method.selector], @"%@ not found for %@",method.signature,vc);
+                }
                 [self monitorMethod:method forViewController:vc];
-            }
+//            }
+        }
+        
+        for (XFAVCProperty * property in vcresp.properties) {
+            NSLog(@"doVc: %@, property:%@",[vc class],property.propertyName);
+            NSAssert([vc respondsToSelector:NSSelectorFromString(property.propertyName)], @"property not found %@ for vc:%@",property.propertyName, [vc class]);
+//            NSAssert([vc respondsToSelector:NSSelectorFromString(@"selectedViewController")], @"property not found %@",property.propertyName);
+            [self monitorProperty:property forViewController:vc];
         }
         
 //        NSString * assertMsg = [NSString stringWithFormat:@"TXEngine doVC:%@ no vcresp.properties", [vc class]];
@@ -371,6 +380,11 @@ NSString * const ENV_PLAN_K = @"XX";
     }];
 
     
+}
+
+-(void)monitorProperty:(XFAVCProperty*)property forViewController:(UIViewController*)vc
+{
+    [self.aop observeVC:vc property:property];
 }
 
 -(void)monitorMethod:(MTMethod*)method forViewController:(UIViewController*)vc{

@@ -39,7 +39,7 @@ static NSMutableDictionary * classMethodNamesDic;
 -(NSString*)description{
     NSObject *obj = (NSObject*)self.classTypeInstance;
     NSString *className = NSStringFromClass(obj.class);
-    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@, isInterceptable:%d", self.signature,self.methodTypeEncoding,self.methodReturnType, className , self.isInterceptable ];
+    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@", self.signature,self.methodTypeEncoding,self.methodReturnType, className ];
 }
 
 -(BOOL)isVoid{

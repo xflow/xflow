@@ -17,6 +17,8 @@
  */
 -(void)dummyMethod:(NSInteger)i{
     NSLog(@"dummyMethod:%d",i);
+    
+    [self.tableView indexPathForSelectedRow];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -54,9 +56,9 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     UIViewController * vc = segue.destinationViewController;
-    vc.title = [NSString stringWithFormat:@"(%d,%d)",
-                [self.tableView indexPathForSelectedRow].section,
-                [self.tableView indexPathForSelectedRow].row];
+    vc.title = [NSString stringWithFormat:@"(%ld,%ld)",
+                (long)[self.tableView indexPathForSelectedRow].section,
+                (long)[self.tableView indexPathForSelectedRow].row];
 //    [super prepareForSegue:segue sender:sender];
 }
 

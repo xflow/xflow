@@ -41,6 +41,7 @@ Pod::Spec.new do |s|
   s.dependency 'OHHTTPStubs', '~> 3.1.2'
   s.dependency 'Aspects', '~> 1.4.1'
   s.dependency 'Bolts', '~> 1.1.3'
+	s.dependency 'ReactiveCocoa', '~> 2.4.4'
   #s.dependency 'xflowparser', '0.1.0'
   #s.dependency 'xflowparser'
 

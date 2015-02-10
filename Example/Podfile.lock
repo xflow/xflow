@@ -34,6 +34,13 @@ PODS:
   - OHHTTPStubs (3.1.10):
     - OHHTTPStubs/Core (= 3.1.10)
   - OHHTTPStubs/Core (3.1.10)
+  - ReactiveCocoa (2.4.4):
+    - ReactiveCocoa/UI (= 2.4.4)
+  - ReactiveCocoa/Core (2.4.4):
+    - ReactiveCocoa/no-arc
+  - ReactiveCocoa/no-arc (2.4.4)
+  - ReactiveCocoa/UI (2.4.4):
+    - ReactiveCocoa/Core
   - RegExCategories (1.0)
   - xflowapp (0.1.0):
     - AFNetworking (~> 2.5.0)
@@ -41,6 +48,7 @@ PODS:
     - Bolts (~> 1.1.3)
     - Mantle (~> 1.5.4)
     - OHHTTPStubs (~> 3.1.2)
+    - ReactiveCocoa (~> 2.4.4)
   - xflowparser (0.1.0):
     - Mantle (~> 1.5.1)
     - RegExCategories (~> 1.0)
@@ -54,7 +62,6 @@ PODS:
     - RegExCategories (~> 1.0)
 
 DEPENDENCIES:
-  - Bolts (~> 1.1.3)
   - CocoaLumberjack (~> 1.9.2)
   - OCMock (~> 2.2.4)
   - xflowapp (from `../`)
@@ -79,8 +86,9 @@ SPEC CHECKSUMS:
   Mantle: d5fbaf30fbc58031223af13812c060e15934a1fe
   OCMock: 6db79185520e24f9f299548f2b8b07e41d881bd5
   OHHTTPStubs: 2038e929b6abb94881000524c1cb4aba0a1bb4a2
+  ReactiveCocoa: 31119068e3dde866bd257cf74e1f06b4023bf387
   RegExCategories: a6410301023ff81bd047c05fd8691d24ca5c7ea9
-  xflowapp: 720c80a3af6125258ffacd8a3fb0657f5055c0d6
+  xflowapp: 06c379cafb2ad69b5cadfb83d3f16d41d12cf79a
   xflowparser: 58c223faa60216dd4f56915955447cd4cc166433
 
 COCOAPODS: 0.35.0
