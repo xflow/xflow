@@ -11,23 +11,31 @@
 #import "XFAVCScalarProperty.h"
 #import "XFAVCLabelProperty.h"
 #import "XFAVCScalarProperty.h"
+#import "XFAVCVCProperty.h"
 
 @implementation XFAVCProperty
 
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
-           /*  @"propertyName"            : @"name",
-             @"propertyObjcType"        : @"objc_type",
-             @"propertyObjcClassName"   : @"objc_class_name",
-             @"propertyIsNil"           : @"is_nil"
-            */
+             @"propertyName"            : @"propertyName",
+//             @""        : [NSNull null],
+//             @""      : [NSNull null],
+//             @""           : [NSNull null]
              };
 }
 
+
+
++ (NSDictionary *)JSONKeyPathsByPropertyKeyOLD {
+    NSDictionary * dic = @{ };
+    return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:dic];
+}
+
+
 -(NSDictionary *)loadValuesFromVC:(UIViewController*)vc
 {
-    NSAssert(FALSE, @"calling loadValueFromVC from XFAVCProperty");
+    NSAssert(FALSE, @"calling loadValueFromVC from ABSTRACT XFAVCProperty");
     return @{ @"very bad" : @"useless" };
 }
 
@@ -36,7 +44,7 @@
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
     
     if (JSONDictionary[@"isIBOutlet"] && [JSONDictionary[@"isIBOutlet"] isEqualToNumber:@1]) {
-        //        return NSClassFromString(@"XFAVCIBOutletViewProperty");
+//        return NSClassFromString(@"XFAVCIBOutletViewProperty");
         return [XFAVCIBOutletViewProperty class];
     }
     
@@ -50,16 +58,19 @@
         return [XFAVCViewProperty class];
     }
 
-
-    
     if ([JSONDictionary[@"objcType"] isEqualToString:@"Scalar"]) {
 //        return NSClassFromString(@"XFAVCScalarProperty");
         return [XFAVCScalarProperty class];
     }
+
+    if ([JSONDictionary[@"objcType"] isEqualToString:@"UIViewController *"]) {
+//        return NSClassFromString(@"XFAVCScalarProperty");
+        return [XFAVCVCProperty class];
+    }
     
     
-//    NSAssert(NO, @"%s No matching class for: '%@'.",__PRETTY_FUNCTION__, JSONDictionary[@"objc_type"]);
-    return self;
+    NSAssert(NO, @"%s No matching class for: '%@'.",__PRETTY_FUNCTION__, JSONDictionary[@"objc_type"]);
+    return [self class];
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "XFAInvocationAOP.h"
 #import <Aspects/Aspects.h>
 #import "XFAMethod.h"
+#import "XFAVCPropertySetterMethod.h"
 #import "MTVcMethodInvocation.h"
 #import "XFAConstants.h"
 #import "XFAVCProperty.h"
@@ -131,7 +132,7 @@
                                                          observer:self];
     [mySignal subscribeNext:^(RACTuple * x){
         NSLog(@"x: %@",x);
-        NSLog(@"x: %@",x.first);
+//        NSLog(@"x: %@",x.first);
         NSDictionary * dic = x.second;
         NSLog(@"kind: %@",dic[@"kind"]);
         NSLog(@"notificationIsPrior: %@",dic[@"notificationIsPrior"]);
@@ -139,26 +140,41 @@
 //        NSLog(@"x: %@",x[@"kind"]);
         if ([x.first isKindOfClass:[UIViewController class]]) {
 
-            UITabBarController * tvc = target_;
-            NSLog(@"selectedViewController: %@",tvc.selectedViewController);
+//            UITabBarController * tvc = target_;
+//            NSLog(@"selectedViewController: %@",tvc.selectedViewController);
         
-            UIViewController * aVC = x.first;
-            NSDictionary * dicState = [MTVcMethodInvocation dicStateOfViewController:aVC];
+//            UIViewController * aVC = x.first;
+//            NSDictionary * dicState = [MTVcMethodInvocation dicStateOfViewController:aVC];
             
             
             MTVcSetterMethodInvocation * invo = nil;
 
+//            method.signature = @"";
+            NSString * k = [NSString stringWithFormat:@"set %@",property.propertyName];
             
             if (dic[@"notificationIsPrior"]) {
-                invo  = [MTVcSetterMethodInvocation new];
-//                XFAMethod
-//                invo.method
+                invo = [MTVcSetterMethodInvocation new];
+                invo.status = MTVcMethodInvocationStatusPre;
+                XFAVCPropertySetterMethod * method = [XFAVCPropertySetterMethod new];
+                invo.property = property;
+//                invo.propertyValue = x.first;
+                invo.method = method;
+                invo.invocationTarget = target_;
+                [invo saveVcStateBefore];
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_PRE_INVOCATION object:invo userInfo:nil];
+                NSAssert(k, @"can't generate key for selector");
+                [self pushIntoStackInvocation:invo withKey:k];
             } else {
+                NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
+                invo = [arr firstObject];
+                NSAssert(invo, @"invo not found in stack");
+                invo.status = MTVcMethodInvocationStatusPost;
+                [invo saveVcStateAfter];
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:invo userInfo:nil];
+                [self popFromStackInvocation:invo withKey:k];
             }
         }
-        NSLog(@"%@",x);
+//        NSLog(@"%@",x);
         NSLog(@"changed .....");
     }];
     

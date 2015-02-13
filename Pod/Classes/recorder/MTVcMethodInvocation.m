@@ -8,7 +8,7 @@
 
 #import "MTVcMethodInvocation.h"
 
-#import "TXViewControllerState.h"
+#import "XFAViewControllerState.h"
 #import "TXViewControllerPropertiesScanner.h"
 
 
@@ -22,22 +22,30 @@
 @implementation MTVcMethodInvocation
 
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    return @{
+             @"method" : @"method",
+             @"invocationIndexWithStack" : @"invocationIndexWithStack",
+             };
+}
+
 -(void)saveVcStateBefore
 {
+    NSAssert(self.invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
     self.vcStateBefore = [MTVcMethodInvocation dicStateOfViewController:self.invocationTarget];
 }
 
 
 -(void)saveVcStateAfter
 {
+    NSAssert(self.invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
     self.vcStateAfter = [MTVcMethodInvocation dicStateOfViewController:self.invocationTarget];
-
 }
 
 
 +(NSDictionary*)dicStateOfViewController:(UIViewController*)vc{
     
-    TXViewControllerState * vcState = TXViewControllerState.new;
+    XFAViewControllerState * vcState = [XFAViewControllerState new];
     NSArray * vcObjectsPath = [vcState viewControllerObjectsPathToWindow:vc];
     NSArray * vcClassesPath = [vcState viewControllerClassesPathToWindow:vc];
     NSDictionary * vcProperties = [TXViewControllerPropertiesScanner propertiesOfVC:vc];
@@ -52,5 +60,6 @@
     return dic;
     
 }
+
 
 @end

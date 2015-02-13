@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TXViewControllerState.h"
+#import "XFAViewControllerState.h"
 @import UIKit;
 
 @interface TXViewControllerStateTests : XCTestCase
@@ -34,7 +34,7 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    TXViewControllerState * vcState = TXViewControllerState.new;
+    XFAViewControllerState * vcState = [XFAViewControllerState new];
     NSArray * array = [vcState viewControllerObjectsPathToWindow:rootVC];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"self.window.rootViewController"];
@@ -47,7 +47,7 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    TXViewControllerState * vcState = TXViewControllerState.new;
+    XFAViewControllerState * vcState = [XFAViewControllerState new];
     NSArray * array = [vcState viewControllerObjectsPathToWindow:vc1];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"self.window.rootViewController",
@@ -62,7 +62,7 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    TXViewControllerState * vcState = TXViewControllerState.new;
+    XFAViewControllerState * vcState = [XFAViewControllerState new];
     NSArray * array = [vcState viewControllerClassesPathToWindow:rootVC];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"UIViewController" ];
@@ -76,7 +76,7 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    TXViewControllerState * vcState = TXViewControllerState.new;
+    XFAViewControllerState * vcState = [XFAViewControllerState new];
     NSArray * array = [vcState viewControllerClassesPathToWindow:vc1];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"UIViewController",

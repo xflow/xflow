@@ -10,7 +10,7 @@
 
 #import "MTMethodArgument.h"
 #import "MTMethodArgumentValue.h"
-#import "TXViewControllerState.h"
+#import "XFAViewControllerState.h"
 
 @implementation MTMethodArgument
 
@@ -161,7 +161,7 @@
         if (! obj) {
             [dic setObject:@"null" forKey:@"value"];
         } else if ([obj isKindOfClass:[UIViewController class]]) {
-            TXViewControllerState * vcState = TXViewControllerState.new;
+            XFAViewControllerState * vcState = [XFAViewControllerState new];
             UIViewController * vc = (UIViewController*)obj;
             [dic setObject:[vcState viewControllerClassesPathToWindow:vc] forKey:@"classesPath"];
             [dic setObject:[vcState viewControllerObjectsPathToWindow:vc] forKey:@"objectsPath"];

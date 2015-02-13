@@ -17,8 +17,6 @@ typedef NS_ENUM(NSInteger, MTVcMethodInvocationStatus) {
 
 @interface MTVcMethodInvocation : MTMethodInvocation
 
-+(NSDictionary*)dicStateOfViewController:(UIViewController*)vc;
-
 @property (nonatomic,readonly) NSDictionary * vcStateBefore;
 @property (nonatomic,readonly) NSDictionary * vcStateAfter;
 @property (nonatomic, assign) MTVcMethodInvocationStatus status;

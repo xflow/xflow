@@ -20,6 +20,7 @@
 #import "XFAConstants.h"
 #import "TXAction.h"
 #import "XFAMethod.h"
+#import "XFAVCPropertySetterMethod.h"
 #import "XFAInvocationAOP.h"
 #import "XFARun.h"
 #import <Bolts/Bolts.h>
@@ -346,7 +347,10 @@ NSString * const ENV_PLAN_K = @"XX";
         
         for (XFAVCProperty * property in vcresp.properties) {
             NSLog(@"doVc: %@, property:%@",[vc class],property.propertyName);
-            NSAssert([vc respondsToSelector:NSSelectorFromString(property.propertyName)], @"property not found %@ for vc:%@",property.propertyName, [vc class]);
+            if (![vc respondsToSelector:NSSelectorFromString(property.propertyName)]) {
+                NSAssert([vc respondsToSelector:NSSelectorFromString(property.propertyName)], @"property not found %@ for vc:%@",property, [vc class]);
+            }
+
 //            NSAssert([vc respondsToSelector:NSSelectorFromString(@"selectedViewController")], @"property not found %@",property.propertyName);
             [self monitorProperty:property forViewController:vc];
         }
@@ -355,7 +359,6 @@ NSString * const ENV_PLAN_K = @"XX";
 //        NSAssert(vcresp.properties, assertMsg);
         
         vc.xfaProperties = NSMutableArray.new;
-        
         for (XFAVCProperty * prop in vcresp.properties) {
             [vc.xfaProperties addObject:prop];
         }

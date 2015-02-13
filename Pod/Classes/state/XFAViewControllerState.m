@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "TXViewControllerState.h"
+#import "XFAViewControllerState.h"
 
-@implementation TXViewControllerState
+@implementation XFAViewControllerState
 
 
 -(NSArray *)childControllers:(UIViewController *)viewController {

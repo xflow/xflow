@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class UIViewController;
 
-@interface TXViewControllerState : NSObject
+@interface XFAViewControllerState : NSObject
 
 -(NSArray *)viewControllerObjectsPathToWindow:(UIViewController *)vc;
 -(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc;
