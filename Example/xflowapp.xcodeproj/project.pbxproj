@@ -24,6 +24,7 @@
 		1058ECE1196CE33000C6ACD0 /* TXTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDC196CE33000C6ACD0 /* TXTestObject.m */; };
 		1058ECE2196CE33000C6ACD0 /* TXTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */; };
 		1058ECE3196CE33000C6ACD0 /* TXViewControllerStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1058ECDF196CE33000C6ACD0 /* TXViewControllerStateTests.m */; };
+		105E642B1A8E5638009FBE68 /* XFAWithTableVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 105E642A1A8E5638009FBE68 /* XFAWithTableVC.m */; };
 		1A1C7434A520EDA806D2EA25 /* libPods-xflowapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 783DD10D67964883A440D19B /* libPods-xflowapp.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -78,6 +79,8 @@
 		1058ECDD196CE33000C6ACD0 /* TXTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXTestViewController.h; sourceTree = "<group>"; };
 		1058ECDE196CE33000C6ACD0 /* TXTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXTestViewController.m; sourceTree = "<group>"; };
 		1058ECDF196CE33000C6ACD0 /* TXViewControllerStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TXViewControllerStateTests.m; sourceTree = "<group>"; };
+		105E64291A8E5638009FBE68 /* XFAWithTableVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFAWithTableVC.h; sourceTree = "<group>"; };
+		105E642A1A8E5638009FBE68 /* XFAWithTableVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFAWithTableVC.m; sourceTree = "<group>"; };
 		2A5BCCA6533785C41B71B7F7 /* Pods-xflowapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xflowapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-xflowapp/Pods-xflowapp.debug.xcconfig"; sourceTree = "<group>"; };
 		2D789EF1464C389CD48F3AD1 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* xflowapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = xflowapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +163,8 @@
 				10157F78197378340010B954 /* XFATableVC.m */,
 				10157F79197378340010B954 /* XFAViewController.h */,
 				10157F7A197378340010B954 /* XFAViewController.m */,
+				105E64291A8E5638009FBE68 /* XFAWithTableVC.h */,
+				105E642A1A8E5638009FBE68 /* XFAWithTableVC.m */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -451,6 +456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F59E195388D20070C39A /* XFAAppDelegate.m in Sources */,
+				105E642B1A8E5638009FBE68 /* XFAWithTableVC.m in Sources */,
 				10157F80197378340010B954 /* XFATabBarC.m in Sources */,
 				10157F7D197378340010B954 /* XFADummy1VC.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
