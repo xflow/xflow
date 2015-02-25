@@ -2,23 +2,14 @@
 //  XFARun.h
 //  Pods
 //
-//  Created by Mohammed Tillawy on 1/24/15.
+//  Created by Mohammed Tillawy on 2/23/15.
 //
 //
 
-typedef NS_ENUM(NSInteger, XFARunMode) {
-    XFARunModeUnknown         = 0,
-    XFARunModeOff             = 1,
-    XFARunModeCapture         = 2,
-    XFARunModeCruiseControl   = 3,
-    XFARunModeTest            = 4
-};
+#import <Mantle/MTLModel.h>
 
-#import <Mantle/Mantle.h>
+@interface XFARun : MTLModel
 
-@interface XFARun : MTLModel <MTLJSONSerializing>
-
-@property (nonatomic, strong) NSString * runId;
-@property (nonatomic, assign) XFARunMode runMode;
+@property (nonatomic, strong) NSArray * steps;
 
 @end

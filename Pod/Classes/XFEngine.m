@@ -22,24 +22,15 @@
 #import "XFAMethod.h"
 #import "XFAVCPropertySetterMethod.h"
 #import "XFAInvocationAOP.h"
-#import "XFARun.h"
+#import "XFARunMode.h"
 #import <Bolts/Bolts.h>
 
-
-typedef NS_ENUM(NSInteger, TXEngineMode) {
-    TXEngineModeUnknown         = 0,
-    TXEngineModeOff             = 1,
-    TXEngineModeCapture         = 2,
-    TXEngineModeCruiseControl   = 3,
-    TXEngineModeTest            = 4
-};
 
 @interface XFEngine (){
     
 }
 
 @property (nonatomic, strong) UIWindow      * mainWindow;
-//@property (nonatomic, assign) TXEngineMode engineMode;
 @property (nonatomic, strong) XFAInvocationAOP * aop;
 
 @property (nonatomic, strong) NSString * feedServerUrl;
@@ -47,6 +38,7 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
 @property (nonatomic, strong) NSString * apiToken;
 @property (nonatomic, strong) XFAFeedService * feedService;
 @property (nonatomic, strong) NSString * captureRunId;
+@property (nonatomic, strong) XFARunMode * runMode;
 
 @end
 
@@ -57,13 +49,13 @@ typedef NS_ENUM(NSInteger, TXEngineMode) {
     static dispatch_once_t onceToken;
     static id sharedInstance;
     dispatch_once(&onceToken, ^{
-        sharedInstance = self.new;
+        sharedInstance = [XFEngine new];
     });
     return sharedInstance;
 }
 
 
-NSString * const ENV_PLAN_K = @"XX";
+//NSString * const ENV_PLAN_K = @"XX";
 
 - (instancetype)init
 {
@@ -102,9 +94,9 @@ NSString * const ENV_PLAN_K = @"XX";
 */
 -(BFTask*)getRunModeTask{
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
-    NSString * urlString = [NSString stringWithFormat:@"%@/%@/%@" ,self.feedServerUrl , @"v1/pod/runMode/token",self.apiToken];
+    NSString * urlString = [NSString stringWithFormat:@"%@/%@/%@" ,self.feedServerUrl , @"v1/pod/run-mode/token",self.apiToken];
     XFAFeedService * feedService = [XFAFeedService new];
-    [feedService getRunModeWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, XFARun *obj) {
+    [feedService getRunModeWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, XFARunMode *obj) {
         [tcs setResult:obj];
     } withFailure:^(AFHTTPRequestOperation *op, NSError *error) {
         [tcs setError:error];
@@ -113,7 +105,8 @@ NSString * const ENV_PLAN_K = @"XX";
 }
 
 
--(BFTask*)startCaptureTask{
+-(BFTask*)startCaptureTask
+{
     return [[self startFreshRunOnServer] continueWithBlock:^id(BFTask *task) {
         NSDictionary * runDic = task.result;
         NSString * newRunId = [runDic objectForKey:@"id"];
@@ -192,16 +185,22 @@ NSString * const ENV_PLAN_K = @"XX";
     [self feedSequence:sequence];
 }
 
--(void)feedSequence:(NSArray*)seq{
+-(void)feedSequence:(NSArray*)seq
+{
     NSString * path = [NSString stringWithFormat:@"v1/pod/runs/%@/steps/token/%@",self.captureRunId ,self.apiToken];
     NSString * urlString = [NSString stringWithFormat:@"%@/%@", self.feedServerUrl , path];
     
     XFAFeedService * ser = [XFAFeedService new];
     
-    [ser feedStepSequence:seq withUrl:urlString onSuccess:^(AFHTTPRequestOperation *op, id obj) {
+    [ser feedStepInvocations:seq
+          withReferenceRunId:self.captureRunId
+                    withRunMode:self.runMode
+                     withUrl:urlString
+                   onSuccess:^(AFHTTPRequestOperation *op, id obj) {
         
     } onFailure:^(AFHTTPRequestOperation *op, NSError *error) {
-        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
+        NSString * msg = [NSString stringWithFormat:@"%@ %@",error.localizedDescription,urlString];
+        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:msg delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
     }];
     
 }
@@ -226,11 +225,12 @@ NSString * const ENV_PLAN_K = @"XX";
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     NSString * urlString = [NSString stringWithFormat:@"%@/v1/pod/runs/%@/token/%@" ,self.playServerUrl ,runId,self.apiToken];
     XFAFeedService * feedService = [XFAFeedService new];
-    [feedService getRunModeWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, XFARun *obj) {
+    [feedService getRunWithURL:urlString withSuccess:^(AFHTTPRequestOperation *op, XFARun *obj) {
         [tcs setResult:obj];
-    } withFailure:^(AFHTTPRequestOperation *op, NSError *error) {
+    } withFailure:^(AFHTTPRequestOperation *ope, NSError *error) {
         [tcs setError:error];
     }];
+    
     return tcs.task;
 }
 
@@ -262,10 +262,10 @@ NSString * const ENV_PLAN_K = @"XX";
             return nil;
         }
         
-        XFARun * r = task.result;
+        self.runMode = task.result;
         
-        switch (r.runMode) {
-            case XFARunModeUnknown:{
+        switch (self.runMode.runModeValue) {
+            case XFARunModeValueUnknown:{
                 NSString * title = @"xflow not running";
                 NSString * message = @"MAKE_SURE_YOU_SET_RUN_MODE";
                 UIAlertView * av = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil, nil];
@@ -274,19 +274,26 @@ NSString * const ENV_PLAN_K = @"XX";
                 break;
             }
                 
-            case XFARunModeOff:{
+            case XFARunModeValueOff:{
                 NSLog(@"***** XFLOW *****");
                 NSLog(@"***** is of for this project *****");
                 NSLog(@"****************");
                 return nil;
                 break;
             }
-            case XFARunModeCapture:{
+            case XFARunModeValueCapture:{
                 return [self startCaptureTask];
                 break;
             }
-            case XFARunModeCruiseControl:{
-                return [self cruiseControlRunWithId:r.runId];
+            case XFARunModeValueCruiseControl:{
+                return [[self startCaptureTask] continueWithBlock:^id(BFTask *task) {
+                    return [[self getFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                        return [[self cruiseControlRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                            return [self startCaptureTask];
+                        }];
+                    }];
+                }];
+                
                 break;
             }
             default:

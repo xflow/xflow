@@ -10,6 +10,7 @@
 
 @class XFObjcVcClass;
 @class AFHTTPRequestOperation;
+@class XFARunMode;
 @class XFARun;
 @class MTVcMethodInvocation;
 
@@ -18,7 +19,7 @@
 
 
 -(AFHTTPRequestOperation *)getRunModeWithURL:(NSString*)urlString
-                                 withSuccess:(void (^)(AFHTTPRequestOperation *,XFARun * obj))success
+                                 withSuccess:(void (^)(AFHTTPRequestOperation *,XFARunMode * obj))success
                                  withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure;
 
 
@@ -31,23 +32,17 @@
                         onSuccess:(void(^)(AFHTTPRequestOperation * op,XFObjcVcClass * resp))success
                         onFailure:(void(^)(AFHTTPRequestOperation * op,NSError * error))failure;
 
-/*
--(AFHTTPRequestOperation *)feedInvocation:(MTVcMethodInvocation *)invocation
-                                  withUrl:(NSString*)urlString
-                                onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
-                                onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure;
 
-*/
+-(AFHTTPRequestOperation *)getRunWithURL:(NSString*)urlString
+                             withSuccess:(void (^)(AFHTTPRequestOperation * , XFARun * obj))success
+                             withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure;
 
-/*
--(AFHTTPRequestOperation *)requestXActionsWithURL:(NSString *)urlString
-                                       onSuccess:(void (^)(NSArray * xactions))success
-                                       onFailure:(void (^)(NSError * error))failure;
-*/
 
--(AFHTTPRequestOperation*)feedStepSequence:(NSArray*)arr
-                           withUrl:(NSString*)url
-                         onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
-                         onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure;
+-(AFHTTPRequestOperation*)feedStepInvocations:(NSArray*)arr
+                           withReferenceRunId:(NSString*)refRunId
+                                  withRunMode:(XFARunMode*)runMode
+                                   withUrl:(NSString*)urlString
+                                 onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
+                                 onFailure:(void (^)(AFHTTPRequestOperation *op,NSError * error))failure;
 
 @end

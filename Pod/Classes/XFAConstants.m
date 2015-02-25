@@ -20,6 +20,12 @@ NSString * const NOTIF_METHOD_POST_INVOCATION = @"NOTIF_METHOD_POST_INVOCATION";
 NSString * const NOTIF_SEQUENCE_STARTED = @"NOTIF_SEQUENCE_STARTED";
 NSString * const NOTIF_SEQUENCE_ENDED = @"NOTIF_SEQUENCE_ENDED";
 
+NSString * const POST = @"POST";
+NSString * const GET = @"GET";
+NSString * const PATCH = @"PATCH";
+NSString * const DELETE = @"DELETE";
+NSString * const PUT = @"PUT";
+
 @implementation XFAConstants
 
 @end

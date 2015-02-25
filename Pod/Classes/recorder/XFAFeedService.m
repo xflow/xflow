@@ -14,10 +14,9 @@
 #import "MTVcMethodInvocation.h"
 
 #import "UIViewController+XFAProperties.h"
-//#import "MTMethod.h"
-//#import "MTMethodArgument.h"
-#import "TXAction.h"
+#import "XFARunMode.h"
 #import "XFARun.h"
+
 
 @interface XFAFeedService (){
     
@@ -37,15 +36,36 @@
     return self;
 }
 
+-(AFHTTPRequestOperation *)getRunWithURL:(NSString*)urlString
+                                 withSuccess:(void (^)(AFHTTPRequestOperation *,XFARun * obj))success
+                                 withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure
+{
+    
+    NSError * reqError = nil;
+    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:GET URLString:urlString parameters:@{} error:&reqError];
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
+    operation.responseSerializer = [AFJSONResponseSerializer new];
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSDictionary * dic) {
+        NSLog(@"success: %@", operation.responseString);
+        NSError * error = nil;
+//        NSLog(@"JSON: %@, error:%@", responseObject,error);
+        XFARun * run = [MTLJSONAdapter modelOfClass:[XFARun class] fromJSONDictionary:dic error:&error];
+        NSAssert(!error, @"MTLJSONAdapter error");
+        success(operation,run);
+    } failure:failure];
+    [[NSOperationQueue mainQueue] addOperation:operation];
+    return operation;
+    
+}
 
 
 
 -(AFHTTPRequestOperation *)getRunModeWithURL:(NSString*)urlString
-                          withSuccess:(void (^)(AFHTTPRequestOperation *,XFARun * obj))success
+                          withSuccess:(void (^)(AFHTTPRequestOperation *,XFARunMode * obj))success
                           withFailure:(void(^)(AFHTTPRequestOperation *,NSError * error))failure{
     
     
-    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:urlString parameters:@{} error:nil];
+    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:GET URLString:urlString parameters:@{} error:nil];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
     
@@ -59,7 +79,7 @@
         
 //        NSLog(@"JSON: %@, error:%@", responseObject,error);
         
-        XFARun * run = [MTLJSONAdapter modelOfClass:[XFARun class] fromJSONDictionary:dic error:&error];
+        XFARunMode * run = [MTLJSONAdapter modelOfClass:[XFARunMode class] fromJSONDictionary:dic error:&error];
         NSAssert(!error, @"MTLJSONAdapter error");
         
         success(operation,run);
@@ -70,7 +90,6 @@
     
     return operation;
     
-    
 }
 
 -(AFHTTPRequestOperation *)startRunWithURL:(NSString*)urlString
@@ -79,7 +98,7 @@
     
     NSDictionary * parameters = @{};
     
-    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
+    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:POST URLString:urlString parameters:parameters error:nil];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
 
@@ -113,127 +132,25 @@
 }
 
 
--(AFHTTPRequestOperation*)feedStepSequence:(NSArray*)arr
-                                    withUrl:(NSString*)urlString
-                                  onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
-                                  onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure{
-    
-    NSError * reqError = nil;
-    
-    NSArray * jsonArr = [MTLJSONAdapter JSONArrayFromModels:arr];
-    
-    NSDictionary * stepDic = @{@"sequence":jsonArr};
-    
-    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:stepDic error:&reqError];
-    NSAssert(!reqError, @"%@",reqError);
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
-    
-    operation.responseSerializer = [AFJSONResponseSerializer new];
-    
-    [operation setCompletionBlockWithSuccess:success failure:failure];
-    
-    [[NSOperationQueue mainQueue] addOperation:operation];
-    
-    return operation;
-    
-}
 
-/*
--(AFHTTPRequestOperation *)requestXActionsWithURL:(NSString *)urlString
-                                       onSuccess:(void (^)(NSArray * xactions))success
-                                       onFailure:(void (^)(NSError * error))failure
+-(AFHTTPRequestOperation*)feedStepInvocations:(NSArray*)arr
+                           withReferenceRunId:(NSString*)refRunId
+                                  withRunMode:(XFARunMode*)runMode
+                                      withUrl:(NSString*)urlString
+                                    onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
+                                    onFailure:(void (^)(AFHTTPRequestOperation *op,NSError * error))failure
 {
-    
     NSError * reqError = nil;
-    
-    NSMutableDictionary * parameters = @{}.mutableCopy;
-    
-    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:urlString parameters:parameters error:&reqError];
-    NSAssert(! reqError, @"should not have an error");
-    
+    NSArray * jsonArr = [MTLJSONAdapter JSONArrayFromModels:arr];
+    NSDictionary * stepDic = @{@"invocations" : jsonArr};
+    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:POST URLString:urlString parameters:stepDic error:&reqError];
+    NSAssert(!reqError, @"%@",reqError);
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-//        NSLog(@"success: %@", [responseObject class]);
-        
-        NSAssert([responseObject isKindOfClass:[NSArray class]], @"XActions responseObject is not an array");
-
-//        NSLog(@"JSON: %@, error:%@", responseObject,error);
-        
-        NSArray * actionsArray = (NSArray*)responseObject;
-        
-        NSMutableArray * outputArray = [NSMutableArray array];
-        
-        for (NSDictionary * dic in actionsArray) {
-            NSError * error = nil;
-            TXAction * xAction = [MTLJSONAdapter modelOfClass:TXAction.class fromJSONDictionary:dic error:&error];
-            NSAssert(! error, @"MTLJSONAdapter error");
-            [outputArray addObject:xAction];
-        }
-        
-        success(outputArray);
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
-        NSLog(@"Error: operation.responseString: %@", operation.responseString);
-        NSLog(@"Error: %@", error);
-        
-        failure(error);
-    }];
-    
+    operation.responseSerializer = [AFJSONResponseSerializer new];
+    [operation setCompletionBlockWithSuccess:success failure:failure];
     [[NSOperationQueue mainQueue] addOperation:operation];
-    
     return operation;
-    
-
 }
-*/
-
-/*
--(AFHTTPRequestOperation *)feedInvocation:(MTVcMethodInvocation *)invocation
-                                  withUrl:(NSString*)urlString
-                                onSuccess:(void (^)(AFHTTPRequestOperation *op,id obj))success
-                                onFailure:(void(^)(AFHTTPRequestOperation *op,NSError * error))failure{
-    
-
-    NSDictionary *invocationJSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:invocation];
-//    NSLog(@"invocationJSONDictionary:%@",invocationJSONDictionary);
-
-    NSDictionary * parameters = @{ @"invocation": invocationJSONDictionary };
-
-    NSMutableURLRequest * req = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
-   
-    [operation  setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *op, id responseObject) {
-
-//        NSString * reqBody = [[NSString alloc] initWithData:operation.request.HTTPBody encoding:NSUTF8StringEncoding];
-//        NSLog(@"reqBody: %@",reqBody );
-//        NSLog(@"success: %@", operation.responseString);
-//        NSError * error = nil;
-//        NSLog(@"JSON: %@, error:%@", responseObject,error);
-//        NSAssert(!error, @"MTLJSONAdapter error");
-        
-        success(op,responseObject);
-        
-    } failure:^(AFHTTPRequestOperation *op, NSError *error) {
-        
-        NSLog(@"error: %@", operation.responseString);
-        NSLog(@"Error: %@", error);
-        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
-        failure(op,error);
-    }];
- 
-    [[NSOperationQueue mainQueue] addOperation:operation];
-
-    return operation;
-    
-}
-
-*/
 
 
 -(AFHTTPRequestOperation *)requestSetupForVC:(UIViewController*)vc
@@ -259,14 +176,7 @@
         NSAssert(!error, @"MTLJSONAdapter error");
         
         success(operation,vcResp);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
-        NSLog(@"requestForVC %@, Failure:%@",urlString,operation.responseString);
-        NSLog(@"Error: %@", error);
-        failure(operation,error);
-        
-    }];
-    
+    } failure:failure];
     
     return op;
 }

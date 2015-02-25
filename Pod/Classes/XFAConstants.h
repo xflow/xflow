@@ -21,6 +21,12 @@ extern NSString * const NOTIF_METHOD_POST_INVOCATION;
 extern NSString * const NOTIF_SEQUENCE_STARTED;
 extern NSString * const NOTIF_SEQUENCE_ENDED;
 
+extern NSString * const POST;
+extern NSString * const GET;
+extern NSString * const PATCH;
+extern NSString * const DELETE;
+extern NSString * const PUT;
+
 @interface XFAConstants : NSObject
 
 @end

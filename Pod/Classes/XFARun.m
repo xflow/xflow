@@ -2,7 +2,7 @@
 //  XFARun.m
 //  Pods
 //
-//  Created by Mohammed Tillawy on 1/24/15.
+//  Created by Mohammed Tillawy on 2/23/15.
 //
 //
 
@@ -12,8 +12,7 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey{
     return @{
-             @"runId" : @"runId",
-             @"runMode" : @"runMode"
+//             @"" : @""
              };
 }
 
