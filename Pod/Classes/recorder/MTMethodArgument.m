@@ -167,16 +167,16 @@
         
         NSMutableDictionary * dic = [NSMutableDictionary dictionary];
         [dic setValue:NSStringFromClass(obj.class) forKey:@"objcType"];
-        [dic setValue:[NSString stringWithFormat:@"%d", obj.hash] forKey:@"objHash"];
+        [dic setValue:[NSString stringWithFormat:@"%ld",(long)obj.hash] forKey:@"objHash"];
         [dic setValue:@(obj == nil) forKey:@"isNil"];
 
         if (! obj) {
             [dic setObject:@"null" forKey:@"value"];
         } else if ([obj isKindOfClass:[UIViewController class]]) {
-            XFAViewControllerState * vcState = [XFAViewControllerState new];
+//            XFAViewControllerState * vcState = [XFAViewControllerState new];
             UIViewController * vc = (UIViewController*)obj;
-            [dic setObject:[vcState viewControllerClassesPathToWindow:vc] forKey:@"classesPath"];
-            [dic setObject:[vcState viewControllerObjectsPathToWindow:vc] forKey:@"objectsPath"];
+            [dic setObject:[XFAViewControllerState viewControllerClassesPathToWindow:vc] forKey:@"classesPath"];
+            [dic setObject:[XFAViewControllerState viewControllerObjectsPathToWindow:vc] forKey:@"objectsPath"];
             [dic setObject:@"UIViewController" forKey:@"argumentType"];
         } else if ([obj isKindOfClass:[UIView class]]) {
             [dic setObject:@"UIView" forKey:@"argumentType"];

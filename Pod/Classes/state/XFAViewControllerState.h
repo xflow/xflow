@@ -7,11 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 @class UIViewController;
 
-@interface XFAViewControllerState : NSObject
+@interface XFAViewControllerState : MTLModel <MTLJSONSerializing>
 
--(NSArray *)viewControllerObjectsPathToWindow:(UIViewController *)vc;
--(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc;
+@property (nonatomic, strong) NSArray * vcClassesPath;
+@property (nonatomic, strong) NSArray * vcObjectsPath;
+@property (nonatomic, strong) NSDictionary * vcProperties;
+@property (nonatomic, strong) NSNumber * objHash;
+
++(NSArray *)viewControllerObjectsPathToWindow:(UIViewController *)vc;
++(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc;
+
+
 
 @end

@@ -8,7 +8,8 @@
 
 #import "XFEngine.h"
 
-#import "MTSwizzleManager.h"
+#import <Bolts/Bolts.h>
+//#import "MTSwizzleManager.h"
 #import "XFACrawler.h"
 #import "XFAFeedService.h"
 #import "XFObjcVcClass.h"
@@ -23,7 +24,9 @@
 #import "XFAVCPropertySetterMethod.h"
 #import "XFAInvocationAOP.h"
 #import "XFARunMode.h"
-#import <Bolts/Bolts.h>
+#import "XFARun.h"
+#import "XFARunStep.h"
+
 #import <MRProgress/MRProgress.h>
 
 
@@ -40,6 +43,8 @@
 @property (nonatomic, strong) XFAFeedService * feedService;
 @property (nonatomic, strong) NSString * captureRunId;
 @property (nonatomic, strong) XFARunMode * runMode;
+@property (nonatomic, strong) XFARun * run;
+
 
 @end
 
@@ -114,7 +119,7 @@
         self.captureRunId = newRunId;
         [self doVC:self.mainWindow.rootViewController];
         [self listenToMethodInvocations];
-        return nil;
+        return task;
     }];
 }
 
@@ -235,15 +240,19 @@
     return tcs.task;
 }
 
--(BFTask*)taskCruiseControlRunWithId:(NSString*)runId
++(BFTask*)taskCruiseControlRun:(XFARun*)cruiseRun
 {
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     
-    return [[self taskGetFromServerRunWithId:runId] continueWithBlock:^id(BFTask *task) {
-//       XFARun * r = task.result;
-//        [r run]
-        return task;
-    }];
+    for ( XFARunStep * step in cruiseRun.steps) {
+        for (XFAVcMethodInvocation * invo in step.invocations) {
+            XFAViewControllerState * vcStateBefore = invo.vcStateBefore;
+            
+            
+            
+//            [invo.method applyTo:<#(NSObject *)#>]
+        }
+    }
     
     return tcs.task;
     
@@ -289,23 +298,15 @@
             case XFARunModeValueCruiseControl:{
                 [MRProgressOverlayView showOverlayAddedTo:self.mainWindow animated:YES];
                 return [[self taskGetFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
-                    return [[self taskCruiseControlRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
-                        return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
-                            [MRProgressOverlayView dismissOverlayForView:self.mainWindow animated:YES];
-                            return nil;
-                        }];
-                    }];
-                }];
-                
-                return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
-                    return [[self taskGetFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
-                        return [[self taskCruiseControlRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                    self.run = task.result;
+                    return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
+                        [MRProgressOverlayView dismissOverlayForView:self.mainWindow animated:YES];
+                        return [[XFEngine taskCruiseControlRun:self.run] continueWithBlock:^id(BFTask *task) {
                             NSLog(@"");
                             return nil;
                         }];
                     }];
                 }];
-                
                 break;
             }
             default:

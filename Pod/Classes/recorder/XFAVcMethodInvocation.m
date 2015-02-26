@@ -14,8 +14,6 @@
 
 @interface XFAVcMethodInvocation ()
 
-@property (nonatomic,strong) NSDictionary * vcStateBefore;
-@property (nonatomic,strong) NSDictionary * vcStateAfter;
 
 @end
 
@@ -29,25 +27,48 @@
              };
 }
 
+
++ (NSValueTransformer *)vcStateBeforeJSONTransformer {
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[XFAViewControllerState class]];
+}
+
++ (NSValueTransformer *)vcStateAfterJSONTransformer {
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[XFAViewControllerState class]];
+}
+
+
 -(void)saveVcStateBefore
 {
     NSAssert(self.invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
-    self.vcStateBefore = [XFAVcMethodInvocation dicStateOfViewController:self.invocationTarget];
+    self.vcStateBefore  = [XFAVcMethodInvocation vcStateForInvocationTarget:self.invocationTarget];
+}
+
++(XFAViewControllerState*)vcStateForInvocationTarget:(UIViewController*)invocationTarget
+{
+    NSAssert(invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
+    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    vcState.vcClassesPath = [XFAViewControllerState viewControllerClassesPathToWindow:invocationTarget];
+    vcState.vcObjectsPath = [XFAViewControllerState viewControllerObjectsPathToWindow:invocationTarget];
+    NSDictionary * vcProperties = [TXViewControllerPropertiesScanner propertiesOfVC:invocationTarget];;
+    vcState.vcProperties = vcProperties;
+    vcState.objHash = @( invocationTarget.hash );
+    return vcState;
+//    [XFAVcMethodInvocation dicStateOfViewController:self.invocationTarget];
 }
 
 
 -(void)saveVcStateAfter
 {
     NSAssert(self.invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
-    self.vcStateAfter = [XFAVcMethodInvocation dicStateOfViewController:self.invocationTarget];
+    self.vcStateAfter = [XFAVcMethodInvocation vcStateForInvocationTarget:self.invocationTarget];
 }
 
-
+/*
 +(NSDictionary*)dicStateOfViewController:(UIViewController*)vc{
     
-    XFAViewControllerState * vcState = [XFAViewControllerState new];
-    NSArray * vcObjectsPath = [vcState viewControllerObjectsPathToWindow:vc];
-    NSArray * vcClassesPath = [vcState viewControllerClassesPathToWindow:vc];
+//    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    NSArray * vcObjectsPath = [XFAViewControllerState viewControllerObjectsPathToWindow:vc];
+    NSArray * vcClassesPath = [XFAViewControllerState viewControllerClassesPathToWindow:vc];
     NSDictionary * vcProperties = [TXViewControllerPropertiesScanner propertiesOfVC:vc];
     
     NSDictionary * dic = @{
@@ -59,7 +80,7 @@
     
     return dic;
     
-}
+}*/
 
 
 @end

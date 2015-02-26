@@ -10,6 +10,10 @@
 
 @implementation XFAViewControllerState
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey {
+    return @{
+             };
+}
 
 -(NSArray *)childControllers:(UIViewController *)viewController {
     return [self childControllers:viewController atLevel:0];
@@ -45,7 +49,7 @@
 
 
 
--(NSArray *)viewControllerObjectsPathToWindow:(UIViewController*)vc{
++(NSArray *)viewControllerObjectsPathToWindow:(UIViewController*)vc{
     
     NSArray * path = nil;
     
@@ -57,21 +61,21 @@
             UITabBarController * tbvc = (UITabBarController *)vc.parentViewController;
             NSInteger idx = [tbvc.childViewControllers indexOfObject:vc];
 
-            NSString * p = [NSString stringWithFormat:@"childViewControllers[%d]",idx];
+            NSString * p = [NSString stringWithFormat:@"childViewControllers[%ld]",(long)idx];
             path = [NSArray arrayWithObject:p];
             
         } else if ([vc.parentViewController isKindOfClass:[UITabBarController class]]) {
             UITabBarController * tbvc = (UITabBarController *)vc.parentViewController;
             NSInteger idx = [tbvc.viewControllers indexOfObject:vc];
             
-            NSString * p = [NSString stringWithFormat:@"viewControllers[%d]",idx];
+            NSString * p = [NSString stringWithFormat:@"viewControllers[%ld]",(long)idx];
             path = [NSArray arrayWithObject:p];
 
         } else {
             UITabBarController * tbvc = (UITabBarController *)vc.parentViewController;
             NSInteger idx = [tbvc.childViewControllers indexOfObject:vc];
 
-            NSString * p = [NSString stringWithFormat:@"childViewControllers[%d]",idx];
+            NSString * p = [NSString stringWithFormat:@"childViewControllers[%ld]",(long)idx];
             path = [NSArray arrayWithObject:p];
         }
         path = [parentPath arrayByAddingObjectsFromArray:path];
@@ -84,7 +88,7 @@
 }
 
 
--(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc{
++(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc{
     NSString * s = NSStringFromClass(vc.class);
     NSArray * path = nil;
     if (vc.parentViewController){

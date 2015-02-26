@@ -14,9 +14,9 @@
 -(NSDictionary *)loadValuesFromVC:(UIViewController*)vc
 {
     UIViewController * propertyValue = (UIViewController*)[self objectFromVC:vc];
-    XFAViewControllerState * vcState = [XFAViewControllerState new];
-    NSArray * vcObjectsPath = [vcState viewControllerObjectsPathToWindow:propertyValue];
-    NSArray * vcClassesPath = [vcState viewControllerClassesPathToWindow:propertyValue];
+//    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    NSArray * vcObjectsPath = [XFAViewControllerState viewControllerObjectsPathToWindow:propertyValue];
+    NSArray * vcClassesPath = [XFAViewControllerState viewControllerClassesPathToWindow:propertyValue];
     
     NSDictionary * dic = @{
                            @"classesPath" : vcClassesPath,

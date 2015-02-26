@@ -7,7 +7,7 @@
 //
 
 #import "XFAMethodInvocation.h"
-
+@class XFAViewControllerState;
 
 typedef NS_ENUM(NSInteger, MTVcMethodInvocationStatus) {
     MTVcMethodInvocationStatusUnknown       = 0,
@@ -17,9 +17,11 @@ typedef NS_ENUM(NSInteger, MTVcMethodInvocationStatus) {
 
 @interface XFAVcMethodInvocation : XFAMethodInvocation
 
-@property (nonatomic,readonly) NSDictionary * vcStateBefore;
-@property (nonatomic,readonly) NSDictionary * vcStateAfter;
+@property (nonatomic,strong) XFAViewControllerState * vcStateBefore;
+@property (nonatomic,strong) XFAViewControllerState * vcStateAfter;
+
 @property (nonatomic, assign) MTVcMethodInvocationStatus status;
+
 
 -(void)saveVcStateBefore;
 -(void)saveVcStateAfter;
