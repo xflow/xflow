@@ -6,11 +6,11 @@
 //
 //
 
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 
 @class XFAVCProperty;
 
-@interface MTVcSetterMethodInvocation : MTVcMethodInvocation
+@interface MTVcSetterMethodInvocation : XFAVcMethodInvocation
 
 @property (nonatomic, strong) XFAVCProperty * property;
 

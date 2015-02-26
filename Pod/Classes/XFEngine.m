@@ -12,7 +12,7 @@
 #import "XFACrawler.h"
 #import "XFAFeedService.h"
 #import "XFObjcVcClass.h"
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 #import "MTMethodArgument.h"
 #import "XFAMethod.h"
 #import "XFAVCProperty.h"
@@ -24,6 +24,7 @@
 #import "XFAInvocationAOP.h"
 #import "XFARunMode.h"
 #import <Bolts/Bolts.h>
+#import <MRProgress/MRProgress.h>
 
 
 @interface XFEngine (){
@@ -92,7 +93,7 @@
     return p;
 }
 */
--(BFTask*)getRunModeTask{
+-(BFTask*)taskGetRunMode{
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     NSString * urlString = [NSString stringWithFormat:@"%@/%@/%@" ,self.feedServerUrl , @"v1/pod/run-mode/token",self.apiToken];
     XFAFeedService * feedService = [XFAFeedService new];
@@ -105,9 +106,9 @@
 }
 
 
--(BFTask*)startCaptureTask
+-(BFTask*)taskStartCapture
 {
-    return [[self startFreshRunOnServer] continueWithBlock:^id(BFTask *task) {
+    return [[self taskStartFreshRunOnServer] continueWithBlock:^id(BFTask *task) {
         NSDictionary * runDic = task.result;
         NSString * newRunId = [runDic objectForKey:@"id"];
         self.captureRunId = newRunId;
@@ -154,7 +155,7 @@
 
 -(void)waitForNewVCsByNotif:(NSNotification*)notif
 {
-    MTVcMethodInvocation * invoc = (MTVcMethodInvocation *) notif.object;
+    XFAVcMethodInvocation * invoc = (XFAVcMethodInvocation *) notif.object;
     
     if ( invoc.method.isChildVcEntryPoint)
     {
@@ -207,7 +208,7 @@
 
 
 
--(BFTask*)startFreshRunOnServer
+-(BFTask*)taskStartFreshRunOnServer
 {
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     NSString * urlString = [NSString stringWithFormat:@"%@/v1/pod/runs/token/%@" ,self.feedServerUrl ,self.apiToken];
@@ -220,7 +221,7 @@
     return tcs.task;
 }
 
--(BFTask*)getFromServerRunWithId:(NSString*)runId
+-(BFTask*)taskGetFromServerRunWithId:(NSString*)runId
 {
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     NSString * urlString = [NSString stringWithFormat:@"%@/v1/pod/runs/%@/token/%@" ,self.playServerUrl ,runId,self.apiToken];
@@ -234,11 +235,11 @@
     return tcs.task;
 }
 
--(BFTask*)cruiseControlRunWithId:(NSString*)runId
+-(BFTask*)taskCruiseControlRunWithId:(NSString*)runId
 {
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     
-    return [[self getFromServerRunWithId:runId] continueWithBlock:^id(BFTask *task) {
+    return [[self taskGetFromServerRunWithId:runId] continueWithBlock:^id(BFTask *task) {
 //       XFARun * r = task.result;
 //        [r run]
         return task;
@@ -254,7 +255,7 @@
     self.feedServerUrl = feedServer;
     self.playServerUrl = playServer;
     
-    [[self getRunModeTask] continueWithBlock:^id(BFTask *task) {
+    [[self taskGetRunMode] continueWithBlock:^id(BFTask *task) {
         
         if (task.error) {
             UIAlertView * av = [[UIAlertView alloc] initWithTitle:task.error.domain message:task.error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
@@ -282,14 +283,25 @@
                 break;
             }
             case XFARunModeValueCapture:{
-                return [self startCaptureTask];
+                return [self taskStartCapture];
                 break;
             }
             case XFARunModeValueCruiseControl:{
-                return [[self startCaptureTask] continueWithBlock:^id(BFTask *task) {
-                    return [[self getFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
-                        return [[self cruiseControlRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
-                            return [self startCaptureTask];
+                [MRProgressOverlayView showOverlayAddedTo:self.mainWindow animated:YES];
+                return [[self taskGetFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                    return [[self taskCruiseControlRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                        return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
+                            [MRProgressOverlayView dismissOverlayForView:self.mainWindow animated:YES];
+                            return nil;
+                        }];
+                    }];
+                }];
+                
+                return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
+                    return [[self taskGetFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                        return [[self taskCruiseControlRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                            NSLog(@"");
+                            return nil;
                         }];
                     }];
                 }];

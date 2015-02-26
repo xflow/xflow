@@ -42,6 +42,7 @@ Pod::Spec.new do |s|
   s.dependency 'Aspects', '~> 1.4.1'
   s.dependency 'Bolts', '~> 1.1.3'
 	s.dependency 'ReactiveCocoa', '~> 2.4.4'
+  s.dependency 'MRProgress', '~> 0.8.1'
   #s.dependency 'xflowparser', '0.1.0'
   #s.dependency 'xflowparser'
 

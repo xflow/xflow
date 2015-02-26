@@ -11,7 +11,7 @@
 
 @class XFAMethod;
 
-@interface MTMethodInvocation : MTLModel <MTLJSONSerializing>
+@interface XFAMethodInvocation : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic,strong) XFAMethod * method;
 @property (nonatomic,strong) UIViewController * invocationTarget;

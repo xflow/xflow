@@ -7,13 +7,20 @@
 //
 
 #import "XFARun.h"
+#import "XFARunStep.h"
+
 
 @implementation XFARun
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey{
-    return @{
-//             @"" : @""
-             };
+    return @{};
 }
+
+
++ (NSValueTransformer*)stepsJSONTransformer
+{
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[XFARunStep class]];
+}
+
 
 @end

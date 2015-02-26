@@ -36,13 +36,13 @@ typedef enum{
 } MTMethodArgumentType;
 
 
-#import <Mantle.h>
+#import <Mantle/Mantle.h>
 
 @interface MTMethodArgument : MTLModel <MTLJSONSerializing>
 
 +(MTMethodArgument*)argumentForType:(NSString*)type;
 
-@property(nonatomic,assign) MTMethodArgumentType type;
+@property(nonatomic,assign) MTMethodArgumentType argumentType;
 @property(nonatomic,strong) NSString *stringType;
 @property(nonatomic,assign) NSInteger index;
 

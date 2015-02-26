@@ -10,11 +10,11 @@
 #import <Aspects/Aspects.h>
 #import "XFAMethod.h"
 #import "XFAVCPropertySetterMethod.h"
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 #import "XFAConstants.h"
 #import "XFAVCProperty.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 #import "MTVcSetterMethodInvocation.h"
 
 @interface XFAInvocationAOP(){
@@ -43,7 +43,7 @@
 }
 
 
--(void)pushIntoStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
+-(void)pushIntoStackInvocation:(XFAMethodInvocation*)invo withKey:(NSString*)k{
     if (self.stackArray.count == 0) {
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_SEQUENCE_STARTED object:nil userInfo:nil];
     }
@@ -57,7 +57,7 @@
     
 }
 
--(void)popFromStackInvocation:(MTMethodInvocation*)invo withKey:(NSString*)k{
+-(void)popFromStackInvocation:(XFAMethodInvocation*)invo withKey:(NSString*)k{
     [self.stackArray removeObject:invo];
     NSMutableArray * arr = [self.stackInvocationsDictionary objectForKey:k];
     NSAssert(arr, @"does not exist");
@@ -76,7 +76,7 @@
     NSError * errorAspectHook = nil;
     
     id<AspectToken> token = [obj aspect_hookSelector:method.selector withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> aspectInfo) {
-        MTVcMethodInvocation * mvcInvo = [MTVcMethodInvocation new];
+        XFAVcMethodInvocation * mvcInvo = [XFAVcMethodInvocation new];
         mvcInvo.invocationTarget = (UIViewController*)obj;
         mvcInvo.method = method;
         mvcInvo.status = MTVcMethodInvocationStatusPre;
@@ -100,7 +100,7 @@
         
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
         NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
-        MTVcMethodInvocation * mvcInvo = [arr firstObject];
+        XFAVcMethodInvocation * mvcInvo = [arr firstObject];
         mvcInvo.method = method;
         mvcInvo.status = MTVcMethodInvocationStatusPost;
         [mvcInvo saveVcStateAfter];

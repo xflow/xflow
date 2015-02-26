@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTMethodInvocation.h"
+#import "XFAMethodInvocation.h"
 #import "XFAMethod.h"
 
 
-@implementation MTMethodInvocation
+@implementation XFAMethodInvocation
 
 - (instancetype)init
 {

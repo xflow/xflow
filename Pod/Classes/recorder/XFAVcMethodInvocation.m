@@ -6,20 +6,20 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 
 #import "XFAViewControllerState.h"
 #import "TXViewControllerPropertiesScanner.h"
 
 
-@interface MTVcMethodInvocation ()
+@interface XFAVcMethodInvocation ()
 
 @property (nonatomic,strong) NSDictionary * vcStateBefore;
 @property (nonatomic,strong) NSDictionary * vcStateAfter;
 
 @end
 
-@implementation MTVcMethodInvocation
+@implementation XFAVcMethodInvocation
 
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
@@ -32,14 +32,14 @@
 -(void)saveVcStateBefore
 {
     NSAssert(self.invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
-    self.vcStateBefore = [MTVcMethodInvocation dicStateOfViewController:self.invocationTarget];
+    self.vcStateBefore = [XFAVcMethodInvocation dicStateOfViewController:self.invocationTarget];
 }
 
 
 -(void)saveVcStateAfter
 {
     NSAssert(self.invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
-    self.vcStateAfter = [MTVcMethodInvocation dicStateOfViewController:self.invocationTarget];
+    self.vcStateAfter = [XFAVcMethodInvocation dicStateOfViewController:self.invocationTarget];
 }
 
 

@@ -21,112 +21,124 @@
     return arg;
 }
 
--(void)setStringType:(NSString *)stringType{
-    MTMethodArgument * arg = self;
+-(void)setStringType:(NSString *)stringType
+{
+//    MTMethodArgumentType type = [MTMethodArgument argumentTypeForStringType:stringType];
+//    self.argumentType = type;
+    _stringType = stringType;
+}
+
+/* to be done later, not done on server */
+
++(MTMethodArgumentType)argumentTypeForStringType:(NSString *)stringType
+{
+    MTMethodArgumentType type = MTMethodArgumentTypeUnknownType;
     if ([stringType  isEqualToString:@"c"]){
-        arg.type = MTMethodArgumentTypeChar;
+        type = MTMethodArgumentTypeChar;
         
     } else if ([stringType  isEqualToString:@"i"]){
-        arg.type = MTMethodArgumentTypeInt;
+        type = MTMethodArgumentTypeInt;
         
     } else if ([stringType  isEqualToString:@"s"]){
-        arg.type = MTMethodArgumentTypeShort;
+        type = MTMethodArgumentTypeShort;
         
     } else if ([stringType  isEqualToString:@"l"]){
-        arg.type = MTMethodArgumentTypeLong;
+        type = MTMethodArgumentTypeLong;
         
     } else if ([stringType  isEqualToString:@"q"]){
-        arg.type = MTMethodArgumentTypeLongLong;
+        type = MTMethodArgumentTypeLongLong;
         
     } else if ([stringType  isEqualToString:@"C"]){
-        arg.type = MTMethodArgumentTypeUnsignedChar;
+        type = MTMethodArgumentTypeUnsignedChar;
         
     } else if ([stringType  isEqualToString:@"I"]){
-        arg.type = MTMethodArgumentTypeUnsignedInt;
+        type = MTMethodArgumentTypeUnsignedInt;
         
     } else if ([stringType  isEqualToString:@"S"]){
-        arg.type = MTMethodArgumentTypeUnsignedShort;
+        type = MTMethodArgumentTypeUnsignedShort;
         
     } else if ([stringType  isEqualToString:@"L"]){
-        arg.type = MTMethodArgumentTypeUnsignedLong;
+        type = MTMethodArgumentTypeUnsignedLong;
         
     } else if ([stringType  isEqualToString:@"Q"]){
-        arg.type = MTMethodArgumentTypeUnsignedLongLong;
+        type = MTMethodArgumentTypeUnsignedLongLong;
         
     } else if ([stringType  isEqualToString:@"f"]){
-        arg.type = MTMethodArgumentTypeFloat;
+        type = MTMethodArgumentTypeFloat;
         
     } else if ([stringType  isEqualToString:@"d"]){
-        arg.type = MTMethodArgumentTypeDouble;
+        type = MTMethodArgumentTypeDouble;
         
     } else if ([stringType  isEqualToString:@"B"]){
-        arg.type = MTMethodArgumentTypeCppBool;
+        type = MTMethodArgumentTypeCppBool;
         
     } else if ([stringType  isEqualToString:@"v"]){
-        arg.type = MTMethodArgumentTypeVoid;
+        type = MTMethodArgumentTypeVoid;
         
     } else if ([stringType  isEqualToString:@"*"]){
-        arg.type = MTMethodArgumentTypeCharacterString;
+        type = MTMethodArgumentTypeCharacterString;
         
     } else if ([stringType  isEqualToString:@"@"]){
-        arg.type = MTMethodArgumentTypeObject;
+        type = MTMethodArgumentTypeObject;
         
     } else if ([stringType  isEqualToString:@"#"]){
-        arg.type = MTMethodArgumentTypeClassObject;
+        type = MTMethodArgumentTypeClassObject;
         
     } else if ([stringType  isEqualToString:@":"]){
-        arg.type = MTMethodArgumentTypeMethodSelector;
+        type = MTMethodArgumentTypeMethodSelector;
         
     } else if ([stringType  hasPrefix:@"["]){
-        arg.type = MTMethodArgumentTypeArray;
+        type = MTMethodArgumentTypeArray;
         
     } else if ([stringType  hasPrefix:@"{"]){
-        arg.type = MTMethodArgumentTypeStructure;
+        type = MTMethodArgumentTypeStructure;
 //        {name=type...}
         
     } else if ([stringType  hasPrefix:@"("]){
-        arg.type = MTMethodArgumentTypeUnion;
+        type = MTMethodArgumentTypeUnion;
 //        (name=type...)
         
     } else if ([stringType  hasPrefix:@"b"]){
-        arg.type = MTMethodArgumentTypeBitFieldOfNumBits;
+        type = MTMethodArgumentTypeBitFieldOfNumBits;
 //#TBD capture num of bits
 //        bnum MTMethodArgumentTypeBitFieldOfNumBits;
         
     } else if ([stringType  hasPrefix:@"^"]){
-        arg.type = MTMethodArgumentTypePointerToType;
+        type = MTMethodArgumentTypePointerToType;
 //        #TBD capture the type
 //        ^type
         
     } else if ([stringType  isEqualToString:@"?"]) {
-        arg.type = MTMethodArgumentTypeUnknownType;
+        type = MTMethodArgumentTypeUnknownType;
         
     } else if ([stringType  isEqualToString:@"@?"]) {
-        arg.type = MTMethodArgumentTypeUnknownType;
+        type = MTMethodArgumentTypeUnknownType;
         
     } else {
         NSString *failMsg = [NSString stringWithFormat:@"unrecognized: %@",stringType];
+//        NSLog(@"%@ %@",self,self.argumentName);
         NSAssert(FALSE, failMsg );
     }
-    _stringType = stringType;
+
+    return type;
 }
 
 
 -(NSString*)description{
     return [NSString stringWithFormat:@"Argument type :%@ %d" ,
             self.stringType,
-            self.type];
+            self.argumentType];
 }
 
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
-             @"argumentName" : @"argumentName",
-             @"variableName" : @"variableName",
-             @"stringType"   : @"stringType",
-             @"isMonitored"  : @"isMonitored",
-             @"objcType"     : @"objcType",
-             @"argumentValue" : @"argumentValue",
+//             @"argumentName" : @"argumentName",
+//             @"variableName" : @"variableName",
+//             @"stringType"   : @"stringType",
+//             @"isMonitored"  : @"isMonitored",
+//             @"objcType"     : @"objcType",
+//             @"argumentValue" : @"argumentValue",
              };
 }
 

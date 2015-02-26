@@ -11,7 +11,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <Mantle/Mantle.h>
 #import "XFObjcVcClass.h"
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 
 #import "UIViewController+XFAProperties.h"
 #import "XFARunMode.h"

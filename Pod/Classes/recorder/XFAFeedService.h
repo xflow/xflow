@@ -12,7 +12,7 @@
 @class AFHTTPRequestOperation;
 @class XFARunMode;
 @class XFARun;
-@class MTVcMethodInvocation;
+@class XFAVcMethodInvocation;
 
 @interface XFAFeedService : NSObject
 

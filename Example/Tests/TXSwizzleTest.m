@@ -21,7 +21,7 @@
 #import "XFAMethod.h"
 #import "MTMethodArgument.h"
 #import "TXTestViewController.h"
-#import "MTMethodInvocation.h"
+#import "XFAMethodInvocation.h"
 
 @interface TXSwizzleTest : XCTestCase
 

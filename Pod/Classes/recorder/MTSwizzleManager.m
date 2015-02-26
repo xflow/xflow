@@ -271,7 +271,7 @@ void * scalarMethodWithInvoker(id objId, SEL _cmd, ...)
     for (int i = 2; i < method.methodArguments.count ; i++) {
         MTMethodArgument *marg = [method.methodArguments objectAtIndex:i];
         NSLog(@"margs:%@",marg);
-        if (marg.type == MTMethodArgumentTypeObject) {
+        if (marg.argumentType == MTMethodArgumentTypeObject) {
             id val = va_arg(args,id);
             [myInvocation setArgument:&val atIndex:i];
         } else {

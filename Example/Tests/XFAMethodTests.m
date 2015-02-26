@@ -9,9 +9,9 @@
 #import <XCTest/XCTest.h>
 #import "XFAMethod.h"
 #import "TXTestViewController.h"
-#import "MTMethodInvocation.h"
+#import "XFAMethodInvocation.h"
 #import "MTMethodArgument.h"
-#import "MTVcMethodInvocation.h"
+#import "XFAVcMethodInvocation.h"
 #import <OCMock/OCMock.h>
 #import "XFAConstants.h"
 #import "UIViewController+XFAProperties.h"
@@ -118,8 +118,8 @@
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         XCTAssertNotNil(obj, @"no notification");
-        XCTAssert([obj isKindOfClass:MTMethodInvocation.class], @"should be a MTMethodInvocation");
-        MTMethodInvocation * methodInvoc = obj;
+        XCTAssert([obj isKindOfClass:XFAMethodInvocation.class], @"should be a MTMethodInvocation");
+        XFAMethodInvocation * methodInvoc = obj;
         XCTAssertNotNil(methodInvoc.method, @"no method");
         XCTAssertEqual(methodInvoc.method, method, @"not right method");
         XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"methodArguments count should be 1");
@@ -165,26 +165,26 @@
     id<AspectToken>tok01 = [aop invoAopPost:objTestSubject method:method0];
     XCTAssert(tok00);
     XCTAssert(tok01);
-    __block MTMethodInvocation * invo0 = nil;
+    __block XFAMethodInvocation * invo0 = nil;
     
     XFAMethod * method1 = [self methodCall:objTestSubject selector:@selector(call1)];
     [aop invoAopPre:objTestSubject method:method1];
     [aop invoAopPost:objTestSubject method:method1];
 
-    __block MTMethodInvocation * invo1 = nil;
+    __block XFAMethodInvocation * invo1 = nil;
     
     XFAMethod * method2 = [self methodCall:objTestSubject selector:@selector(call2)];
     [aop invoAopPre:objTestSubject method:method2];
     [aop invoAopPost:objTestSubject method:method2];
 
-    __block MTMethodInvocation * invo2 = nil;
+    __block XFAMethodInvocation * invo2 = nil;
     
     XFAMethod * method3 = [self methodCall:objTestSubject selector:@selector(call3)];
     
     [aop invoAopPre:objTestSubject method:method3];
     [aop invoAopPost:objTestSubject method:method3];
 
-    __block MTMethodInvocation * invo3 = nil;
+    __block XFAMethodInvocation * invo3 = nil;
     
     id observerMock = [OCMockObject observerMock];
     
@@ -198,19 +198,19 @@
     
 
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call3"]) {
             return NO;
         }
-        invo3 = (MTMethodInvocation *)obj;
+        invo3 = (XFAMethodInvocation *)obj;
         XCTAssertFalse(invo3.isFirstInVirtualStack, @"should not be first");
         return YES;
     }] userInfo:[OCMArg any]];
     
 
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call0"]) {
             return NO;
@@ -221,30 +221,30 @@
     }] userInfo:[OCMArg any]];
 
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call1"]) {
             return NO;
         }
-        invo1 = (MTMethodInvocation *)obj;
+        invo1 = (XFAMethodInvocation *)obj;
         XCTAssertFalse(invo1.isFirstInVirtualStack, @"should not be first");
         return YES;
     }] userInfo:[OCMArg any]];
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call2"]) {
             return NO;
         }
-        invo2 = (MTMethodInvocation *)obj;
+        invo2 = (XFAMethodInvocation *)obj;
         XCTAssertFalse(invo2.isFirstInVirtualStack, @"should not be first");
         return YES;
     }] userInfo:[OCMArg any]];
     
 
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call0"]) {
             return NO;
@@ -257,7 +257,7 @@
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call1"]) {
             return NO;
@@ -272,7 +272,7 @@
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         NSLog(@"NOTIF_METHOD_POST_INVOCATION");
         
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call2"]) {
             return NO;
@@ -286,7 +286,7 @@
     
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"call3"]) {
             return NO;
@@ -315,15 +315,15 @@
     [aop invoAopPre:objcTestSubject method:method0];
     [aop invoAopPost:objcTestSubject method:method0];
     
-    __block MTMethodInvocation * invo0 = nil;
+    __block XFAMethodInvocation * invo0 = nil;
     
     XFAMethod * method1 = [self methodCall:objcTestSubject selector:@selector(calledTwoTimes)];
 
     [aop invoAopPre:objcTestSubject method:method1];
     [aop invoAopPost:objcTestSubject method:method1];
     
-    __block MTMethodInvocation * invo1 = nil;
-    __block MTMethodInvocation * invo2 = nil;
+    __block XFAMethodInvocation * invo1 = nil;
+    __block XFAMethodInvocation * invo2 = nil;
     
     id observerMock = [OCMockObject observerMock];
     
@@ -337,7 +337,7 @@
     
      // 1
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION 1 %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"callfirst"]) {
             return NO;
@@ -349,7 +349,7 @@
     
     // 2
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION 2 %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
             return NO;
@@ -361,7 +361,7 @@
     
     // 3
     [[observerMock expect] notificationWithName:NOTIF_METHOD_PRE_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_PRE_INVOCATION 3 %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
             return NO;
@@ -375,7 +375,7 @@
     // 4
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION 4 %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"callfirst"]) {
             return NO;
@@ -389,7 +389,7 @@
      // 5
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION 5 %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
             return NO;
@@ -403,7 +403,7 @@
     // 6
     [[observerMock expect] notificationWithName:NOTIF_METHOD_POST_INVOCATION object:[OCMArg checkWithBlock:^BOOL(id obj) {
         
-        MTMethodInvocation * invo = (MTMethodInvocation *) obj;
+        XFAMethodInvocation * invo = (XFAMethodInvocation *) obj;
         NSLog(@"NOTIF_METHOD_POST_INVOCATION 6 %@",invo.method.methodName);
         if (![invo.method.methodName isEqualToString:@"calledTwoTimes"]) {
             return NO;

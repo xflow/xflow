@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTMethodInvocation.h"
+#import "XFAMethodInvocation.h"
 
 
 typedef NS_ENUM(NSInteger, MTVcMethodInvocationStatus) {
@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, MTVcMethodInvocationStatus) {
     MTVcMethodInvocationStatusPost          = 2
 };
 
-@interface MTVcMethodInvocation : MTMethodInvocation
+@interface XFAVcMethodInvocation : XFAMethodInvocation
 
 @property (nonatomic,readonly) NSDictionary * vcStateBefore;
 @property (nonatomic,readonly) NSDictionary * vcStateAfter;

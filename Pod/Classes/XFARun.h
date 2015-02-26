@@ -6,10 +6,16 @@
 //
 //
 
-#import <Mantle/MTLModel.h>
+#import <Mantle/Mantle.h>
 
-@interface XFARun : MTLModel
+@interface XFARun : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, strong) NSArray * steps;
+
+@property (nonatomic, strong) NSNumber * portalProjectId;
+@property (nonatomic, strong) NSNumber * portalUserId;
+@property (nonatomic, strong) NSDate * createdAt;
+@property (nonatomic, strong) NSNumber * isActive;
+@property (nonatomic, strong) NSNumber * isKept;
 
 @end
