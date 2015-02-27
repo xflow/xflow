@@ -34,8 +34,8 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    XFAViewControllerState * vcState = [XFAViewControllerState new];
-    NSArray * array = [vcState viewControllerObjectsPathToWindow:rootVC];
+//    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    NSArray * array = [XFAViewControllerState viewControllerObjectsPathToWindow:rootVC];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"self.window.rootViewController"];
     XCTAssertEqualObjects(array, expectedOutput, @"output not nice");
@@ -47,8 +47,8 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    XFAViewControllerState * vcState = [XFAViewControllerState new];
-    NSArray * array = [vcState viewControllerObjectsPathToWindow:vc1];
+//    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    NSArray * array = [XFAViewControllerState viewControllerObjectsPathToWindow:vc1];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"self.window.rootViewController",
                                   @"childViewControllers[0]"];
@@ -62,8 +62,8 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    XFAViewControllerState * vcState = [XFAViewControllerState new];
-    NSArray * array = [vcState viewControllerClassesPathToWindow:rootVC];
+//    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    NSArray * array = [XFAViewControllerState viewControllerClassesPathToWindow:rootVC];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"UIViewController" ];
     XCTAssertEqualObjects(array, expectedOutput, @"output not nice");
@@ -76,8 +76,8 @@
     UIViewController * vc1 = UIViewController.new;
     [rootVC addChildViewController:vc1];
     
-    XFAViewControllerState * vcState = [XFAViewControllerState new];
-    NSArray * array = [vcState viewControllerClassesPathToWindow:vc1];
+//    XFAViewControllerState * vcState = [XFAViewControllerState new];
+    NSArray * array = [XFAViewControllerState viewControllerClassesPathToWindow:vc1];
     NSLog(@"%@",array);
     NSArray * expectedOutput = @[ @"UIViewController",
                                   @"UIViewController" ];

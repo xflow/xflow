@@ -58,8 +58,8 @@
         
         
         method.methodName = n;
-        method.methodReturnType = t;
-        method.methodTypeEncoding = e;
+        method.returnObjcType = t;
+        method.encoding = e;
         
         NSLog(@"methodName:%@,methodReturnType:%@ ,methodTypeEncoding:%@",
               n,t,e );

@@ -39,45 +39,45 @@ static NSMutableDictionary * classMethodNamesDic;
 -(NSString*)description{
     NSObject *obj = (NSObject*)self.classTypeInstance;
     NSString *className = NSStringFromClass(obj.class);
-    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@", self.signature,self.methodTypeEncoding,self.methodReturnType, className ];
+    return [NSString stringWithFormat:@"signature:%@, typeEncoding:%@, returnType:%@,class: %@", self.signature,self.encoding,self.returnObjcType, className ];
 }
 
 -(BOOL)isVoid{
-    BOOL iv = [self.methodReturnType isEqualToString:@"v"];
+    BOOL iv = [self.returnObjcType isEqualToString:@"v"];
     return iv;
 }
 
 
 -(BOOL)isObjectAndNoArguments{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"@8@0:4"];
+    BOOL iv = [self.encoding isEqualToString:@"@8@0:4"];
     return iv;
 }
 
 
 -(BOOL)isObjectAndOneArgument{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"@12@0:4@8"];
+    BOOL iv = [self.encoding isEqualToString:@"@12@0:4@8"];
     return iv;
 }
 
 
 -(BOOL)isObjectAndTwoArguments{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"@16@0:4@8@12"];
+    BOOL iv = [self.encoding isEqualToString:@"@16@0:4@8@12"];
     return iv;
 }
 
 
 -(BOOL)isVoidAndNoArguments{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"v16@0:8"];
+    BOOL iv = [self.encoding isEqualToString:@"v16@0:8"];
     return iv;
 }
 
 -(BOOL)isVoidWithOneObject{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"v12@0:4@8"];
+    BOOL iv = [self.encoding isEqualToString:@"v12@0:4@8"];
     return iv;
 }
 
 -(BOOL)isVoidWithTwoObjects{
-    BOOL iv = [self.methodTypeEncoding isEqualToString:@"v16@0:4@8@12"];
+    BOOL iv = [self.encoding isEqualToString:@"v16@0:4@8@12"];
     return iv;
 }
 
@@ -93,7 +93,7 @@ static NSMutableDictionary * classMethodNamesDic;
     NSArray *arr = [NSArray arrayWithObjects:@"i",@"f",@"c", nil];
     for (NSString *s in arr)
     {
-        if ([self.methodReturnType rangeOfString:s].location != NSNotFound) {
+        if ([self.returnObjcType rangeOfString:s].location != NSNotFound) {
             isScalar = YES;
             break;
         }
@@ -108,7 +108,7 @@ static NSMutableDictionary * classMethodNamesDic;
     NSArray *arr = [NSArray arrayWithObjects:@"i",@"f", nil];
     for (NSString *s in arr)
     {
-        if ([self.methodReturnType rangeOfString:s].location != NSNotFound) {
+        if ([self.returnObjcType rangeOfString:s].location != NSNotFound) {
             isScalar = YES;
             break;
         }
@@ -119,7 +119,7 @@ static NSMutableDictionary * classMethodNamesDic;
     //    NSArray *arr = [NSArray arrayWithObjects:@"i",@"f", nil];
     for (NSString *s in arr)
     {
-        if ([self.methodTypeEncoding rangeOfString:s].location != NSNotFound) {
+        if ([self.encoding rangeOfString:s].location != NSNotFound) {
             hasScalar = YES;
             break;
         }
@@ -132,13 +132,13 @@ static NSMutableDictionary * classMethodNamesDic;
 
 -(BOOL)isVoidWithScalars{
     
-    BOOL isVoid = [self.methodTypeEncoding hasPrefix:@"v"];
+    BOOL isVoid = [self.encoding hasPrefix:@"v"];
     
     BOOL hasScalar=NO;
     NSArray *arr = [NSArray arrayWithObjects:@"i",@"f", nil];
     for (NSString *s in arr)
     {
-        if ([self.methodTypeEncoding rangeOfString:s].location != NSNotFound) {
+        if ([self.encoding rangeOfString:s].location != NSNotFound) {
             hasScalar = YES;
             break;
         }
@@ -149,7 +149,7 @@ static NSMutableDictionary * classMethodNamesDic;
 
 
 -(BOOL)isObject {
-    BOOL isObject = [self.methodTypeEncoding hasPrefix:@"@"];
+    BOOL isObject = [self.encoding hasPrefix:@"@"];
     return isObject;
 }
 
@@ -159,7 +159,7 @@ static NSMutableDictionary * classMethodNamesDic;
     NSArray *arr = [NSArray arrayWithObjects:@"i",@"f", nil];
     for (NSString *s in arr)
     {
-        if ([self.methodTypeEncoding rangeOfString:s].location != NSNotFound) {
+        if ([self.encoding rangeOfString:s].location != NSNotFound) {
             hasScalar = YES;
             break;
         }
@@ -218,7 +218,7 @@ static NSMutableDictionary * classMethodNamesDic;
 
 +(void*)applyMethod:(XFAMethod*)method toObject:(NSObject*)obj{
     
-    SEL sel = NSSelectorFromString(method.methodName);
+    SEL sel = NSSelectorFromString(method.signature);
     BOOL respondsToSelector = [obj respondsToSelector:sel];
     NSString * errorMsg = [NSString stringWithFormat:@"%@ instance doesn't respond to:%@",NSStringFromClass(obj.class ),method.methodName];
     NSAssert(respondsToSelector, errorMsg);
@@ -269,7 +269,7 @@ static NSMutableDictionary * classMethodNamesDic;
 }*/
 
 -(NSInteger)methodArgumentsCount{
-    NSAssert(self.methodTypeEncoding, @"no methodTypeEncoding to generate methodArgumentsCount");
+    NSAssert(self.encoding, @"no methodTypeEncoding to generate methodArgumentsCount");
     return 2;
 }
 

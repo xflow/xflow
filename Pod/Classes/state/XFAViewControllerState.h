@@ -12,14 +12,16 @@
 
 @interface XFAViewControllerState : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, strong) NSArray * vcClassesPath;
-@property (nonatomic, strong) NSArray * vcObjectsPath;
+@property (nonatomic, strong) NSArray * vcPath;
+//@property (nonatomic, strong) NSArray * vcClassesPath;
+//@property (nonatomic, strong) NSArray * vcObjectsPath;
+
 @property (nonatomic, strong) NSDictionary * vcProperties;
 @property (nonatomic, strong) NSNumber * objHash;
 
 +(NSArray *)viewControllerObjectsPathToWindow:(UIViewController *)vc;
 +(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc;
-
++(NSArray *)viewControllerPathToWindow:(UIViewController*)vc;
 
 
 @end

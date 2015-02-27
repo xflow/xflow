@@ -46,11 +46,13 @@
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:req];
     operation.responseSerializer = [AFJSONResponseSerializer new];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSDictionary * dic) {
+        NSHTTPURLResponse * httpResp = operation.response;
+        NSAssert(httpResp.statusCode == 200, @"responses not 200");
         NSLog(@"success: %@", operation.responseString);
         NSError * error = nil;
 //        NSLog(@"JSON: %@, error:%@", responseObject,error);
         XFARun * run = [MTLJSONAdapter modelOfClass:[XFARun class] fromJSONDictionary:dic error:&error];
-        NSAssert(!error, @"MTLJSONAdapter error");
+        NSAssert(!error, @"MTLJSONAdapter error %@",error);
         success(operation,run);
     } failure:failure];
     [[NSOperationQueue mainQueue] addOperation:operation];

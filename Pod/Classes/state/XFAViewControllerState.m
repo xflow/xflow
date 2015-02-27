@@ -100,4 +100,81 @@
     return path;
 }
 
+
+
++(NSString*)childrenKeyForVC:(UIViewController*)viewController{
+    NSString *childrenKey = nil;
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        childrenKey = @"viewControllers";
+    } else if ([viewController isKindOfClass:[UITabBarController class]]) {
+        childrenKey = @"viewControllers";
+    } else {
+        childrenKey = @"childViewControllers";
+    }
+    return childrenKey;
+}
+
+
+NSString * K_ROOT = @"vcRoot";
+NSString * K_PARENT_CHILDREN_KEY = @"vcParentChildrenKey";
+NSString * K_CHILDREN_KEY = @"vcChildrenKey";
+NSString * K_PARENT_CHILDREN_INDEX = @"vcInParentChildIndex";
+NSString * K_VC_HASH = @"vcHash";
+NSString * K_VC_CLASS = @"vcClass";
+
++(NSArray *)viewControllerPathToWindow:(UIViewController*)vc
+{
+    NSArray * path = nil;
+    
+    if (vc.parentViewController) {
+        NSArray * parentPath = nil;
+        parentPath = [self viewControllerPathToWindow:vc.parentViewController];
+        
+        if ([vc.parentViewController isKindOfClass:[UINavigationController class]]) {
+            UITabBarController * tbvc = (UITabBarController *)vc.parentViewController;
+            NSInteger idx = [tbvc.childViewControllers indexOfObject:vc];
+            
+//            NSString * p2 = [NSString stringWithFormat:@"childViewControllers"];
+//            NSString * p3 = [NSString stringWithFormat:@"%ld",(long)idx];
+            path = [NSArray arrayWithObject:@{K_PARENT_CHILDREN_KEY: [self childrenKeyForVC:vc.parentViewController],
+                                              K_CHILDREN_KEY: [self childrenKeyForVC:vc] ,
+                                              K_PARENT_CHILDREN_INDEX: @(idx) ,
+                                              K_VC_HASH: @(vc.hash),
+                                              K_VC_CLASS: NSStringFromClass([vc class])}];
+            
+        } else if ([vc.parentViewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController * tbvc = (UITabBarController *)vc.parentViewController;
+            NSInteger idx = [tbvc.viewControllers indexOfObject:vc];
+            
+//            NSString * p2 = [NSString stringWithFormat:@"viewControllers"];
+//            NSString * p3 = [NSString stringWithFormat:@"%ld",(long)idx];
+            path = [NSArray arrayWithObject:@{K_PARENT_CHILDREN_KEY: [self childrenKeyForVC:vc.parentViewController],
+                                              K_CHILDREN_KEY: [self childrenKeyForVC:vc] ,
+                                              K_PARENT_CHILDREN_INDEX: @(idx) ,
+                                              K_VC_HASH: @(vc.hash),
+                                              K_VC_CLASS :NSStringFromClass([vc class])}];
+        } else {
+            UITabBarController * tbvc = (UITabBarController *)vc.parentViewController;
+            NSInteger idx = [tbvc.childViewControllers indexOfObject:vc];
+            path = [NSArray arrayWithObject:@{K_PARENT_CHILDREN_KEY: [self childrenKeyForVC:vc.parentViewController],
+                                              K_CHILDREN_KEY: [self childrenKeyForVC:vc] ,
+                                              K_PARENT_CHILDREN_INDEX: @(idx) ,
+                                              K_VC_HASH: @(vc.hash),
+                                              K_VC_CLASS :NSStringFromClass([vc class])}];
+        }
+        path = [parentPath arrayByAddingObjectsFromArray:path];
+        
+    } else {
+        UIViewController * rootVC = vc.view.window.rootViewController;
+        path = [NSArray arrayWithObject:@{
+                                          K_ROOT : @"self.window.rootViewController" ,
+                                          K_CHILDREN_KEY: [self childrenKeyForVC:rootVC] ,
+                                          K_VC_CLASS:NSStringFromClass([rootVC class])  ,
+                                          K_VC_HASH : @(rootVC.hash)
+                                          }];
+    }
+    
+    return path;
+}
+
 @end

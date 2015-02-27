@@ -47,8 +47,15 @@
 {
     NSAssert(invocationTarget, @"%s no invocation target",__PRETTY_FUNCTION__);
     XFAViewControllerState * vcState = [XFAViewControllerState new];
-    vcState.vcClassesPath = [XFAViewControllerState viewControllerClassesPathToWindow:invocationTarget];
-    vcState.vcObjectsPath = [XFAViewControllerState viewControllerObjectsPathToWindow:invocationTarget];
+//    NSArray * vcClassesPath = [XFAViewControllerState viewControllerClassesPathToWindow:invocationTarget];
+//    NSArray * vcObjectsPath = [XFAViewControllerState viewControllerObjectsPathToWindow:invocationTarget];
+    NSArray * vcPath = [XFAViewControllerState viewControllerPathToWindow:invocationTarget];
+//    NSAssert(vcClassesPath.count == vcObjectsPath.count, @"vcClassesPath.count == vcObjectsPath.count");
+    
+//    vcState.vcClassesPath = vcClassesPath;
+//    vcState.vcObjectsPath = vcObjectsPath;
+    vcState.vcPath = vcPath;
+    
     NSDictionary * vcProperties = [TXViewControllerPropertiesScanner propertiesOfVC:invocationTarget];;
     vcState.vcProperties = vcProperties;
     vcState.objHash = @( invocationTarget.hash );

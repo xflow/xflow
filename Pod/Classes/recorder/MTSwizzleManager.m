@@ -103,7 +103,7 @@ static MTSwizzleManager * globalSelf;
             class_addMethod(obj.class ,
                             NSSelectorFromString(newMethodName),
                             (IMP) newMethodWithVarArgs ,
-                            [m.methodTypeEncoding cStringUsingEncoding:NSUTF8StringEncoding]);
+                            [m.encoding cStringUsingEncoding:NSUTF8StringEncoding]);
             
             SEL targetSelector2 = NSSelectorFromString(newMethodName);
             
@@ -135,7 +135,7 @@ static MTSwizzleManager * globalSelf;
             class_addMethod(obj.class ,
                             NSSelectorFromString(replacementMethod),
                             (IMP) voidMethodWithInvoker ,
-                            [m.methodTypeEncoding cStringUsingEncoding:NSUTF8StringEncoding]);
+                            [m.encoding cStringUsingEncoding:NSUTF8StringEncoding]);
             
             SEL targetSelectorInvoker = NSSelectorFromString(replacementMethod);
             
@@ -231,7 +231,7 @@ NSString* replacementMethod(NSString* methodName)
             class_addMethod(obj.class ,
                             NSSelectorFromString(replacementMethod),
                             (IMP) scalarMethodWithInvoker ,
-                            [m.methodTypeEncoding cStringUsingEncoding:NSUTF8StringEncoding]);
+                            [m.encoding cStringUsingEncoding:NSUTF8StringEncoding]);
             
             SEL targetSelectorInvoker = NSSelectorFromString(replacementMethod);
             

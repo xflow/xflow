@@ -26,15 +26,17 @@
 #import "XFARunMode.h"
 #import "XFARun.h"
 #import "XFARunStep.h"
-
+#import "XFAViewControllerState.h"
 #import <MRProgress/MRProgress.h>
-
+#import <ObjectiveSugar/NSArray+ObjectiveSugar.h>
+#import <ObjectiveSugar/NSMutableArray+ObjectiveSugar.h>
 
 @interface XFEngine (){
     
 }
 
-@property (nonatomic, strong) UIWindow      * mainWindow;
++(UIWindow*)mainWindow;
+
 @property (nonatomic, strong) XFAInvocationAOP * aop;
 
 @property (nonatomic, strong) NSString * feedServerUrl;
@@ -117,7 +119,7 @@
         NSDictionary * runDic = task.result;
         NSString * newRunId = [runDic objectForKey:@"id"];
         self.captureRunId = newRunId;
-        [self doVC:self.mainWindow.rootViewController];
+        [self doVC:[XFEngine mainWindow].rootViewController];
         [self listenToMethodInvocations];
         return task;
     }];
@@ -245,13 +247,41 @@
     BFTaskCompletionSource * tcs = [BFTaskCompletionSource taskCompletionSource];
     
     for ( XFARunStep * step in cruiseRun.steps) {
-        for (XFAVcMethodInvocation * invo in step.invocations) {
-            XFAViewControllerState * vcStateBefore = invo.vcStateBefore;
+        XFAVcMethodInvocation * invo = [step.invocations lastObject];
+        XFAViewControllerState * vcStateBefore = invo.vcStateBefore;
+//            XFAViewControllerState * vcStateAfter = invo.vcStateAfter;
+        
+//            NSDictionary * dic1Root = vcStateBefore.vcPath[0];
+        NSMutableArray * marr = vcStateBefore.vcPath.mutableCopy;
+        NSDictionary * dic1Root = [marr first];
+        [marr removeObjectAtIndex:0];
+        dic1Root[@"vcRoot"];
+        dic1Root[@"vcParentChildrenKey"];
+        dic1Root[@"vcChildrenKey"];
+        dic1Root[@"vcInParentChildIndex"];
+        dic1Root[@"vcHash"];
+        NSString * rootVcClassString = dic1Root[@"vcClass"];
+        
+        UIViewController * rootVC = [XFEngine mainWindow].rootViewController;
+        NSAssert([rootVC isMemberOfClass:NSClassFromString(rootVcClassString)], @"root vc shold be %@",rootVcClassString);
+        
+        __block id vcA = rootVC;
+        [marr eachWithIndex:^(NSDictionary * dic, NSUInteger index) {
             
-            
-            
-//            [invo.method applyTo:<#(NSObject *)#>]
-        }
+            NSString * vcParentChildrenKey = dic[@"vcParentChildrenKey"];
+//                NSString * vcChildrenKey =  dic[@"vcChildrenKey"];
+            NSNumber * vcInParentChildIndex =  dic[@"vcInParentChildIndex"];
+            NSArray * children = [vcA valueForKey:vcParentChildrenKey];
+            NSString * vcClassStr = dic[@"vcClass"];
+            Class vcClass  = NSClassFromString(vcClassStr);
+            id vcB = children[vcInParentChildIndex.integerValue];
+            NSAssert([vcB isMemberOfClass:vcClass], @"expeted class to be: %@",vcClassStr);
+            vcA = vcB;
+        }];
+        NSLog(@"vcA:%@",vcA);
+        UIViewController * invocationTarget = vcA;
+        [invo.method applyTo:invocationTarget];
+        
     }
     
     return tcs.task;
@@ -286,21 +316,34 @@
                 
             case XFARunModeValueOff:{
                 NSLog(@"***** XFLOW *****");
-                NSLog(@"***** is of for this project *****");
+                NSLog(@"***** is off for this project *****");
                 NSLog(@"****************");
                 return nil;
                 break;
             }
             case XFARunModeValueCapture:{
-                return [self taskStartCapture];
+                [MRProgressOverlayView showOverlayAddedTo:[XFEngine mainWindow] title:@"LOADING_VC_SETUP" mode:MRProgressOverlayViewModeIndeterminate animated:YES];
+                return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
+                    [MRProgressOverlayView dismissOverlayForView:[XFEngine mainWindow] animated:YES];
+                    return nil;
+                }];
                 break;
             }
             case XFARunModeValueCruiseControl:{
-                [MRProgressOverlayView showOverlayAddedTo:self.mainWindow animated:YES];
+                [MRProgressOverlayView showOverlayAddedTo:[XFEngine mainWindow] animated:YES];
                 return [[self taskGetFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
+                    if (task.error) {
+                        [MRProgressOverlayView showOverlayAddedTo:[XFEngine mainWindow] title:task.error.description mode:MRProgressOverlayViewModeCross animated:YES];
+                        return nil;
+                    }
                     self.run = task.result;
                     return [[self taskStartCapture] continueWithBlock:^id(BFTask *task) {
-                        [MRProgressOverlayView dismissOverlayForView:self.mainWindow animated:YES];
+                        if (task.error) {
+                            [MRProgressOverlayView showOverlayAddedTo:[XFEngine mainWindow] title:task.error.description mode:MRProgressOverlayViewModeCross animated:YES];
+                            return nil;
+                        }
+                        
+                        [MRProgressOverlayView dismissOverlayForView:[XFEngine mainWindow] animated:YES];
                         return [[XFEngine taskCruiseControlRun:self.run] continueWithBlock:^id(BFTask *task) {
                             NSLog(@"");
                             return nil;
@@ -420,7 +463,8 @@
 
 
 
--(UIWindow*)mainWindow{
+
++(UIWindow*)mainWindow{
     return [[UIApplication sharedApplication].windows objectAtIndex:0];
 }
 
