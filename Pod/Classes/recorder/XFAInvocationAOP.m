@@ -20,7 +20,7 @@
 #import "XFAMethodArgument.h"
 #import "XFAMethodArgumentValue.h"
 #import "UIViewController+XFAProperties.h"
-
+#import "XFAMethodArgumentMappedValue.h"
 
 @interface XFAInvocationAOP(){
 
@@ -105,14 +105,16 @@
         
         NSLog(@"%@: %@", aspectInfo.instance, aspectInfo.arguments);
 
-        NSMutableArray * arguments = [NSMutableArray array];
+//        NSMutableArray * arguments = [NSMutableArray array];
         
         [method.methodArguments eachWithIndex:^(XFAMethodArgument * methodArgument, NSUInteger index) {
             UIViewController * vc = (UIViewController*)obj;
             NSValue * aspectArgValue = aspectInfo.arguments[index];
             
-            id virtalArgValue = [XFAMethodArgumentValue virtualArgumentValue:aspectArgValue ofViewController:vc];
-            [arguments addObject:virtalArgValue];
+            XFAMethodArgumentMappedValue * argMapVal = [XFAMethodArgumentMappedValue virtualArgumentValue:aspectArgValue ofViewController:vc];
+//            id virtalArgValue = [XFAMethodArgumentValue virtualArgumentValue:aspectArgValue ofViewController:vc];
+            methodArgument.argumentMappedValue = argMapVal;
+//            [arguments addObject:virtalArgValue];
         }];
         
 
@@ -121,7 +123,7 @@
         NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
         XFAVcMethodInvocation * mvcInvo = [arr firstObject];
         mvcInvo.method = method;
-        mvcInvo.method.methodArguments = arguments;
+//        mvcInvo.method.methodArguments = arguments;
 
         mvcInvo.status = MTVcMethodInvocationStatusPost;
         [mvcInvo saveVcStateAfter];

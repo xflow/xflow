@@ -17,7 +17,6 @@
 @property (nonatomic, strong) NSArray * objectsPath;
 @property (nonatomic, strong) NSArray * classesPath;
 
-+(NSDictionary *)virtualArgumentValue:(NSValue*)value ofViewController:(UIViewController*)vc;
 
 
 @end

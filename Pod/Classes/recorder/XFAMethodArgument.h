@@ -37,6 +37,7 @@ typedef enum{
 
 
 #import <Mantle/Mantle.h>
+@class XFAMethodArgumentMappedValue;
 
 @interface XFAMethodArgument : MTLModel <MTLJSONSerializing>
 
@@ -46,6 +47,7 @@ typedef enum{
 @property(nonatomic,strong) NSString *stringType;
 @property(nonatomic,assign) NSInteger index;
 
+@property (nonatomic, strong) XFAMethodArgumentMappedValue * argumentMappedValue;
 
 @property(nonatomic,strong) NSString * argumentName;
 @property(nonatomic,strong) NSString * variableName;

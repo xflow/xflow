@@ -11,6 +11,7 @@
 #import "XFAMethodArgument.h"
 #import "XFAMethodArgumentValue.h"
 #import "XFAViewControllerState.h"
+#import "XFAMethodArgumentMappedValue.h"
 
 @implementation XFAMethodArgument
 
@@ -141,6 +142,13 @@
 //             @"argumentValue" : @"argumentValue",
              };
 }
+
+
++ (NSValueTransformer *)argumentMappedValueJSONTransformer {
+    Class k = [XFAMethodArgumentMappedValue class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:k];
+}
+
 
 
 
