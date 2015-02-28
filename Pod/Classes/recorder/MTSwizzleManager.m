@@ -12,7 +12,7 @@
 #import "Swizzle.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "MTMethodArgument.h"
+#import "XFAMethodArgument.h"
 #import "XFAConstants.h"
 
 
@@ -269,7 +269,7 @@ void * scalarMethodWithInvoker(id objId, SEL _cmd, ...)
     va_list args;
     va_start(args,0); // try _cmd instead
     for (int i = 2; i < method.methodArguments.count ; i++) {
-        MTMethodArgument *marg = [method.methodArguments objectAtIndex:i];
+        XFAMethodArgument *marg = [method.methodArguments objectAtIndex:i];
         NSLog(@"margs:%@",marg);
         if (marg.argumentType == MTMethodArgumentTypeObject) {
             id val = va_arg(args,id);

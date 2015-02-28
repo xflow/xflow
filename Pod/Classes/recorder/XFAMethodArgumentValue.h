@@ -8,7 +8,7 @@
 
 #import <Mantle.h>
 
-@interface MTMethodArgumentValue : MTLModel<MTLJSONSerializing>
+@interface XFAMethodArgumentValue : MTLModel<MTLJSONSerializing>
 
 @property (nonatomic, strong) id value;
 @property (nonatomic, strong) NSString * objcType;
@@ -16,5 +16,8 @@
 @property (nonatomic, assign) BOOL isNil;
 @property (nonatomic, strong) NSArray * objectsPath;
 @property (nonatomic, strong) NSArray * classesPath;
+
++(NSDictionary *)virtualArgumentValue:(NSValue*)value ofViewController:(UIViewController*)vc;
+
 
 @end

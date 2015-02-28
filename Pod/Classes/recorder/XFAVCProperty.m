@@ -18,19 +18,16 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
-             @"propertyName"            : @"propertyName",
-//             @""        : [NSNull null],
-//             @""      : [NSNull null],
-//             @""           : [NSNull null]
+
              };
 }
 
-
+/*
 
 + (NSDictionary *)JSONKeyPathsByPropertyKeyOLD {
     NSDictionary * dic = @{ };
     return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:dic];
-}
+}*/
 
 
 -(NSDictionary *)loadValuesFromVC:(UIViewController*)vc

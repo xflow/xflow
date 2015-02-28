@@ -14,7 +14,7 @@
 #import "XFAFeedService.h"
 #import "XFObjcVcClass.h"
 #import "XFAVcMethodInvocation.h"
-#import "MTMethodArgument.h"
+#import "XFAMethodArgument.h"
 #import "XFAMethod.h"
 #import "XFAVCProperty.h"
 #import "UIViewController+XFAProperties.h"
@@ -166,7 +166,7 @@
     
     if ( invoc.method.isChildVcEntryPoint)
     {
-        MTMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex.integerValue];
+        XFAMethodArgument * arg = [invoc.method.methodArguments objectAtIndex:invoc.method.childVcArgumentIndex.integerValue];
         NSAssert([arg.argumentValue isKindOfClass:[UIViewController class]], @"argument is not a UIViewContoller");
 //        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_VC object:arg.argumentValue userInfo:nil];
         [self doVC:(UIViewController*)arg.argumentValue];
@@ -390,7 +390,7 @@
     XFAFeedService * service = [XFAFeedService new];
     [service requestSetupForVC:vc withUrl:urlString onSuccess:^(AFHTTPRequestOperation * op, XFObjcVcClass * vcresp){
         
-        NSLog(@"vcresp:%@",vcresp);
+//        NSLog(@"vcresp:%@",vcresp);
         
         NSArray * methods = vcresp.methods;
 //        NSLog(@"methods:%@",methods);
@@ -399,17 +399,16 @@
 //        NSAssert(methods.count > 0, @"doVC no methods %@",vc.class);
         
         for (XFAMethod * method in methods) {
-//            if (method.isInterceptable) {
-                NSLog(@"doVc: %@, method:%@",[vc class],method.signature);
-                if (! [vc respondsToSelector:method.selector]) {
-                    NSAssert([vc respondsToSelector:method.selector], @"%@ not found for %@",method.signature,vc);
-                }
-                [self monitorMethod:method forViewController:vc];
-//            }
+//            NSLog(@"doVc: %@, method:%@",[vc class],method.signature);
+            if (! [vc respondsToSelector:method.selector]) {
+                NSAssert([vc respondsToSelector:method.selector], @"%@ not found for %@",method.signature,vc);
+            }
+            [self monitorMethod:method forViewController:vc];
+            
         }
         
         for (XFAVCProperty * property in vcresp.properties) {
-            NSLog(@"doVc: %@, property:%@",[vc class],property.propertyName);
+//            NSLog(@"doVc: %@, property:%@",[vc class],property.propertyName);
             if (![vc respondsToSelector:NSSelectorFromString(property.propertyName)]) {
                 NSAssert([vc respondsToSelector:NSSelectorFromString(property.propertyName)], @"property not found %@ for vc:%@",property, [vc class]);
             }

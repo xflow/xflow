@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTMethodArgumentValue.h"
+#import "XFAMethodArgumentValue.h"
 
-@interface MTMethodArgumentObjectValue : MTMethodArgumentValue
+@interface MTMethodArgumentObjectValue : XFAMethodArgumentValue
 
 @end

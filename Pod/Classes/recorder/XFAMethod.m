@@ -7,11 +7,11 @@
 //
 
 #import "XFAMethod.h"
-#import "MTMethodArgument.h"
+#import "XFAMethodArgument.h"
 #import <objc/runtime.h>
 #import "Swizzle.h"
 #import "XFAConstants.h"
-#import "MTMethodArgumentValue.h"
+#import "XFAMethodArgumentValue.h"
 #import "TXAssertion.h"
 #import "XFAInvocationAOP.h"
 
@@ -169,7 +169,7 @@ static NSMutableDictionary * classMethodNamesDic;
 }
 
 -(void)addArgument:(NSString *)t atIndex:(NSInteger)index{
-    MTMethodArgument *arg = [MTMethodArgument argumentForType:t];
+    XFAMethodArgument *arg = [XFAMethodArgument argumentForType:t];
     arg.index = index;
     self.methodArguments = [self.methodArguments arrayByAddingObject:arg];
 }
@@ -224,8 +224,8 @@ static NSMutableDictionary * classMethodNamesDic;
     NSAssert(respondsToSelector, errorMsg);
     
     if( method.isVoidWithTwoObjects ){
-        MTMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
-        MTMethodArgument * arg1 = [method.methodArguments objectAtIndex:1];
+        XFAMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
+        XFAMethodArgument * arg1 = [method.methodArguments objectAtIndex:1];
         
         NSValue * arg0Value = arg0.argumentValue;
         NSObject * argObj0 = arg0Value.nonretainedObjectValue;
@@ -239,7 +239,7 @@ static NSMutableDictionary * classMethodNamesDic;
     }
     
     if(  method.isVoidWithOneObject ){
-        MTMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
+        XFAMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
         NSValue * arg0Value = arg0.argumentValue;
         NSObject * argObj = arg0Value.nonretainedObjectValue;
         [obj performSelector:sel withObject:argObj];
@@ -275,7 +275,7 @@ static NSMutableDictionary * classMethodNamesDic;
 
 -(void)runArgumentsAssertions{
     for (TXAssertion * as in self.methodArgumentsAssertions) {
-        MTMethodArgument * arg = [self.methodArguments objectAtIndex:as.assertionIndex];
+        XFAMethodArgument * arg = [self.methodArguments objectAtIndex:as.assertionIndex];
         [as evaluate:arg.argumentValue];
     }
 }
@@ -323,7 +323,7 @@ NSString * replacement(NSString* methodName)
 
 + (NSValueTransformer *)methodArgumentsJSONTransformer {
     
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:MTMethodArgument.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:XFAMethodArgument.class];
     
 }
 

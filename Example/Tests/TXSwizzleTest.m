@@ -19,7 +19,7 @@
 
 //#import "XFAFeedService.h"
 #import "XFAMethod.h"
-#import "MTMethodArgument.h"
+#import "XFAMethodArgument.h"
 #import "TXTestViewController.h"
 #import "XFAMethodInvocation.h"
 
@@ -117,17 +117,17 @@
     
     XFAMethod * method = [XFAMethod new];
     method.methodName = @"actionButton2:event:";
-    method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v16@0:4@8@12";
+    method.returnObjcType = @"v";
+    method.encoding = @"v16@0:4@8@12";
     UIButton * btn = vc.button2;
     XCTAssert(btn, @"no button");
     NSValue * val = [NSValue valueWithNonretainedObject:btn];
-    MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
+    XFAMethodArgument * arg1 = [XFAMethodArgument argumentForType:@"@"];
     XCTAssert(val.nonretainedObjectValue, @"no value");
     arg1.argumentValue = val;
 //    [method.methodArguments addObject:arg1]
     method.methodArguments = [method.methodArguments arrayByAddingObject:arg1];
-    MTMethodArgument * arg2 = [MTMethodArgument argumentForType:@"@"];
+    XFAMethodArgument * arg2 = [XFAMethodArgument argumentForType:@"@"];
     UIEvent * event;
     event = [UIEvent new];
     arg2.argumentValue =[NSValue valueWithNonretainedObject:event];

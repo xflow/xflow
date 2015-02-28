@@ -8,15 +8,15 @@
 //   https://developer.apple.com/library/mac/documentation/cocoa/conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
 
 
-#import "MTMethodArgument.h"
-#import "MTMethodArgumentValue.h"
+#import "XFAMethodArgument.h"
+#import "XFAMethodArgumentValue.h"
 #import "XFAViewControllerState.h"
 
-@implementation MTMethodArgument
+@implementation XFAMethodArgument
 
-+(MTMethodArgument*)argumentForType:(NSString*)type{
++(XFAMethodArgument*)argumentForType:(NSString*)type{
 //    NSLog(@" • argumentForType:%@",type);
-    MTMethodArgument* arg = MTMethodArgument.new;
+    XFAMethodArgument* arg = [XFAMethodArgument new];
     arg.stringType = type;
     return arg;
 }
@@ -150,7 +150,7 @@
     return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSDictionary * dic) {
 
         NSError  * error = nil;
-        MTMethodArgumentValue * argValue = [MTLJSONAdapter modelOfClass:MTMethodArgumentValue.class fromJSONDictionary:dic error:&error];
+        XFAMethodArgumentValue * argValue = [MTLJSONAdapter modelOfClass:[XFAMethodArgumentValue class] fromJSONDictionary:dic error:&error];
         NSAssert(! error, @"argumentValueJSONTransformer ForwardBlock");
         return argValue;
         

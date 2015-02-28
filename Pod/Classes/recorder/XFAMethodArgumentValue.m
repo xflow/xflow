@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 Mohammed O. Tillawy. All rights reserved.
 //
 
-#import "MTMethodArgumentValue.h"
+#import "XFAMethodArgumentValue.h"
+#import "UIViewController+XFAProperties.h"
+#import "XFAVCProperty.h"
+#import <RXCollections/RXCollection.h>
 
-@implementation MTMethodArgumentValue
+@implementation XFAMethodArgumentValue
 
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
@@ -22,6 +25,25 @@
              };
 }
 
+
++(NSDictionary *)virtualArgumentValue:(NSValue*)value ofViewController:(UIViewController*)vc
+{
+    NSDictionary * dic = nil;
+    if ([value isKindOfClass:[UIView class]])
+    {
+        NSArray * output = [vc.xfaProperties rx_filterWithBlock:^BOOL(XFAVCProperty * eachProperty) {
+            if (eachProperty.isNSObject) {
+                NSObject * obj = [vc valueForKey:eachProperty.propertyName];
+                BOOL output = obj.hash == value.hash;
+                return output;
+            }
+            return NO;
+           
+        }];
+        dic = [output firstObject];
+    }
+    return dic;
+}
 
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
     if (JSONDictionary[@"argumentType"] != nil &&

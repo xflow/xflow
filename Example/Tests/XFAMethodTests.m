@@ -10,7 +10,7 @@
 #import "XFAMethod.h"
 #import "TXTestViewController.h"
 #import "XFAMethodInvocation.h"
-#import "MTMethodArgument.h"
+#import "XFAMethodArgument.h"
 #import "XFAVcMethodInvocation.h"
 #import <OCMock/OCMock.h>
 #import "XFAConstants.h"
@@ -47,12 +47,12 @@
 -(XFAMethod*)methodButton1:(TXTestViewController*)vc{
     XFAMethod * method = [XFAMethod new];
     method.methodName = @"actionButton1:";
-    method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v12@0:4@8";
+    method.returnObjcType = @"v";
+    method.encoding = @"v12@0:4@8";
     UIButton * btn = vc.button1;
     XCTAssert(btn, @"no button");
     NSValue * val = [NSValue valueWithNonretainedObject:btn];
-    MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
+    XFAMethodArgument * arg1 = [XFAMethodArgument argumentForType:@"@"];
     XCTAssert(val.nonretainedObjectValue, @"no value");
     arg1.argumentValue = val;
 //    [method.methodArguments addObject:arg1];
@@ -63,17 +63,17 @@
 -(XFAMethod*)methodButton2:(TXTestViewController*)vc{
     XFAMethod * method = [XFAMethod new];
     method.methodName = @"actionButton2:event:";
-    method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v16@0:4@8@12";
+    method.returnObjcType = @"v";
+    method.encoding = @"v16@0:4@8@12";
     UIButton * btn = vc.button1;
     XCTAssert(btn, @"no button");
     NSValue * val = [NSValue valueWithNonretainedObject:btn];
-    MTMethodArgument * arg1 = [MTMethodArgument argumentForType:@"@"];
+    XFAMethodArgument * arg1 = [XFAMethodArgument argumentForType:@"@"];
     XCTAssert(val.nonretainedObjectValue, @"no value");
     arg1.argumentValue = val;
 //    [method.methodArguments addObject:arg1];
     method.methodArguments = [method.methodArguments arrayByAddingObject:arg1];
-    MTMethodArgument * arg2 = [MTMethodArgument argumentForType:@"@"];
+    XFAMethodArgument * arg2 = [XFAMethodArgument argumentForType:@"@"];
     UIEvent * event = UIEvent.new;
     arg2.argumentValue = [NSValue valueWithNonretainedObject:event];
 //    [method.methodArguments addObject:arg2];
@@ -123,7 +123,7 @@
         XCTAssertNotNil(methodInvoc.method, @"no method");
         XCTAssertEqual(methodInvoc.method, method, @"not right method");
         XCTAssertEqual(methodInvoc.method.methodArguments.count, 1, @"methodArguments count should be 1");
-        MTMethodArgument * arg = methodInvoc.method.methodArguments.firstObject;
+        XFAMethodArgument * arg = methodInvoc.method.methodArguments.firstObject;
         NSValue * argvalue = arg.argumentValue;
         
         XCTAssert(argvalue , @"should be a argument value");
@@ -149,8 +149,8 @@
 -(XFAMethod*)methodCall:(NSObject *)vc selector:(SEL)selector{
     XFAMethod * method = [XFAMethod new];
     method.methodName = NSStringFromSelector(selector);
-    method.methodReturnType = @"v";
-    method.methodTypeEncoding = @"v16@0:8";
+    method.returnObjcType = @"v";
+    method.encoding = @"v16@0:8";
     return method;
 }
 

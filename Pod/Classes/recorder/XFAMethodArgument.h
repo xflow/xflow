@@ -38,9 +38,9 @@ typedef enum{
 
 #import <Mantle/Mantle.h>
 
-@interface MTMethodArgument : MTLModel <MTLJSONSerializing>
+@interface XFAMethodArgument : MTLModel <MTLJSONSerializing>
 
-+(MTMethodArgument*)argumentForType:(NSString*)type;
++(XFAMethodArgument*)argumentForType:(NSString*)type;
 
 @property(nonatomic,assign) MTMethodArgumentType argumentType;
 @property(nonatomic,strong) NSString *stringType;

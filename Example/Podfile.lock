@@ -71,6 +71,7 @@ PODS:
   - ReactiveCocoa/UI (2.4.4):
     - ReactiveCocoa/Core
   - RegExCategories (1.0)
+  - RXCollections (1.0)
   - xflowapp (0.1.0):
     - AFNetworking (~> 2.5.0)
     - Aspects (~> 1.4.1)
@@ -80,6 +81,7 @@ PODS:
     - ObjectiveSugar (~> 1.1.0)
     - OHHTTPStubs (~> 3.1.2)
     - ReactiveCocoa (~> 2.4.4)
+    - RXCollections (~> 1.0)
   - xflowparser (0.1.0):
     - Mantle (~> 1.5.1)
     - RegExCategories (~> 1.0)
@@ -121,7 +123,8 @@ SPEC CHECKSUMS:
   OHHTTPStubs: 2038e929b6abb94881000524c1cb4aba0a1bb4a2
   ReactiveCocoa: 31119068e3dde866bd257cf74e1f06b4023bf387
   RegExCategories: a6410301023ff81bd047c05fd8691d24ca5c7ea9
-  xflowapp: 46b92ca817f5ce2952108addcdd005f9bc250fec
+  RXCollections: 96cbe2ebea1a3b5ab8ca7a50f4296fb7fa05adc1
+  xflowapp: f0f784801eb6013188c1feb1237340b3641ebc04
   xflowparser: 58c223faa60216dd4f56915955447cd4cc166433
 
 COCOAPODS: 0.35.0

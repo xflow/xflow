@@ -16,6 +16,11 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "XFAVcMethodInvocation.h"
 #import "MTVcSetterMethodInvocation.h"
+#import <ObjectiveSugar/NSArray+ObjectiveSugar.h>
+#import "XFAMethodArgument.h"
+#import "XFAMethodArgumentValue.h"
+#import "UIViewController+XFAProperties.h"
+
 
 @interface XFAInvocationAOP(){
 
@@ -34,10 +39,10 @@
 {
     self = [super init];
     if (self) {
-        _stackInvocationsDictionary = NSMutableDictionary.new;
-        _stackArray = NSMutableArray.new;
-        _aspectTokens = NSMutableArray.new;
-        _sequenceArray = NSMutableArray.new;
+        self.stackInvocationsDictionary = NSMutableDictionary.new;
+        self.stackArray = NSMutableArray.new;
+        self.aspectTokens = NSMutableArray.new;
+        self.sequenceArray = NSMutableArray.new;
     }
     return self;
 }
@@ -98,10 +103,26 @@
     NSError * errorAspectHook = nil;
     id<AspectToken> token = [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
         
+        NSLog(@"%@: %@", aspectInfo.instance, aspectInfo.arguments);
+
+        NSMutableArray * arguments = [NSMutableArray array];
+        
+        [method.methodArguments eachWithIndex:^(XFAMethodArgument * methodArgument, NSUInteger index) {
+            UIViewController * vc = (UIViewController*)obj;
+            NSValue * aspectArgValue = aspectInfo.arguments[index];
+            
+            id virtalArgValue = [XFAMethodArgumentValue virtualArgumentValue:aspectArgValue ofViewController:vc];
+            [arguments addObject:virtalArgValue];
+        }];
+        
+
+        
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
         NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
         XFAVcMethodInvocation * mvcInvo = [arr firstObject];
         mvcInvo.method = method;
+        mvcInvo.method.methodArguments = arguments;
+
         mvcInvo.status = MTVcMethodInvocationStatusPost;
         [mvcInvo saveVcStateAfter];
         NSAssert(mvcInvo, @"invocation not found %@",k);

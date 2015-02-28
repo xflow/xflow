@@ -44,6 +44,8 @@ Pod::Spec.new do |s|
 	s.dependency 'ReactiveCocoa', '~> 2.4.4'
   s.dependency 'MRProgress', '~> 0.8.1'
   s.dependency 'ObjectiveSugar', '~> 1.1.0'
+	s.dependency 'RXCollections', '~> 1.0'
+
   #s.dependency 'xflowparser', '0.1.0'
   #s.dependency 'xflowparser'
 
