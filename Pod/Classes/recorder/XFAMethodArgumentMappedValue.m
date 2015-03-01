@@ -41,9 +41,27 @@
     return mval;
 }
 
+-(NSValue*)loadValueOfObject:(NSObject*)obj
+{
+    NSAssert(NO, @"calling abstract %s",__PRETTY_FUNCTION__);
+    return nil;
+}
 
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
-    return nil;
+    NSNumber * mappedValueTypeNumber = JSONDictionary[@"mappedValueType"];
+    XFAMethodArgumentMappedValueType mappedValueType = mappedValueTypeNumber.integerValue;
+    Class outputClass = nil;
+    switch (mappedValueType) {
+        case XFAMethodArgumentMappedValueTypeVCUIViewProperty:{
+            outputClass = [XFAMethodArgumentMappedVCUIViewPropertyValue class];
+            break;
+        }
+        default:{
+            NSAssert(NO, @"unknownn classForParsingJSONDictionary %ld",mappedValueType);
+            break;
+        }
+    }
+    return outputClass;
 }
 
 

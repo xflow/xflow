@@ -56,4 +56,7 @@ typedef enum{
 
 @property(nonatomic,assign) BOOL isMonitored;
 
+-(NSValue*)loadArgumentMappedValueFromObject:(NSObject*)obj;
+
+
 @end

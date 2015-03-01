@@ -20,4 +20,6 @@ typedef enum : NSUInteger {
 
 +(XFAMethodArgumentMappedValue *)virtualArgumentValue:(NSValue*)value ofViewController:(UIViewController*)vc;
 
+-(NSValue*)loadValueOfObject:(NSObject*)obj;
+
 @end

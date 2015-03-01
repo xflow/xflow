@@ -150,7 +150,11 @@
 }
 
 
-
+-(NSValue*)loadArgumentMappedValueFromObject:(NSObject*)obj
+{
+    NSValue * v = [self.argumentMappedValue loadValueOfObject:obj];
+    return v;
+}
 
 
 + (NSValueTransformer *)argumentValueJSONTransformer {

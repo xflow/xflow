@@ -240,9 +240,9 @@ static NSMutableDictionary * classMethodNamesDic;
     
     if(  method.isVoidWithOneObject ){
         XFAMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
-        NSValue * arg0Value = arg0.argumentValue;
-        NSObject * argObj = arg0Value.nonretainedObjectValue;
-        [obj performSelector:sel withObject:argObj];
+        NSValue * arg0Value = [arg0 loadArgumentMappedValueFromObject:obj];
+//        NSObject * argObj = arg0Value.nonretainedObjectValue;
+        [obj performSelector:sel withObject:arg0Value];
     }
     
     if (method.isVoidAndNoArguments ) {

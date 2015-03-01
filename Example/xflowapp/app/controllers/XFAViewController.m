@@ -50,6 +50,9 @@
 
 - (IBAction)actionButton:(id)sender {
     NSLog(@"MTViewController actionButton %@",sender);
+    
+    UIButton * senderButton = sender;
+    [senderButton setTitle:@"NNNJ" forState:UIControlStateNormal];
     self.labelConnected.text = @"BBBBBB";
 
     self.labelNil = UILabel.new;

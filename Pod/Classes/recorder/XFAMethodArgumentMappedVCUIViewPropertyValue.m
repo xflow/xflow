@@ -22,4 +22,10 @@
 }
 
 
+-(NSValue*)loadValueOfObject:(NSObject*)obj
+{
+    NSValue * val = [obj valueForKey:self.vcProperty.propertyName];
+    return val;
+}
+
 @end
