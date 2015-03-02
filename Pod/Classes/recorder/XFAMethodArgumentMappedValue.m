@@ -44,7 +44,7 @@
     if ([value isKindOfClass:[UIViewController class]])
     {
         XFAMethodArgumentMappedVCValue * mvcval = [XFAMethodArgumentMappedVCValue  new];
-        mvcval.vcPath = [XFAViewControllerState viewControllerPathToWindow:vc];
+        mvcval.vcPath = [XFAViewControllerState viewControllerPathToWindow:(UIViewController*)value];
         mvcval.mappedValueType = XFAMethodArgumentMappedValueTypeVC;
         mval = (XFAMethodArgumentMappedValue*)mvcval;
     }
@@ -65,6 +65,10 @@
     switch (mappedValueType) {
         case XFAMethodArgumentMappedValueTypeVCUIViewProperty:{
             outputClass = [XFAMethodArgumentMappedVCUIViewPropertyValue class];
+            break;
+        }
+        case XFAMethodArgumentMappedValueTypeVC:{
+            outputClass = [XFAMethodArgumentMappedVCValue class];
             break;
         }
         default:{

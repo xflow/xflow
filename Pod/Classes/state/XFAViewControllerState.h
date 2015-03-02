@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Mantle/Mantle.h>
 @class UIViewController;
+@class UIWindow;
 
 @interface XFAViewControllerState : MTLModel <MTLJSONSerializing>
 
@@ -19,8 +20,10 @@
 @property (nonatomic, strong) NSDictionary * vcProperties;
 @property (nonatomic, strong) NSNumber * objHash;
 
+
 +(NSArray *)viewControllerObjectsPathToWindow:(UIViewController *)vc;
 +(NSArray *)viewControllerClassesPathToWindow:(UIViewController*)vc;
++(UIViewController *)viewControllerForPath:(NSArray*)vcPath withWindow:(UIWindow*)window;
 +(NSArray *)viewControllerPathToWindow:(UIViewController*)vc;
 
 

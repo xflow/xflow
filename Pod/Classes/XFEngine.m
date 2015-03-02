@@ -252,8 +252,12 @@
 //            XFAViewControllerState * vcStateAfter = invo.vcStateAfter;
         
 //            NSDictionary * dic1Root = vcStateBefore.vcPath[0];
-        NSMutableArray * marr = vcStateBefore.vcPath.mutableCopy;
-        NSDictionary * dic1Root = [marr first];
+        
+//        NSMutableArray * marr = vcStateBefore.vcPath.mutableCopy;
+        UIViewController * invocationTarget = [XFAViewControllerState viewControllerForPath:vcStateBefore.vcPath
+                                                                                 withWindow:[XFEngine mainWindow]];
+        
+        /*NSDictionary * dic1Root = [marr first];
         [marr removeObjectAtIndex:0];
         dic1Root[@"vcRoot"];
         dic1Root[@"vcParentChildrenKey"];
@@ -279,7 +283,7 @@
             vcA = vcB;
         }];
         NSLog(@"vcA:%@",vcA);
-        UIViewController * invocationTarget = vcA;
+        UIViewController * invocationTarget = vcA;*/
         [invo.method applyTo:invocationTarget];
         
     }

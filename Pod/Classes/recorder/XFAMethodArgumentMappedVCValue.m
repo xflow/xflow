@@ -7,6 +7,8 @@
 //
 
 #import "XFAMethodArgumentMappedVCValue.h"
+#import "XFAViewControllerState.h"
+#import "XFEngine.h"
 
 @implementation XFAMethodArgumentMappedVCValue
 
@@ -16,6 +18,11 @@
 }
 
 
-
+-(NSValue*)loadValueOfObject:(NSObject*)obj
+{
+    UIWindow * window =  [[UIApplication sharedApplication].windows objectAtIndex:0];
+    UIViewController * vc = [XFAViewControllerState viewControllerForPath:self.vcPath withWindow:window];
+    return (NSValue*)vc;
+}
 
 @end

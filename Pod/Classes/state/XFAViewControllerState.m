@@ -7,6 +7,8 @@
 //
 
 #import "XFAViewControllerState.h"
+#import <ObjectiveSugar/NSArray+ObjectiveSugar.h>
+#import <ObjectiveSugar/NSMutableArray+ObjectiveSugar.h>
 
 @implementation XFAViewControllerState
 
@@ -175,6 +177,34 @@ NSString * K_VC_CLASS = @"vcClass";
     }
     
     return path;
+}
+
+
++(UIViewController *)viewControllerForPath:(NSArray*)vcPath withWindow:(UIWindow*)window
+{
+    
+    NSMutableArray * marr = vcPath.mutableCopy;
+    NSDictionary * dic1Root = [marr first];
+    [marr removeObjectAtIndex:0];
+    NSString * rootVcClassString = dic1Root[@"vcClass"];
+    UIViewController * rootVC = window.rootViewController;
+    NSAssert([rootVC isMemberOfClass:NSClassFromString(rootVcClassString)], @"root vc shold be %@",rootVcClassString);
+
+    __block id vcA = rootVC;
+    [marr eachWithIndex:^(NSDictionary * dic, NSUInteger index) {
+        
+        NSString * vcParentChildrenKey = dic[@"vcParentChildrenKey"];
+//                NSString * vcChildrenKey =  dic[@"vcChildrenKey"];
+        NSNumber * vcInParentChildIndex =  dic[@"vcInParentChildIndex"];
+        NSArray * children = [vcA valueForKey:vcParentChildrenKey];
+        NSString * vcClassStr = dic[@"vcClass"];
+        Class vcClass  = NSClassFromString(vcClassStr);
+        id vcB = children[vcInParentChildIndex.integerValue];
+        NSAssert([vcB isMemberOfClass:vcClass], @"expeted class to be: %@",vcClassStr);
+        vcA = vcB;
+    }];
+    UIViewController * outputVC = vcA;
+    return outputVC;
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "XFATabBarC.h"
-#import <ReactiveCocoa/ReactiveCocoa.h>
+//#import <ReactiveCocoa/ReactiveCocoa.h>
 
 
 @interface XFATabBarC ()
@@ -27,10 +27,11 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
+    /*
     [RACObserve(self, selectedViewController) subscribeNext:^(UIViewController * x) {
         NSLog(@"[XFATabBarC selectedViewController]: %@",x);
     }];
+     */
 }
 
 
