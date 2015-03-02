@@ -8,10 +8,12 @@
 
 #import "XFAMethod.h"
 
-//@class XFAVCProperty;
+@class XFAVCProperty;
 
 @interface XFAVCPropertySetterMethod : XFAMethod
 
-//@property (nonatomic, strong) XFAVCProperty * property;
+@property (nonatomic, strong) XFAVCProperty * property;
+
+@property (nonatomic, readonly) BOOL isPropertySetter;
 
 @end

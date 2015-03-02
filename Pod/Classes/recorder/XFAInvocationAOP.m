@@ -15,7 +15,6 @@
 #import "XFAVCProperty.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "XFAVcMethodInvocation.h"
-#import "MTVcSetterMethodInvocation.h"
 #import <ObjectiveSugar/NSArray+ObjectiveSugar.h>
 #import "XFAMethodArgument.h"
 #import "XFAMethodArgumentValue.h"
@@ -103,27 +102,21 @@
     NSError * errorAspectHook = nil;
     id<AspectToken> token = [obj aspect_hookSelector:method.selector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
         
-        NSLog(@"%@: %@", aspectInfo.instance, aspectInfo.arguments);
+//        NSLog(@"%@: %@", aspectInfo.instance, aspectInfo.arguments);
 
-//        NSMutableArray * arguments = [NSMutableArray array];
-        
         [method.methodArguments eachWithIndex:^(XFAMethodArgument * methodArgument, NSUInteger index) {
             UIViewController * vc = (UIViewController*)obj;
             NSValue * aspectArgValue = aspectInfo.arguments[index];
-            
             XFAMethodArgumentMappedValue * argMapVal = [XFAMethodArgumentMappedValue virtualArgumentValue:aspectArgValue ofViewController:vc];
-//            id virtalArgValue = [XFAMethodArgumentValue virtualArgumentValue:aspectArgValue ofViewController:vc];
             methodArgument.argumentMappedValue = argMapVal;
-//            [arguments addObject:virtalArgValue];
         }];
-        
 
         
         NSString * k = NSStringFromSelector([[aspectInfo originalInvocation] selector]);
         NSArray * arr = [self.stackInvocationsDictionary objectForKey:k];
         XFAVcMethodInvocation * mvcInvo = [arr firstObject];
         mvcInvo.method = method;
-//        mvcInvo.method.methodArguments = arguments;
+
 
         mvcInvo.status = MTVcMethodInvocationStatusPost;
         [mvcInvo saveVcStateAfter];
@@ -150,6 +143,7 @@
 {
     
     __weak id target_ = (vc);
+
     RACSignal *mySignal = [target_ rac_valuesAndChangesForKeyPath:property.propertyName
                                                           options:NSKeyValueObservingOptionPrior
                                                          observer:self];
@@ -170,16 +164,16 @@
 //            NSDictionary * dicState = [MTVcMethodInvocation dicStateOfViewController:aVC];
             
             
-            MTVcSetterMethodInvocation * invo = nil;
+            XFAVcMethodInvocation * invo = nil;
 
 //            method.signature = @"";
             NSString * k = [NSString stringWithFormat:@"set %@",property.propertyName];
             
             if (dic[@"notificationIsPrior"]) {
-                invo = [MTVcSetterMethodInvocation new];
+                invo = [XFAVcMethodInvocation new];
                 invo.status = MTVcMethodInvocationStatusPre;
                 XFAVCPropertySetterMethod * method = [XFAVCPropertySetterMethod new];
-                invo.property = property;
+                method.property = property;
 //                invo.propertyValue = x.first;
                 invo.method = method;
                 invo.invocationTarget = target_;
@@ -193,6 +187,14 @@
                 NSAssert(invo, @"invo not found in stack");
                 invo.status = MTVcMethodInvocationStatusPost;
                 [invo saveVcStateAfter];
+                NSValue * postValue = x.first;
+                
+                XFAMethodArgumentMappedValue * argMapVal = [XFAMethodArgumentMappedValue virtualArgumentValue:postValue ofViewController:vc];
+                XFAMethodArgument * arg = [XFAMethodArgument argumentForType:property.objcType];
+                arg.argumentType = MTMethodArgumentTypeObject;
+                arg.argumentMappedValue = argMapVal;
+                invo.method.methodArguments = @[arg];
+                NSLog(@"%@",invo.method.methodArguments);
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_METHOD_POST_INVOCATION object:invo userInfo:nil];
                 [self popFromStackInvocation:invo withKey:k];
             }

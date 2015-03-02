@@ -240,7 +240,15 @@ static NSMutableDictionary * classMethodNamesDic;
     
     if(  method.isVoidWithOneObject ){
         XFAMethodArgument * arg0 = [method.methodArguments objectAtIndex:0];
-        NSValue * arg0Value = [arg0 loadArgumentMappedValueFromObject:obj];
+        NSValue * arg0Value = nil;
+        arg0Value = [arg0 loadArgumentMappedValueFromObject:obj];
+        /*
+        if (method.methodType == XFAMethodTypeMessage) {
+            
+        } else if (method.methodType == XFAMethodTypePropertySetter) {
+            
+        }*/
+
 //        NSObject * argObj = arg0Value.nonretainedObjectValue;
         [obj performSelector:sel withObject:arg0Value];
     }
@@ -280,7 +288,7 @@ static NSMutableDictionary * classMethodNamesDic;
     }
 }
 
-
+/*
 - (NSString *)replacementMethod:(NSString*)methodName
 {
     return replacement(methodName);
@@ -292,6 +300,7 @@ NSString * replacement(NSString* methodName)
     NSString *replacementMethodName = [NSString stringWithFormat:@"FXA%@",methodName];
     return replacementMethodName;
 }
+ */
 
 +(NSMutableDictionary*)classMethodNamesDic{
     if (classMethodNamesDic == nil) {
@@ -344,6 +353,8 @@ NSString * replacement(NSString* methodName)
 + (NSValueTransformer *)methodArgumentsAssertionsJSONTransformer {
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:TXAssertion.class];
 }
+
+
 
 /*
 -(BOOL)isMonitored{

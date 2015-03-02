@@ -54,7 +54,7 @@ typedef enum{
 @property(nonatomic,strong) NSValue * argumentValue;
 @property(nonatomic,strong) NSString * objcType;
 
-@property(nonatomic,assign) BOOL isMonitored;
+//@property(nonatomic,assign) BOOL isMonitored;
 
 -(NSValue*)loadArgumentMappedValueFromObject:(NSObject*)obj;
 

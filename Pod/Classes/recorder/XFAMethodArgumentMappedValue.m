@@ -11,6 +11,8 @@
 #import "XFAVCProperty.h"
 #import <RXCollections/RXCollection.h>
 #import "XFAMethodArgumentMappedVCUIViewPropertyValue.h"
+#import "XFAMethodArgumentMappedVCValue.h"
+#import "XFAViewControllerState.h"
 
 @implementation XFAMethodArgumentMappedValue
 
@@ -38,6 +40,15 @@
         mpval.mappedValueType = XFAMethodArgumentMappedValueTypeVCUIViewProperty;
         mval = (XFAMethodArgumentMappedValue*)mpval;
     }
+    
+    if ([value isKindOfClass:[UIViewController class]])
+    {
+        XFAMethodArgumentMappedVCValue * mvcval = [XFAMethodArgumentMappedVCValue  new];
+        mvcval.vcPath = [XFAViewControllerState viewControllerPathToWindow:vc];
+        mvcval.mappedValueType = XFAMethodArgumentMappedValueTypeVC;
+        mval = (XFAMethodArgumentMappedValue*)mvcval;
+    }
+    
     return mval;
 }
 

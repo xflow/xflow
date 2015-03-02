@@ -10,7 +10,8 @@
 
 typedef enum : NSUInteger {
     XFAMethodArgumentMappedValueTypeUnknown,
-    XFAMethodArgumentMappedValueTypeVCUIViewProperty,
+    XFAMethodArgumentMappedValueTypeVCUIViewProperty, // a property on the VC
+    XFAMethodArgumentMappedValueTypeVC, // anywhere
     XFAMethodArgumentMappedValueTypeVCSomethingProperty
 } XFAMethodArgumentMappedValueType;
 

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @class MTClassTypeInstance;
 
 #import <xflowparser/XFPObjcMethod.h>
@@ -16,10 +17,8 @@
 @interface XFAMethod : XFPObjcMethod
 
 
-//@property(nonatomic,strong) NSString * methodReturnType;
-//@property(nonatomic,strong) NSString * methodTypeEncoding;
+
 @property(nonatomic,strong) NSNumber * isUserDefined;
-//@property(nonatomic,assign) BOOL isMonitored;
 @property(nonatomic,strong) NSNumber * isChildVcEntryPoint;
 @property(nonatomic,strong) NSNumber * childVcArgumentIndex;
 
@@ -54,6 +53,7 @@
 @property(nonatomic,strong) id classTypeInstance;
 
 -(void)applyTo:(NSObject*)obj;
+
 
 //+(BOOL)isVcClassProcessed:(Class)vcClass;
 //+(void)setVcClassAsProcessed:(Class)vcClass;

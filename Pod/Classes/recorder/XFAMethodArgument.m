@@ -126,7 +126,7 @@
 
 
 -(NSString*)description{
-    return [NSString stringWithFormat:@"Argument type :%@ %d" ,
+    return [NSString stringWithFormat:@"XFAMethodArgument type type :%@ %d" ,
             self.stringType,
             self.argumentType];
 }
