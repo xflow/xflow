@@ -233,9 +233,7 @@ static NSMutableDictionary * classMethodNamesDic;
         NSValue * arg1Value = arg1.argumentValue;
         NSObject * argObj1 = arg1Value.nonretainedObjectValue;
         
-        [obj performSelector:sel
-                  withObject:argObj0
-                  withObject:argObj1];
+        [obj performSelector:sel withObject:argObj0 withObject:argObj1];
     }
     
     if(  method.isVoidWithOneObject ){

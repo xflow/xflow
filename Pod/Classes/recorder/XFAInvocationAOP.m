@@ -174,7 +174,7 @@
                 invo.status = MTVcMethodInvocationStatusPre;
                 XFAVCPropertySetterMethod * method = [XFAVCPropertySetterMethod new];
                 method.property = property;
-//                invo.propertyValue = x.first;
+//                invo.propertyValue = x.first; 
                 invo.method = method;
                 invo.invocationTarget = target_;
                 [invo saveVcStateBefore];
@@ -192,6 +192,8 @@
                 XFAMethodArgumentMappedValue * argMapVal = [XFAMethodArgumentMappedValue virtualArgumentValue:postValue ofViewController:vc];
                 XFAMethodArgument * arg = [XFAMethodArgument argumentForType:property.objcType];
                 arg.argumentType = MTMethodArgumentTypeObject;
+                arg.argumentName = property.propertyName;
+                arg.objcType = property.objcType;
                 arg.argumentMappedValue = argMapVal;
                 invo.method.methodArguments = @[arg];
                 NSLog(@"%@",invo.method.methodArguments);
