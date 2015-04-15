@@ -22,11 +22,14 @@ PODS:
     - AFNetworking/NSURLSession
   - Aspects (1.4.1)
   - Bolts (1.1.3)
-  - CocoaLumberjack (1.9.2):
-    - CocoaLumberjack/Extensions (= 1.9.2)
-  - CocoaLumberjack/Core (1.9.2)
-  - CocoaLumberjack/Extensions (1.9.2):
+  - CocoaLumberjack (2.0.0):
+    - CocoaLumberjack/Default (= 2.0.0)
+    - CocoaLumberjack/Extensions (= 2.0.0)
+  - CocoaLumberjack/Core (2.0.0)
+  - CocoaLumberjack/Default (2.0.0):
     - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.0.0):
+    - CocoaLumberjack/Default
   - Mantle (1.5.4):
     - Mantle/extobjc (= 1.5.4)
   - Mantle/extobjc (1.5.4)
@@ -76,6 +79,7 @@ PODS:
     - AFNetworking (~> 2.5.0)
     - Aspects (~> 1.4.1)
     - Bolts (~> 1.1.3)
+    - CocoaLumberjack (~> 2.0.0-rc2)
     - Mantle (~> 1.5.4)
     - MRProgress (~> 0.8.1)
     - ObjectiveSugar (~> 1.1.0)
@@ -95,7 +99,6 @@ PODS:
     - RegExCategories (~> 1.0)
 
 DEPENDENCIES:
-  - CocoaLumberjack (~> 1.9.2)
   - OCMock (~> 2.2.4)
   - xflowapp (from `../`)
   - xflowparser (from `https://github.com/xflow/xflowparser.git`)
@@ -112,10 +115,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/xflow/xflowparser.git
 
 SPEC CHECKSUMS:
-  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
-  Aspects: a6368eba05295b24ffe0e9acfb9080cc3b0f4b5f
-  Bolts: 3db0a875235e0c9042b013af13af0f00f79b102c
-  CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  AFNetworking: 96ac9bf3eda33582701cb1fcc5b896aa1e20311e
+  Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
+  Bolts: e431c88fd02115d4a34016c2100bbfa4d2d5b146
+  CocoaLumberjack: a6f77d987d65dc7ba86b0f84db7d0b9084f77bcb
   Mantle: d5fbaf30fbc58031223af13812c060e15934a1fe
   MRProgress: cd12726e001ea25dec133322d34cc4754cbc58f8
   ObjectiveSugar: f48793f5902c77cfc02a4ce46d2e8ecddcad4dc2
@@ -124,7 +127,7 @@ SPEC CHECKSUMS:
   ReactiveCocoa: 31119068e3dde866bd257cf74e1f06b4023bf387
   RegExCategories: a6410301023ff81bd047c05fd8691d24ca5c7ea9
   RXCollections: 96cbe2ebea1a3b5ab8ca7a50f4296fb7fa05adc1
-  xflowapp: f0f784801eb6013188c1feb1237340b3641ebc04
+  xflowapp: 3a54e4ceae5f6fb84a0213768b98e772b88a9cd3
   xflowparser: 58c223faa60216dd4f56915955447cd4cc166433
 
 COCOAPODS: 0.35.0

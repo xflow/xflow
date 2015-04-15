@@ -8,6 +8,7 @@
 
 #import "XFAAppDelegate.h"
 #import <xflowapp/XFEngine.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 @implementation XFAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -16,6 +17,8 @@
     NSLog(@"launchOptions:%@",launchOptions);
 //#ifdef TESTING
      [Xfe startWithFeedServer:@"http://127.0.0.1:4000" withPlayServer:@"http://127.0.0.1:4000"  withApiToken:@"787d84e59e36d35a54b8668ffbe46061"];
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
 //#else
 //#warning Testmode
 //#endif

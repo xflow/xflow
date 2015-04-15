@@ -9,7 +9,6 @@
 #import "XFEngine.h"
 
 #import <Bolts/Bolts.h>
-//#import "MTSwizzleManager.h"
 #import "XFACrawler.h"
 #import "XFAFeedService.h"
 #import "XFObjcVcClass.h"
@@ -30,6 +29,11 @@
 #import <MRProgress/MRProgress.h>
 #import <ObjectiveSugar/NSArray+ObjectiveSugar.h>
 #import <ObjectiveSugar/NSMutableArray+ObjectiveSugar.h>
+#import <CocoaLumberjack/DDLog.h>
+
+
+static const int ddLogLevel = DDLogLevelError;
+
 
 @interface XFEngine (){
     
@@ -207,7 +211,8 @@
                    onSuccess:^(AFHTTPRequestOperation *op, id obj) {
         
     } onFailure:^(AFHTTPRequestOperation *op, NSError *error) {
-        NSString * msg = [NSString stringWithFormat:@"%@ %@",error.localizedDescription,urlString];
+        NSString * msg = [NSString stringWithFormat:@"%@ %@",error.domain,urlString];
+        DDLogError(@"%s %@",__PRETTY_FUNCTION__,error);
         [[[UIAlertView alloc] initWithTitle:@"FEED ACTION ERROR" message:msg delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil] show];
     }];
     
@@ -301,6 +306,7 @@
     [[self taskGetRunMode] continueWithBlock:^id(BFTask *task) {
         
         if (task.error) {
+            DDLogError(@"%s %@",__PRETTY_FUNCTION__,task.error);
             UIAlertView * av = [[UIAlertView alloc] initWithTitle:task.error.domain message:task.error.localizedDescription delegate:nil cancelButtonTitle:@"DISMISS" otherButtonTitles:nil, nil];
             [av show];
             return nil;
@@ -337,6 +343,8 @@
                 [MRProgressOverlayView showOverlayAddedTo:[XFEngine mainWindow] animated:YES];
                 return [[self taskGetFromServerRunWithId:self.runMode.runId] continueWithBlock:^id(BFTask *task) {
                     if (task.error) {
+                        DDLogError(@"%s %@",__PRETTY_FUNCTION__,task.error);
+                        //NSLog(@"%s %@",__PRETTY_FUNCTION__,task.error);
                         [MRProgressOverlayView showOverlayAddedTo:[XFEngine mainWindow] title:task.error.description mode:MRProgressOverlayViewModeCross animated:YES];
                         return nil;
                     }
@@ -443,6 +451,7 @@
         
     } onFailure:^(AFHTTPRequestOperation * op,NSError *error) {
         
+        DDLogError(@"%s %@",__PRETTY_FUNCTION__,error);
         UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"xflow launch failed" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [av show];
 //        NSAssert(FALSE, @"doVC onFailure: %@",error.localizedDescription);
